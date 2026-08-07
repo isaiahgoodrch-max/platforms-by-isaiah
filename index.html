@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Platforms by Isaiah Goodrich — Custom Websites for Creators & Small Businesses</title>
-<meta name="description" content="I build custom websites for creators and small businesses — designed around your brand, coded from scratch, and maintained for you. No templates, no page builders.">
+<title>Platforms by Isaiah Goodrich | Custom Websites for Creators & Small Businesses</title>
+<meta name="description" content="I build custom websites for creators and small businesses. Designed around your brand, coded from scratch, and maintained for you. No templates, no page builders.">
 <meta name="theme-color" content="#050708">
 <meta property="og:title" content="Platforms by Isaiah Goodrich">
 <meta property="og:description" content="Custom websites for creators and small businesses. Built from scratch. Maintained for you.">
@@ -402,6 +402,10 @@ section{position:relative;z-index:1;padding:112px 0}
   background:linear-gradient(175deg,#fdfaf8,#f3dfe4);
 }
 .work-shot img{width:100%;height:100%;object-fit:cover;object-position:center 18%;opacity:.95}
+.work-shot.shot-steven{background:linear-gradient(175deg,#171416,#0e0c0d)}
+.work-shot.shot-steven img{object-position:center 26%}
+.work-shot.shot-mayson{background:linear-gradient(175deg,#1a1512,#0d0b0a)}
+.work-shot.shot-mayson img{object-position:center 24%}
 .work-tag{
   position:absolute;top:14px;left:14px;z-index:2;
   display:inline-flex;align-items:center;gap:7px;
@@ -409,6 +413,52 @@ section{position:relative;z-index:1;padding:112px 0}
   backdrop-filter:blur(10px);
   font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--green);
 }
+.work-tag.tag-build{color:var(--blue-soft)}
+.work-tag.tag-build .dot{background:var(--blue);animation-name:pulse-b}
+.work-tag.tag-dev{color:var(--muted)}
+.work-tag.tag-dev .dot{background:var(--muted);animation:none;box-shadow:none}
+
+/* mini app-UI preview (Coach Hub) */
+.app-shot{background:linear-gradient(160deg,#0b1011,#091320);display:flex;flex-direction:column}
+.app-bar{
+  flex-shrink:0;height:23px;display:flex;align-items:center;gap:5px;padding:0 11px;
+  background:rgba(255,255,255,.045);border-bottom:1px solid rgba(255,255,255,.07);
+}
+.app-bar i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.16)}
+.app-bar b{
+  margin-left:8px;font-size:7.5px;font-weight:500;letter-spacing:.1em;
+  color:rgba(255,255,255,.35);text-transform:uppercase;
+}
+.app-body{flex:1;display:flex;min-height:0}
+.app-side{
+  width:78px;flex-shrink:0;padding:11px 9px;
+  border-right:1px solid rgba(255,255,255,.06);
+  display:flex;flex-direction:column;gap:6px;
+}
+.app-side b{
+  font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;padding:0 3px 3px;
+}
+.app-side u{display:block;height:13px;border-radius:4px;background:rgba(255,255,255,.05);text-decoration:none}
+.app-side u.on{background:rgba(87,168,106,.2);border:1px solid rgba(87,168,106,.34)}
+.app-main{flex:1;padding:12px 13px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.app-h{font-size:9.5px;color:var(--paper);font-weight:700;letter-spacing:.02em;margin-bottom:1px}
+.app-row{
+  display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);
+}
+.app-av{
+  width:16px;height:16px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(140deg,var(--forest-600),var(--navy-700));
+}
+.app-nm{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.15);min-width:0}
+.app-chip{
+  flex-shrink:0;font-size:6.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 7px;border-radius:999px;
+}
+.chip-ok{background:rgba(87,168,106,.18);color:var(--green);border:1px solid rgba(87,168,106,.32)}
+.chip-due{background:rgba(77,132,224,.16);color:var(--blue-soft);border:1px solid rgba(77,132,224,.32)}
+
 .work-body{padding:26px 26px 28px}
 .work-body h3{font-family:var(--serif);font-weight:500;font-size:25px;color:var(--paper)}
 .work-body .cat{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-top:7px}
@@ -594,7 +644,7 @@ html.js .reveal.in{opacity:1;transform:none}
       <a href="#build">The Build</a>
       <a href="#who">Who It's For</a>
       <a href="#process">Process</a>
-      <a href="#work">Live Work</a>
+      <a href="#work">Portfolio</a>
       <a href="#contact" class="btn btn-primary nav-cta">Start a build</a>
     </div>
   </div>
@@ -604,19 +654,19 @@ html.js .reveal.in{opacity:1;transform:none}
 <header class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <span class="pill"><i></i>Custom websites — creators &amp; small businesses</span>
+      <span class="pill"><i></i>Custom websites for creators &amp; small businesses</span>
       <h1>
         You run the business.
         <span class="accent">Your website should look like it.</span>
       </h1>
       <p class="hero-sub">
-        I build custom websites for creators and small businesses — designed around your
+        I build custom websites for creators and small businesses. Designed around your
         brand, coded from scratch, and <strong>maintained for you</strong> after launch.
         No templates. No page builders. No link-in-bio standing in for a real site.
       </p>
       <div class="hero-actions">
         <a href="#contact" class="btn btn-primary">Start your build</a>
-        <a href="#work" class="btn btn-ghost">See live work</a>
+        <a href="#work" class="btn btn-ghost">See the work</a>
       </div>
       <p class="hero-note">One flat price · Your own domain · Maintained, not abandoned</p>
     </div>
@@ -626,7 +676,7 @@ html.js .reveal.in{opacity:1;transform:none}
       <div class="float float-a">
         <div class="float-head"><span class="dot"></span>Live</div>
         <div class="float-main">mandibagley.com</div>
-        <div class="float-sub">Custom build — zero templates</div>
+        <div class="float-sub">Custom build, zero templates</div>
       </div>
 
       <div class="phone">
@@ -678,7 +728,7 @@ html.js .reveal.in{opacity:1;transform:none}
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">The Build</span>
-      <h2>A real website, <em>made for you</em> — and kept that way.</h2>
+      <h2>A real website, <em>made for you</em>. And kept that way.</h2>
       <p>
         Everything here is written by hand for your brand. Nothing is dragged out of a
         theme library, and nothing gets left to rot the week after launch.
@@ -691,7 +741,7 @@ html.js .reveal.in{opacity:1;transform:none}
         <div>
           <h3>A website, not a template.</h3>
           <p>
-            A completely custom site at your own domain — your name, your colors, your work,
+            A completely custom site at your own domain: your name, your colors, your work,
             your voice. Not Linktree. Not a Squarespace theme with your logo dropped in the
             corner. Yours, and it looks like nobody else's because nobody else has it.
           </p>
@@ -705,7 +755,7 @@ html.js .reveal.in{opacity:1;transform:none}
           <p>
             A creator pitching brand partnerships and a shop taking Saturday orders don't need
             the same website. Before I write a line of code, we figure out the one thing you
-            need a visitor to do — then the whole site is built to get them there.
+            need a visitor to do, then the whole site is built to get them there.
           </p>
         </div>
       </article>
@@ -727,7 +777,7 @@ html.js .reveal.in{opacity:1;transform:none}
         <div>
           <h3>Maintained, not abandoned.</h3>
           <p>
-            New photos, new services, updated prices, a whole new section — you send it, I ship
+            New photos, new services, updated prices, a whole new section. You send it, I ship
             it. You never have to learn a dashboard, fight a page builder, or watch your site go
             stale because changing it is a hassle.
           </p>
@@ -752,7 +802,7 @@ html.js .reveal.in{opacity:1;transform:none}
         <p>
           It's a rented list of buttons on someone else's domain. It doesn't look like your
           brand, it can't hold your portfolio, and a brand manager can't tell what you're worth
-          from it. A real site can — and it's the difference between getting considered and
+          from it. A real site can, and it's the difference between getting considered and
           getting scrolled past.
         </p>
         <ul class="who-list">
@@ -767,14 +817,14 @@ html.js .reveal.in{opacity:1;transform:none}
         <span class="eyebrow">Small Businesses</span>
         <h3>People are looking. They're just not finding you.</h3>
         <p>
-          Your hours are buried in a Facebook post, your prices are "DM us," and your site — if
-          you have one — was built in 2019 by somebody's nephew. Every one of those is a
+          Your hours are buried in a Facebook post, your prices are "DM us," and your site (if
+          you have one) was built in 2019 by somebody's nephew. Every one of those is a
           customer deciding to go somewhere easier.
         </p>
         <ul class="who-list">
           <li>Hours, services, and prices exactly where people look for them</li>
           <li>A site that loads before someone gives up and closes the tab</li>
-          <li>Clear directions to whatever "buy" means for you — call, book, order, visit</li>
+          <li>Clear directions to whatever "buy" means for you: call, book, order, visit</li>
           <li>Somebody to actually call when something needs to change</li>
         </ul>
       </div>
@@ -797,7 +847,7 @@ html.js .reveal.in{opacity:1;transform:none}
         <h3>We talk.</h3>
         <p>
           Tell me about your brand, who you're trying to reach, and what you want them to do
-          when they land. No forms to fill out for an hour — just a conversation.
+          when they land. No forms to fill out for an hour, just a conversation.
         </p>
       </div>
       <div class="step reveal">
@@ -812,7 +862,7 @@ html.js .reveal.in{opacity:1;transform:none}
         <div class="step-n">3</div>
         <h3>I keep it running.</h3>
         <p>
-          Launch isn't the end of it. Updates, new content, new sections, fixes — you message
+          Launch isn't the end of it. Updates, new content, new sections, fixes. You message
           me, and it's handled. No tickets, no support queue, no dashboard to learn.
         </p>
       </div>
@@ -822,7 +872,7 @@ html.js .reveal.in{opacity:1;transform:none}
       <div class="t">This isn't a one-time build.</div>
       <div class="d">
         Your site stays current because keeping it current is part of the deal. You run your
-        business and make your content — I handle the website, permanently.
+        business and make your content. I handle the website, permanently.
       </div>
     </div>
   </div>
@@ -832,22 +882,25 @@ html.js .reveal.in{opacity:1;transform:none}
 <section id="work">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Live Work</span>
-      <h2>Real sites. <em>Real people.</em></h2>
-      <p>Custom-built, live right now, and actively maintained.</p>
+      <span class="eyebrow">Portfolio</span>
+      <h2>Real work. <em>Real people.</em></h2>
+      <p>
+        Every one of these was designed and coded from scratch for the person whose name is
+        on it. No templates, no page builders, no two alike.
+      </p>
     </div>
 
     <div class="work-grid">
       <a class="work-card reveal" href="https://mandibagley.com" target="_blank" rel="noopener noreferrer">
         <div class="work-shot">
           <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/mandi-phone.jpg" alt="Mandi Bagley's custom portfolio site" loading="lazy" width="600" height="678">
+          <img src="images/mandi-phone.jpg" alt="Mandi Bagley's custom portfolio site" loading="lazy" width="900" height="1126">
         </div>
         <div class="work-body">
           <h3>Mandi Bagley</h3>
           <div class="cat">Creator · Fitness, Faith &amp; Travel</div>
           <p>
-            A full UGC portfolio for a creator with a seven-figure following — brand work,
+            A full UGC portfolio for a creator with a seven-figure following. Brand work,
             partnership history, and a rate card, all on her own domain and updated as fast as
             she shoots it.
           </p>
@@ -855,11 +908,68 @@ html.js .reveal.in{opacity:1;transform:none}
         </div>
       </a>
 
-      <div class="work-card work-soon reveal">
-        <div>
-          <span class="badge">Launching soon</span>
-          <h3>Next build</h3>
-          <p>Another site is in the works. It goes here the day it's live.</p>
+      <a class="work-card reveal" href="https://steven-howard-website.vercel.app" target="_blank" rel="noopener noreferrer">
+        <div class="work-shot shot-steven">
+          <span class="work-tag"><span class="dot"></span>Live</span>
+          <img src="images/steven-portrait.jpg" alt="Steven Howard's coaching site" loading="lazy" width="800" height="1200">
+        </div>
+        <div class="work-body">
+          <h3>Steven Howard</h3>
+          <div class="cat">Author · Writing &amp; Publishing Coach</div>
+          <p>
+            A one-on-one coaching site for an award-winning author of 22 books. His catalogue
+            and awards do the selling, and the contact form gathers enough detail that he can
+            vet an inquiry before he ever gets on a call.
+          </p>
+          <span class="work-link">View site →</span>
+        </div>
+      </a>
+
+      <div class="work-card reveal">
+        <div class="work-shot shot-mayson">
+          <span class="work-tag tag-build"><span class="dot"></span>In build</span>
+          <img src="images/mayson-hero.jpg" alt="Mayson Brown's creator site" loading="lazy" width="770" height="770">
+        </div>
+        <div class="work-body">
+          <h3>Mayson Brown</h3>
+          <div class="cat">Creator &amp; Marketer · Scottsdale, AZ</div>
+          <p>
+            A creator site built on proof instead of follower counts. Per-video numbers, real
+            sponsor work, and his apparel brand, so a partner can judge him on what the content
+            actually did rather than on a vanity metric.
+          </p>
+          <span class="work-link">Launching soon</span>
+        </div>
+      </div>
+
+      <div class="work-card reveal">
+        <div class="work-shot app-shot">
+          <span class="work-tag tag-dev"><span class="dot"></span>In development</span>
+          <div class="app-bar">
+            <i></i><i></i><i></i><b>Peak Natty · Coach Hub</b>
+          </div>
+          <div class="app-body">
+            <div class="app-side">
+              <b>Menu</b>
+              <u class="on"></u><u></u><u></u><u></u>
+            </div>
+            <div class="app-main">
+              <div class="app-h">This week's check-ins</div>
+              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-ok">Done</span></div>
+              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-due">Due</span></div>
+              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-ok">Done</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-body">
+          <h3>Gabe McKenney</h3>
+          <div class="cat">Peak Natty · Online Coaching</div>
+          <p>
+            Not a website. A private hub for running the coaching business behind one: client
+            roster, lead pipeline, weekly check-ins, and the follow-up emails that go out on
+            their own. Early days, and it will look nothing like this in a month.
+          </p>
+          <span class="work-link">In progress</span>
         </div>
       </div>
 
@@ -902,7 +1012,7 @@ html.js .reveal.in{opacity:1;transform:none}
       </h2>
       <p style="margin-top:20px;font-size:16px;line-height:1.7">
         A sentence or two is enough to start. I'll come back with what I'd build for you and
-        what it costs — no commitment, no sales call you have to escape from.
+        what it costs. No commitment, no sales call you have to escape from.
       </p>
 
       <ul class="assure">
@@ -944,7 +1054,7 @@ html.js .reveal.in{opacity:1;transform:none}
         </div>
         <div class="field full">
           <label for="f-site">Current website, if you have one</label>
-          <input id="f-site" name="site" type="text" placeholder="yoursite.com — or 'none yet'">
+          <input id="f-site" name="site" type="text" placeholder="yoursite.com, or 'none yet'">
         </div>
         <div class="field full">
           <label for="f-msg">What are you building?</label>
@@ -958,7 +1068,7 @@ html.js .reveal.in{opacity:1;transform:none}
       </div>
 
       <div class="sent" id="sent">
-        Your email app should be opening with everything filled in — just hit send.
+        Your email app should be opening with everything filled in. Just hit send.
         If nothing happened, email me directly at
         <a href="mailto:isaiahgoodrch@gmail.com">isaiahgoodrch@gmail.com</a>.
       </div>
@@ -981,7 +1091,7 @@ html.js .reveal.in{opacity:1;transform:none}
         <a href="#build">The Build</a>
         <a href="#who">Who It's For</a>
         <a href="#process">Process</a>
-        <a href="#work">Live Work</a>
+        <a href="#work">Portfolio</a>
         <a href="#contact">Contact</a>
       </div>
     </div>
@@ -1014,7 +1124,7 @@ document.documentElement.classList.add('js');
     setTimeout(function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 700);
   }
 
-  /* Hard safety net — the page NEVER stays behind a black overlay. */
+  /* Hard safety net: the page NEVER stays behind a black overlay. */
   setTimeout(finish, 7000);
   skipBtn.addEventListener('click', finish);
   window.addEventListener('keydown', function(e){ if(e.key==='Escape') finish(); });
@@ -1225,15 +1335,15 @@ document.documentElement.classList.add('js');
     var lines = [
       'Name: ' + name,
       'Email: ' + email,
-      'Type: ' + (v('f-type') || '—'),
-      'Business / handle: ' + (v('f-brand') || '—'),
-      'Current site: ' + (v('f-site') || '—'),
+      'Type: ' + (v('f-type') || '(not given)'),
+      'Business / handle: ' + (v('f-brand') || '(not given)'),
+      'Current site: ' + (v('f-site') || '(not given)'),
       '',
       'What they’re building:',
-      v('f-msg') || '—'
+      v('f-msg') || '(not given)'
     ];
 
-    var subject = 'Website build inquiry — ' + name;
+    var subject = 'Website build inquiry from ' + name;
     var href = 'mailto:isaiahgoodrch@gmail.com'
              + '?subject=' + encodeURIComponent(subject)
              + '&body='    + encodeURIComponent(lines.join('\n'));
