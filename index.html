@@ -1055,18 +1055,18 @@ document.documentElement.classList.add('js');
     octx.textAlign = 'center';
     octx.textBaseline = 'middle';
 
-    try { octx.letterSpacing = '0.34em'; } catch(e){}
+    try { octx.letterSpacing = '0.2em'; } catch(e){}
     octx.font = '700 ' + fsSmall + 'px "DM Sans", system-ui, sans-serif';
     octx.fillText('PLATFORMS BY', cx + fsSmall*0.17, cy - fsBig*0.62);
 
     try { octx.letterSpacing = '0em'; } catch(e){}
-    octx.font = '400 ' + fsBig + 'px "Fraunces", Georgia, serif';
+    octx.font = '600 ' + fsBig + 'px "Fraunces", Georgia, serif';
     octx.fillText('Isaiah Goodrich', cx, cy + fsBig*0.10);
 
     var data, targets = [];
     try { data = octx.getImageData(0,0,W,H).data; } catch(e){ finish(); return; }
 
-    var step = mobile ? 3 : 2;
+    var step = 1;
     for(var y=0; y<H; y+=step){
       for(var x=0; x<W; x+=step){
         if(data[(y*W+x)*4+3] > 130) targets.push(x, y);
@@ -1075,7 +1075,7 @@ document.documentElement.classList.add('js');
     var count = targets.length/2;
     if(count < 40){ finish(); return; }
 
-    var MAX = mobile ? 2600 : 5200;
+    var MAX = mobile ? 12000 : 30000;
     if(count > MAX){
       var thinned = [], stride = count/MAX;
       for(var i=0;i<MAX;i++){
@@ -1103,13 +1103,13 @@ document.documentElement.classList.add('js');
         ex: cx + Math.cos(a1)*r1,
         ey: cy + Math.sin(a1)*r1,
         r: col[0], g: col[1], b: col[2],
-        s: 0.7 + Math.random()*0.9,
-        a: 0.45 + Math.random()*0.55,
-        d: Math.random()*260
+        s: 1.0 + Math.random()*0.6,
+        a: 0.62 + Math.random()*0.38,
+        d: Math.random()*170
       };
     }
 
-    var GATHER = 1150, HOLD = 900, SCATTER = 950;
+    var GATHER = 1150, HOLD = 1500, SCATTER = 950;
     var t0 = performance.now();
     overlay.classList.add('armed');
 
