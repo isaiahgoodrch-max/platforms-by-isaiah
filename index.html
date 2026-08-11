@@ -216,6 +216,25 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
   filter:blur(50px);
 }
 .device{position:relative;width:296px;max-width:100%}
+.phone-link{
+  display:block;position:relative;text-decoration:none;
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.phone-link:hover{transform:translateY(-9px)}
+.phone-link:focus-visible{outline:2px solid var(--purple);outline-offset:16px;border-radius:48px}
+.phone-cta{
+  position:absolute;left:50%;bottom:-19px;transform:translateX(-50%);
+  display:inline-flex;align-items:center;
+  padding:9px 18px;border-radius:999px;white-space:nowrap;
+  background:rgba(10,8,16,.94);border:1px solid rgba(143,116,196,.32);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--purple-soft);opacity:.72;
+  transition:opacity .3s,border-color .3s,color .3s;
+}
+.phone-link:hover .phone-cta,.phone-link:focus-visible .phone-cta{
+  opacity:1;border-color:rgba(143,116,196,.6);color:var(--paper);
+}
 .phone{
   position:relative;width:100%;
   border-radius:42px;padding:9px;
@@ -363,6 +382,7 @@ section{position:relative;z-index:1;padding:112px 0}
   text-decoration:none;
 }
 .work-card:hover{border-color:rgba(143,116,196,.22)}
+a.work-card:hover{border-color:rgba(143,116,196,.4);transform:translateY(-4px)}
 .work-shot{
   height:310px;position:relative;overflow:hidden;
   background:linear-gradient(175deg,#fdfaf8,#f3dfe4);
@@ -662,17 +682,18 @@ html.js .reveal.in{opacity:1;transform:none}
     <div class="stage">
      <div class="device">
       <div class="float float-a">
-        <div class="float-head float-build"><span class="dot"></span>In build</div>
-        <div class="float-main">Mandi Bagley</div>
+        <div class="float-head"><span class="dot"></span>Live</div>
+        <div class="float-main">mandibagleyugc.com</div>
         <div class="float-sub">UGC portfolio, zero templates</div>
       </div>
 
-      <!-- Not linked while the build is unfinished. Re-wrap in an anchor when it ships. -->
+      <a class="phone-link" href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer"
+         aria-label="Open Mandi Bagley's UGC portfolio in a new tab">
       <div class="phone">
         <div class="screen">
           <div class="island"></div>
           <div class="chrome">
-            <div class="url"><span class="lock"></span>Mandi Bagley</div>
+            <div class="url"><span class="lock"></span>mandibagleyugc.com</div>
           </div>
           <div class="site">
             <div class="site-nav">
@@ -691,6 +712,8 @@ html.js .reveal.in{opacity:1;transform:none}
           </div>
         </div>
       </div>
+        <span class="phone-cta">Open the live site →</span>
+      </a>
 
       <div class="float float-b">
         <div class="float-head"><span class="dot"></span>Maintained</div>
@@ -726,9 +749,9 @@ html.js .reveal.in{opacity:1;transform:none}
     </div>
 
     <div class="work-grid">
-      <div class="work-card reveal">
+      <a class="work-card reveal" href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer">
         <div class="work-shot">
-          <span class="work-tag tag-build"><span class="dot"></span>In build</span>
+          <span class="work-tag"><span class="dot"></span>Live</span>
           <img src="images/mandi-phone.jpg" alt="Mandi Bagley's custom portfolio site" loading="lazy" width="900" height="1126">
         </div>
         <div class="work-body">
@@ -738,9 +761,9 @@ html.js .reveal.in{opacity:1;transform:none}
             A full UGC portfolio for a creator with a seven-figure following. Brand work,
             partnership history, and a rate card in one place, updated as fast as she shoots it.
           </p>
-          <span class="work-link">Launching soon</span>
+          <span class="work-link">mandibagleyugc.com →</span>
         </div>
-      </div>
+      </a>
 
       <div class="work-card reveal">
         <div class="work-shot shot-steven">
