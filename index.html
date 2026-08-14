@@ -83,6 +83,55 @@ a{color:inherit}
   color:var(--purple);
 }
 
+/* ── sheen ──
+   Ported from Mayson's site. The highlight roams diagonally rather than
+   tracking straight across, and the accent-edged elements breathe, so the
+   purple keeps catching the eye instead of settling. Sweeps animate transform
+   only, so they stay on the compositor, and everything stops for
+   reduced-motion visitors. */
+@keyframes purpleRoam{
+  0%   {background-position:  0%  50%}
+  25%  {background-position: 65%   8%}
+  50%  {background-position:100%  55%}
+  75%  {background-position: 35%  95%}
+  100% {background-position:  0%  50%}
+}
+@keyframes pillSweep{0%{transform:translateX(-170%)}100%{transform:translateX(330%)}}
+@keyframes purplePulse{
+  0%,100%{box-shadow:0 0 16px rgba(143,116,196,.13), inset 0 0 12px rgba(143,116,196,.06)}
+  50%    {box-shadow:0 0 30px rgba(143,116,196,.36), inset 0 0 16px rgba(143,116,196,.15)}
+}
+/* the money buttons never carried a border, so a bloom under them is what
+   actually pulls the eye rather than an edge treatment */
+@keyframes ctaGlow{
+  0%,100%{box-shadow:0 6px 26px rgba(106,79,155,.3)}
+  50%    {box-shadow:0 6px 26px rgba(106,79,155,.3), 0 0 34px 2px rgba(143,116,196,.42)}
+}
+
+@supports (-webkit-background-clip:text) or (background-clip:text){
+  .eyebrow{
+    background-image:linear-gradient(115deg,
+      var(--purple) 0%, var(--purple) 34%,
+      #b9a6de 44%, #efe8fa 50%, #b9a6de 56%,
+      var(--purple) 66%, var(--purple) 100%);
+    background-size:300% 300%;
+    -webkit-background-clip:text;background-clip:text;
+    color:transparent;
+    filter:drop-shadow(0 0 10px rgba(143,116,196,.38));
+    animation:purpleRoam 4.5s ease-in-out infinite;
+  }
+}
+
+.pill{position:relative;overflow:hidden;animation:purplePulse 3.6s ease-in-out infinite}
+.pill::after{
+  content:"";position:absolute;top:0;bottom:0;left:0;width:44%;
+  background:linear-gradient(115deg,transparent,rgba(233,226,246,.18),transparent);
+  transform:translateX(-170%);pointer-events:none;
+  animation:pillSweep 4s linear infinite;
+}
+.btn-primary{animation:ctaGlow 3.2s ease-in-out infinite}
+.btn-primary:hover{animation:none}
+
 /* ══════════════ INTRO ══════════════ */
 #intro{
   display:none;
@@ -624,6 +673,9 @@ html.js .reveal.in{opacity:1;transform:none}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .eyebrow{animation:none;background-position:0 0}
+  .pill::after{animation:none;opacity:0}
+  .pill,.btn-primary{animation:none}
   html{scroll-behavior:auto}
 }
 </style>
