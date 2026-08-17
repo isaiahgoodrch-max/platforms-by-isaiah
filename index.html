@@ -152,6 +152,26 @@ html.js.intro-lock body{overflow:hidden}
 #intro.armed #introSkip{opacity:1}
 #introSkip:hover{color:rgba(255,255,255,.6)}
 
+/* ══════════════ MOTION ══════════════ */
+/* Reading position. Scales on the compositor rather than animating width. */
+#progress{
+  position:fixed;top:0;left:0;right:0;height:2px;z-index:200;
+  background:linear-gradient(90deg,var(--purple-dim),var(--purple),#c3b1e4);
+  transform:scaleX(0);transform-origin:0 50%;
+  will-change:transform;
+}
+/* A pool of light under the pointer. Pure decoration, so it never takes hits. */
+#cursor-glow{
+  position:fixed;top:0;left:0;width:520px;height:520px;margin:-260px 0 0 -260px;
+  border-radius:50%;pointer-events:none;z-index:0;opacity:0;
+  background:radial-gradient(circle,rgba(143,116,196,.14),transparent 66%);
+  transition:opacity .5s ease;
+  will-change:transform;
+}
+/* The photo drifts in a touch when you hover a build that is actually live. */
+a.work-card .work-shot img{transition:transform 1.1s cubic-bezier(.22,1,.36,1)}
+a.work-card:hover .work-shot img{transform:scale(1.06)}
+
 /* ══════════════ ATMOSPHERE ══════════════ */
 .glow{position:fixed;inset:0;pointer-events:none;z-index:0}
 .glow::before,.glow::after{
@@ -508,6 +528,7 @@ a.work-card:hover{border-color:rgba(143,116,196,.4);transform:translateY(-4px)}
   font-size:13.5px;font-weight:700;color:var(--purple);
 }
 .work-card:hover .work-link{color:var(--purple-soft)}
+.work-note{display:block;margin-top:7px;font-size:11.5px;letter-spacing:.06em;color:var(--muted)}
 .work-soon{
   border-style:dashed;border-color:rgba(255,255,255,.13);
   display:grid;place-items:center;text-align:center;padding:52px 30px;min-height:340px;
@@ -674,6 +695,8 @@ html.js .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .eyebrow{animation:none;background-position:0 0}
+  a.work-card:hover .work-shot img{transform:none}
+  #cursor-glow{display:none}
   .pill::after{animation:none;opacity:0}
   .pill,.btn-primary{animation:none}
   html{scroll-behavior:auto}
@@ -688,6 +711,8 @@ html.js .reveal.in{opacity:1;transform:none}
   <button id="introSkip" type="button">Skip</button>
 </div>
 
+<div id="progress" aria-hidden="true"></div>
+<div id="cursor-glow" aria-hidden="true"></div>
 <div class="glow" aria-hidden="true"></div>
 
 <!-- ══════════════ NAV ══════════════ -->
@@ -834,7 +859,7 @@ html.js .reveal.in{opacity:1;transform:none}
         </div>
       </a>
 
-      <div class="work-card reveal">
+      <a class="work-card reveal" href="https://gabe-coach-hub-demo.vercel.app" target="_blank" rel="noopener noreferrer">
         <div class="work-shot app-shot">
           <span class="work-tag tag-dev"><span class="dot"></span>Built</span>
           <div class="app-bar">
@@ -859,11 +884,13 @@ html.js .reveal.in{opacity:1;transform:none}
           <p>
             Not a website. A private hub for running the coaching business behind one: client
             roster, lead pipeline, weekly check-ins, and the follow-up emails that go out on
-            their own. Early days, and it will look nothing like this in a month.
+            their own. His real hub is private, so this opens a sandbox running on
+            invented clients instead.
           </p>
-          <span class="work-link">Private build</span>
+          <span class="work-link">Try the demo →</span>
+          <span class="work-note">Password: peaknatty</span>
         </div>
-      </div>
+      </a>
 
       <div class="work-card reveal">
         <div class="work-shot shot-steven">
@@ -1264,6 +1291,51 @@ document.documentElement.classList.add('js');
       btn.setAttribute('aria-expanded','false');
     }
   });
+})();
+
+/* ════════ SCROLL PROGRESS + PHONE PARALLAX ════════ */
+(function(){
+  var bar=document.getElementById('progress');
+  var device=document.querySelector('.device');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ticking=false;
+  function paint(){
+    ticking=false;
+    var max=document.documentElement.scrollHeight-window.innerHeight;
+    if(bar) bar.style.transform='scaleX('+(max>0?Math.min(1,window.scrollY/max):0)+')';
+    /* the phone lags the page slightly, which reads as depth rather than movement */
+    if(device&&!reduce){
+      var shift=Math.max(-40,Math.min(40,(window.scrollY-260)*0.045));
+      device.style.transform='translateY('+(-shift).toFixed(2)+'px)';
+    }
+  }
+  function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(paint); } }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll,{passive:true});
+  paint();
+})();
+
+/* ════════ CURSOR GLOW ════════ */
+(function(){
+  var el=document.getElementById('cursor-glow');
+  if(!el) return;
+  /* pointer only: on touch there is no cursor to follow, and it would just
+     sit wherever the last tap landed */
+  if(!(window.matchMedia&&window.matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var x=0,y=0,pending=false;
+  window.addEventListener('pointermove',function(e){
+    x=e.clientX;y=e.clientY;
+    if(!pending){
+      pending=true;
+      requestAnimationFrame(function(){
+        pending=false;
+        el.style.transform='translate('+x+'px,'+y+'px)';
+        el.style.opacity='1';
+      });
+    }
+  },{passive:true});
+  document.addEventListener('mouseleave',function(){el.style.opacity='0';});
 })();
 
 /* ════════ REVEAL ════════ */
