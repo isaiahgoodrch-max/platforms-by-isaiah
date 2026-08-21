@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Platforms by Isaiah Goodrich | Custom Websites for Creators & Small Businesses</title>
 <meta name="description" content="I build custom websites for creators and small businesses. Designed around your brand, coded from scratch, and maintained for you. No templates, no page builders.">
-<meta name="theme-color" content="#141417">
+<meta name="theme-color" content="#0a0a0c">
 <meta property="og:title" content="Platforms by Isaiah Goodrich">
 <meta property="og:description" content="Custom websites for creators and small businesses. Built from scratch. Maintained for you.">
 <meta property="og:type" content="website">
@@ -30,33 +30,33 @@
 <style>
 :root{
   /* base */
-  --black:#141417;
-  --ink-2:#2b2b31;
-  --panel:#1f1f23;
+  --black:#0a0a0c;
+  --ink-2:#232328;
+  --panel:#151517;
 
   /* white accent on a neutral scale */
-  --gray-900:#212126;
-  --gray-800:#2e2e34;
-  --gray-700:#2e2e34;
-  --gray-600:#3b3b42;
+  --gray-900:#17171a;
+  --gray-800:#26262b;
+  --gray-700:#26262b;
+  --gray-600:#333339;
   --accent:#ffffff;
-  --accent-dim:#b2b2ba;
+  --accent-dim:#9a9aa4;
 
   /* status only, never decoration: marks work that is not shipped yet */
   --status-dim:#9696a0;
 
   /* the deeper neutral surfaces */
-  --slate-900:#26262a;
-  --slate-800:#2b2b31;
-  --slate-700:#2b2b31;
+  --slate-900:#1c1c20;
+  --slate-800:#232328;
+  --slate-700:#232328;
   --accent-soft:#e6e6ea;
 
   /* type */
   --paper:#f7f7f8;
-  --text:#e8e8ec;
-  --muted:#bcbcc4;
-  --line:rgba(255,255,255,.2);
-  --line-2:rgba(255,255,255,.14);
+  --text:#d6d6dc;
+  --muted:#a2a2ac;
+  --line:rgba(255,255,255,.16);
+  --line-2:rgba(255,255,255,.1);
 
   --serif:'Fraunces',Georgia,serif;
   --sans:'DM Sans',system-ui,-apple-system,sans-serif;
@@ -139,7 +139,7 @@ a{color:inherit}
 #intro{
   display:none;
   position:fixed;inset:0;z-index:10000;
-  background:#141417;overflow:hidden;
+  background:#0a0a0c;overflow:hidden;
   transition:opacity .5s ease;
 }
 html.js #intro{display:block}
@@ -312,7 +312,7 @@ html.js.intro-lock body{overflow:hidden}
 .modal-card{
   position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;
   padding:38px 36px 34px;border-radius:20px;
-  background:#1e1e22;border:1px solid rgba(255,255,255,.1);
+  background:#141416;border:1px solid rgba(255,255,255,.1);
   box-shadow:0 40px 90px rgba(0,0,0,.75);
   animation:cardIn .35s cubic-bezier(.22,1,.36,1);
 }
@@ -415,11 +415,11 @@ a.work-card:hover .work-shot img{transform:scale(1.06)}
 /* ══════════════ NAV ══════════════ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(20,20,23,.9);
+  background:rgba(10,10,12,.9);
   border-bottom:1px solid var(--line-2);
   transition:background .3s,border-color .3s;
 }
-nav.solid{background:#141417;border-bottom-color:var(--line)}
+nav.solid{background:#0a0a0c;border-bottom-color:var(--line)}
 .nav-in{
   max-width:1200px;margin:0 auto;padding:0 28px;
   height:74px;display:flex;align-items:center;gap:22px;
@@ -482,7 +482,7 @@ header.hero{
   display:inline-flex;align-items:center;gap:9px;
   padding:8px 17px;border-radius:999px;
   border:1px solid rgba(255,255,255,.28);
-  background:rgba(46,46,52,.4);
+  background:rgba(38,38,43,.4);
   font-size:10.5px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;
   color:var(--accent-soft);margin-bottom:26px;
 }
@@ -523,22 +523,20 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
 .laptop-link:hover{transform:translateY(-7px)}
 .laptop-link.is-turning{transform:none}
 .laptop-link:focus-visible{outline:2px solid #fff;outline-offset:16px;border-radius:20px}
-.laptop{
-  position:relative;width:100%;
-  perspective:1500px;perspective-origin:50% 42%;
-  /* --spin is written by the drag handler */
-  --spin:0deg;
-}
-.laptop-inner{transform:rotateY(var(--spin));transform-style:preserve-3d;transition:transform .1s linear}
+/* Deliberately flat. A perspective + preserve-3d version of this promoted the
+   whole document into one composited layer and Safari rasterised it dark.
+   The angle is faked with clip-path and gradients instead, which costs the
+   compositor nothing. */
+.laptop{position:relative;width:100%;--spin:0deg}
+.laptop-inner{transform:skewX(calc(var(--spin) * 0.28));transition:transform .12s linear}
 .laptop.is-easing .laptop-inner{transition:transform .9s cubic-bezier(.22,1,.36,1)}
 
 /* lid leans back; the base lies down toward the viewer, which is what sells it */
 .lid{
   position:relative;border-radius:12px 12px 3px 3px;
   padding:9px 9px 11px;
-  background:linear-gradient(165deg,#3a3a40,#212126 48%,#2e2e34);
+  background:linear-gradient(165deg,#3a3a40,#17171a 48%,#26262b);
   box-shadow:0 30px 60px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.09);
-  transform:rotateX(9deg);transform-origin:50% 100%;
 }
 .screen{
   position:relative;border-radius:6px;overflow:hidden;background:#fdfaf8;
@@ -548,7 +546,7 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
 /* the hinge line between lid and deck */
 .hinge{
   height:5px;margin:0 4%;border-radius:0 0 3px 3px;
-  background:linear-gradient(180deg,#2a2a30,#141417);
+  background:linear-gradient(180deg,#2a2a30,#0a0a0c);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
 }
 
@@ -558,7 +556,7 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
   border-radius:4px 4px 12px 12px;
   background:linear-gradient(180deg,#33333a 0%,#212127 34%,#17171b 100%);
   box-shadow:0 26px 40px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.2);
-  transform:rotateX(64deg);transform-origin:50% 0;
+  clip-path:polygon(4% 0,96% 0,100% 100%,0 100%);
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   gap:5px;padding:7px 9% 0;
 }
@@ -618,7 +616,7 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
 /* floating cards */
 .float{
   position:absolute;z-index:3;
-  background:#212126;
+  background:#17171a;
   border:1px solid var(--line);border-radius:15px;
   padding:13px 16px;
   box-shadow:0 22px 50px rgba(0,0,0,.6);
@@ -653,7 +651,7 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
 .strip{
   position:relative;z-index:1;
   border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);
-  background:linear-gradient(90deg,rgba(33,33,38,.7),rgba(34,34,39,.7));
+  background:linear-gradient(90deg,rgba(23,23,26,.7),rgba(26,26,30,.7));
   overflow:hidden;padding:16px 0;
 }
 .track{display:flex;width:max-content;animation:slide 42s linear infinite}
@@ -683,14 +681,14 @@ section{position:relative;z-index:1;padding:112px 0}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .step{
   padding:38px 32px;border-radius:20px;
-  border:1px solid transparent;background:#e8e8ec;
+  border:1px solid transparent;background:#d6d6dc;
   transition:box-shadow .3s,transform .3s;
 }
 .step:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(0,0,0,.5)}
 /* each card lifts and brightens as it arrives, then settles */
 .steps .step{transition:transform .7s cubic-bezier(.22,1,.36,1),box-shadow .7s,background .7s}
 .steps .step.reveal{transform:translateY(34px) scale(.97);background:#c9c9d0}
-.steps .step.reveal.in{transform:none;background:#e8e8ec;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.steps .step.reveal.in{transform:none;background:#d6d6dc;box-shadow:0 20px 50px rgba(0,0,0,.45)}
 @media(max-width:680px){
   /* on a phone the cards are full width and stacked, so the scale reads as jitter */
   .steps .step.reveal{transform:translateY(18px) scale(1)}
@@ -705,7 +703,7 @@ section{position:relative;z-index:1;padding:112px 0}
 .after-steps{
   margin-top:26px;padding:32px 36px;border-radius:20px;
   border:1px solid rgba(255,255,255,.2);
-  background:linear-gradient(120deg,rgba(46,46,52,.45),rgba(44,44,50,.3));
+  background:linear-gradient(120deg,rgba(38,38,43,.45),rgba(35,35,40,.3));
   display:flex;gap:26px;align-items:center;flex-wrap:wrap;
 }
 .after-steps .t{font-family:var(--serif);font-size:24px;color:var(--paper);font-style:normal}
@@ -715,7 +713,7 @@ section{position:relative;z-index:1;padding:112px 0}
 .work-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
 .work-card{
   border-radius:22px;overflow:hidden;border:1px solid var(--line-2);
-  background:#212126;
+  background:#17171a;
   display:flex;flex-direction:column;
   transition:border-color .3s,transform .3s;
   text-decoration:none;
@@ -738,7 +736,7 @@ a.work-card:hover{border-color:rgba(255,255,255,.4);transform:translateY(-4px)}
 .work-tag{
   position:absolute;top:14px;left:14px;z-index:2;
   display:inline-flex;align-items:center;gap:7px;
-  padding:6px 12px;border-radius:999px;background:rgba(20,20,23,.92);
+  padding:6px 12px;border-radius:999px;background:rgba(10,10,12,.92);
   font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
 }
 .work-tag.tag-build{color:var(--status-dim)}
@@ -817,11 +815,11 @@ a.work-card:hover{border-color:rgba(255,255,255,.4);transform:translateY(-4px)}
 /* pain ticker */
 .pain{
   border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);
-  background:rgba(33,33,38,.35);overflow:hidden;padding:20px 0;position:relative;z-index:1;
+  background:rgba(23,23,26,.35);overflow:hidden;padding:20px 0;position:relative;z-index:1;
 }
 .pain .track{animation-duration:52s}
 .pain .track span{
-  color:rgba(232,232,236,.78);font-family:var(--serif);font-style:normal;
+  color:rgba(214,214,220,.78);font-family:var(--serif);font-style:normal;
   font-size:17px;font-weight:400;letter-spacing:0;text-transform:none;
 }
 .pain .track span::after{background:rgba(255,255,255,.6)}
@@ -843,7 +841,7 @@ a.work-card:hover{border-color:rgba(255,255,255,.4);transform:translateY(-4px)}
 .book-card{
   margin-top:26px;padding:28px 30px;border-radius:18px;
   border:1px solid rgba(255,255,255,.3);
-  background:#26262a;
+  background:#1c1c20;
 }
 .book-card h3{
   font-family:var(--serif);font-weight:500;font-size:23px;color:var(--paper);margin-top:12px;
@@ -853,7 +851,7 @@ a.work-card:hover{border-color:rgba(255,255,255,.4);transform:translateY(-4px)}
 
 .step-link{
   display:inline-flex;align-items:center;margin-top:16px;
-  font-size:13.5px;font-weight:700;color:#212126;
+  font-size:13.5px;font-weight:700;color:#17171a;
   text-decoration:none;transition:color .2s;
 }
 .step-link:hover{color:#000000;text-decoration:underline}
@@ -868,7 +866,7 @@ a.work-card:hover{border-color:rgba(255,255,255,.4);transform:translateY(-4px)}
 form{
   padding:40px;border-radius:24px;
   border:1px solid var(--line-2);
-  background:#212126;
+  background:#17171a;
 }
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .field{display:flex;flex-direction:column;gap:8px}
@@ -876,25 +874,25 @@ form{
 label{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 input,select,textarea{
   font-family:var(--sans);font-size:15px;color:var(--paper);
-  background:rgba(20,20,23,.6);border:1px solid var(--line);border-radius:11px;
+  background:rgba(10,10,12,.6);border:1px solid var(--line);border-radius:11px;
   padding:13px 15px;transition:border-color .2s,background .2s;width:100%;
 }
-input::placeholder,textarea::placeholder{color:#a8a8b2}
+input::placeholder,textarea::placeholder{color:#8e8e98}
 input:focus,select:focus,textarea:focus{
-  outline:none;border-color:var(--accent-dim);background:rgba(46,46,52,.3);
+  outline:none;border-color:var(--accent-dim);background:rgba(38,38,43,.3);
 }
 textarea{resize:vertical;min-height:118px;line-height:1.6}
 select{appearance:none;cursor:pointer;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237c8a85' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 15px center;padding-right:38px;
 }
-select option{background:#1f1f23;color:var(--paper)}
+select option{background:#151517;color:var(--paper)}
 .form-submit{margin-top:26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .form-submit .btn-primary{padding:14px 30px;font-size:15px}
 .form-note{font-size:12.5px;color:var(--muted);flex:1;min-width:200px}
 .sent{
   display:none;margin-top:22px;padding:18px 20px;border-radius:13px;
-  border:1px solid rgba(255,255,255,.35);background:rgba(46,46,52,.4);
+  border:1px solid rgba(255,255,255,.35);background:rgba(38,38,43,.4);
   font-size:14px;line-height:1.65;color:var(--accent-soft);
 }
 .sent.show{display:block}
@@ -904,7 +902,7 @@ select option{background:#1f1f23;color:var(--paper)}
 footer{
   position:relative;z-index:1;
   border-top:1px solid var(--line-2);padding:56px 0 44px;
-  background:rgba(16,16,19,.7);
+  background:rgba(8,8,10,.7);
 }
 .foot-top{display:flex;justify-content:space-between;gap:34px;flex-wrap:wrap;align-items:flex-start}
 .foot-tag{font-family:var(--serif);font-style:normal;font-size:19px;color:var(--text);margin-top:14px;max-width:400px;line-height:1.5}
@@ -1296,7 +1294,7 @@ html.js .reveal.in{opacity:1;transform:none}
             <stop offset="1" stop-color="#8a6c39"/>
           </linearGradient>
           <linearGradient id="hoodieGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#2e2e34"/><stop offset="1" stop-color="#141417"/>
+            <stop offset="0" stop-color="#26262b"/><stop offset="1" stop-color="#0a0a0c"/>
           </linearGradient>
           <radialGradient id="screenGlow" cx="0.5" cy="0.5" r="0.6">
             <stop offset="0" stop-color="#ffffff" stop-opacity="0.20"/>
@@ -1314,7 +1312,7 @@ html.js .reveal.in{opacity:1;transform:none}
         <rect x="248" y="150" width="196" height="4" rx="2" fill="#ffffff" opacity=".2"/>
         <rect x="248" y="162" width="168" height="4" rx="2" fill="#ffffff" opacity=".2"/>
         <rect x="248" y="186" width="86" height="20" rx="10" fill="#ffffff" opacity=".82"/>
-        <rect x="404" y="150" width="106" height="86" rx="5" fill="#2b2b31"/>
+        <rect x="404" y="150" width="106" height="86" rx="5" fill="#232328"/>
         <circle cx="457" cy="182" r="15" fill="#3d3d45"/>
         <rect x="418" y="206" width="78" height="4" rx="2" fill="#ffffff" opacity=".18"/>
         <circle cx="470" cy="228" r="3.5" fill="#fff" class="ds-cursor"/>
@@ -1353,7 +1351,7 @@ html.js .reveal.in{opacity:1;transform:none}
           <circle cx="497" cy="392" r="11" fill="#caa588"/>
         </g>
 
-        <rect x="372" y="502" width="16" height="18" fill="#2b2b31"/>
+        <rect x="372" y="502" width="16" height="18" fill="#232328"/>
       </svg>
       <span class="desk-cta">See it live at themaysonbrown.com &rarr;</span>
     </a>
