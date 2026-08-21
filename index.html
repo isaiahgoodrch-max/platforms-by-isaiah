@@ -331,41 +331,16 @@ html.js.intro-lock body{overflow:hidden}
 }
 .monitor-link:hover .mon-cta{opacity:1}
 
-/* the miniature itself */
-.mb-nav{
-  flex:none;display:flex;align-items:center;justify-content:space-between;
-  padding:9px 16px;border-bottom:1px solid rgba(242,237,228,.1);
+/* The real site, framed and scaled down. --mon-scale is written by JS from the
+   screen's measured width, so the frame always renders at a true desktop
+   viewport and is shrunk, rather than being served a narrow mobile layout. */
+.mon-frame{
+  position:absolute;top:0;left:0;
+  width:1440px;height:900px;border:0;
+  transform-origin:0 0;transform:scale(var(--mon-scale,.2));
+  pointer-events:none;
 }
-.mb-mark{font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.02em;color:var(--mb-cream)}
-.mb-mark b{color:var(--mb-brown);font-weight:700}
-.mb-links{display:flex;align-items:center;gap:9px}
-.mb-links i{font-style:normal;font-size:5.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mb-dim)}
-.mb-links .mb-cta-sm{
-  color:var(--mb-black);background:var(--mb-cream);
-  padding:3px 7px;border-radius:999px;font-weight:700;
-}
-.mb-hero{
-  flex:1;min-height:0;display:grid;grid-template-columns:1.15fr .85fr;
-  gap:16px;align-items:center;padding:14px 16px 16px;
-}
-.mb-copy{display:flex;flex-direction:column;min-width:0}
-.mb-eyebrow{font-size:5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mb-brown)}
-.mb-h1{
-  font-family:var(--sans);font-weight:700;font-size:19px;line-height:1.06;
-  letter-spacing:-.02em;color:var(--mb-cream);margin-top:8px;
-}
-.mb-loc{font-size:5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mb-dim);margin-top:9px}
-.mb-photo{
-  display:block;border-radius:6px;overflow:hidden;aspect-ratio:1/1.04;
-  box-shadow:0 10px 24px rgba(0,0,0,.55);
-}
-.mb-photo img{width:100%;height:100%;object-fit:cover;object-position:center 18%}
-@media(max-width:680px){
-  .mb-h1{font-size:14px}
-  .mb-hero{padding:10px 12px 12px;gap:11px}
-  .mb-nav{padding:7px 12px}
-  .mon-cta{margin-top:16px;font-size:10px}
-}
+@media(max-width:680px){ .mon-cta{margin-top:16px;font-size:10px} }
 
 /* ══════════════ MOTION ══════════════ */
 /* Reading position. Scales on the compositor rather than animating width. */
@@ -1254,20 +1229,9 @@ html.js .reveal.in{opacity:1;transform:none}
        aria-label="Open Mayson Brown's site in a new tab">
       <div class="monitor">
         <div class="mon-screen">
-          <div class="mb-nav">
-            <span class="mb-mark">Mayson <b>Brown</b></span>
-            <span class="mb-links"><i class="mb-cta-sm">Work With Me</i><i>Shop</i><i>About</i></span>
-          </div>
-          <div class="mb-hero">
-            <div class="mb-copy">
-              <span class="mb-eyebrow">Creator &middot; Luxury Content &middot; Marketing Manager</span>
-              <span class="mb-h1">Luxury content,<br>built to convert.</span>
-              <span class="mb-loc">Scottsdale, Arizona</span>
-            </div>
-            <span class="mb-photo">
-              <img src="images/mayson-hero.jpg" alt="Mayson Brown" loading="lazy" width="900" height="900">
-            </span>
-          </div>
+          <iframe class="mon-frame" src="https://themaysonbrown.com" title="Mayson Brown's website"
+                  loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
+                  referrerpolicy="no-referrer"></iframe>
         </div>
       </div>
       <span class="mon-neck"></span>
@@ -1577,6 +1541,23 @@ document.documentElement.classList.add('js');
     el.style.transitionDelay = (Math.min(i % 4, 3) * 70) + 'ms';
     io.observe(el);
   });
+})();
+
+/* ════════ SCALE THE FRAMED SITE ════════ */
+(function(){
+  var screenEl=document.querySelector('.mon-screen');
+  var frame=document.querySelector('.mon-frame');
+  if(!screenEl||!frame) return;
+  var BASE=1440;                       /* the viewport the frame renders at */
+  function fit(){
+    var w=screenEl.clientWidth;
+    if(w) screenEl.style.setProperty('--mon-scale',(w/BASE).toFixed(4));
+  }
+  fit();
+  if(window.ResizeObserver) new ResizeObserver(fit).observe(screenEl);
+  window.addEventListener('resize',fit,{passive:true});
+  /* re-fit once it has actually loaded, in case fonts shift its height */
+  frame.addEventListener('load',fit);
 })();
 
 /* ════════ SECTION MARKER ════════ */
