@@ -286,6 +286,39 @@ html.js.intro-lock body{overflow:hidden}
 @media(prefers-reduced-motion:reduce){ #mark{transition:none} #mark.show .mk-dot{animation:none} }
 
 
+
+/* ── who I am ── */
+.about-grid{display:grid;grid-template-columns:.62fr 1fr;gap:60px;align-items:center}
+.about-photo{
+  position:relative;width:100%;max-width:360px;aspect-ratio:1;
+  border-radius:50%;overflow:hidden;justify-self:center;
+  background:#26262b;
+  box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.14);
+}
+.about-photo img{
+  width:100%;height:100%;object-fit:cover;
+  /* portrait crop: his face sits in the upper third of the frame */
+  object-position:center 24%;
+}
+/* until the file is added, the circle holds its shape rather than breaking */
+.photo-fallback{
+  position:absolute;inset:0;display:none;place-items:center;
+  font-family:var(--serif);font-size:56px;color:rgba(255,255,255,.3);
+}
+.about-photo.no-photo img{display:none}
+.about-photo.no-photo .photo-fallback{display:grid}
+
+.about-copy h2{
+  font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.6vw,46px);
+  line-height:1.1;color:var(--paper);margin-top:16px;text-wrap:balance;
+}
+.about-copy p{margin-top:18px;font-size:16.5px;line-height:1.75;max-width:60ch}
+@media(max-width:920px){
+  .about-grid{grid-template-columns:1fr;gap:34px;justify-items:center;text-align:center}
+  .about-photo{max-width:260px}
+  .about-copy p{margin-left:auto;margin-right:auto}
+}
+
 /* ── his site, on a monitor ──
    No surrounding card: the display sits on the page itself. Colours are taken
    from themaysonbrown.com so the miniature reads as his site, not as ours. */
@@ -1057,6 +1090,35 @@ html.js .reveal.in{opacity:1;transform:none}
 
 
 
+<!-- ══════════════ WHO I AM ══════════════ -->
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-photo reveal">
+      <img src="images/isaiah.jpg" alt="Isaiah Goodrich" width="1333" height="2000"
+           loading="lazy" onerror="this.closest('.about-photo').classList.add('no-photo')">
+      <span class="photo-fallback" aria-hidden="true">IG</span>
+    </div>
+
+    <div class="about-copy reveal">
+      <span class="eyebrow">Who's behind it</span>
+      <h2>Hey, I'm Isaiah.</h2>
+      <p>
+        I build custom websites for creators, small brands and personal brands. One person from
+        the first conversation to launch, and I stay on afterwards to keep it current.
+      </p>
+      <p>
+        I do it because almost everyone online ends up looking the same. Same template, same
+        layout, same list of links. I want yours to look like it was made for you, because it
+        was. Something that sparks a bit of creativity instead of blending in.
+      </p>
+      <p>
+        And it isn't only about looking good. A page that's properly put together gets taken
+        seriously, and it turns more of the people who land on it into actual clients.
+      </p>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════════ PORTFOLIO ══════════════ -->
 <section id="work">
   <div class="wrap">
@@ -1592,6 +1654,7 @@ document.documentElement.classList.add('js');
   var label=mark.querySelector('.mk-label');
   var SECTIONS=[
     {id:'top',      name:'Start your build'},
+    {id:'about',    name:'Who I am'},
     {id:'work',     name:'My portfolio'},
     {id:'domain',   name:'Your own address'},
     {id:'process',  name:'The steps'},
