@@ -159,14 +159,14 @@ html.js.intro-lock body{overflow:hidden}
 
 /* ── envelope ── */
 .env{
-  position:absolute;left:50%;top:65%;width:300px;height:190px;
+  position:absolute;left:50%;top:66%;width:440px;height:280px;
   transform:translate(-50%,-50%) scale(.9);
   opacity:0;
 }
-.env-body{fill:#0c0c0f;stroke:rgba(255,255,255,.42);stroke-width:2}
-.env-back{fill:none;stroke:rgba(255,255,255,.22);stroke-width:2}
+.env-body{fill:#ded7c7;stroke:#b9b0a0;stroke-width:2}
+.env-seam{fill:none;stroke:#b9b0a0;stroke-width:2}
 .env-flap{
-  fill:#141418;stroke:rgba(255,255,255,.42);stroke-width:2;
+  fill:#cbc3b1;stroke:#b9b0a0;stroke-width:2;
   transform-box:fill-box;transform-origin:50% 0;
 }
 #intro.t-drop .env{animation:envDrop .55s cubic-bezier(.3,1.4,.5,1) forwards}
@@ -190,28 +190,39 @@ html.js.intro-lock body{overflow:hidden}
 @keyframes letterUp{
   0%  {opacity:0;transform:translate(-50%,-20px) scale(.9)}
   35% {opacity:1}
-  100%{opacity:1;transform:translate(-50%,-335px) scale(1)}
+  100%{opacity:1;transform:translate(-50%,-413px) scale(1)}
+}
+.paper{
+  background:#fff;border-radius:3px;
+  padding:30px 40px 34px;display:grid;justify-items:center;gap:12px;
+  box-shadow:0 26px 54px rgba(0,0,0,.6);
+  min-width:420px;
 }
 .iw-small{
-  font-family:var(--sans);font-size:13px;font-weight:700;
-  letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.72);
+  font-family:var(--sans);font-size:11px;font-weight:700;
+  letter-spacing:.36em;text-transform:uppercase;color:#5c5c66;
 }
 .iw-big{
-  font-family:var(--serif);font-weight:600;font-size:64px;line-height:1;
-  color:#fff;letter-spacing:-.01em;white-space:nowrap;
+  font-family:var(--serif);font-weight:600;font-size:46px;line-height:1;
+  color:#0a0a0c;letter-spacing:-.01em;white-space:nowrap;
 }
 
 /* ── the dove ── */
 .dove{
-  position:absolute;left:0;top:0;width:164px;height:108px;
-  offset-path:path("M -200 -110 C 60 20 150 150 260 216 C 348 268 424 258 452 208 C 482 152 432 104 390 128 C 344 154 362 232 428 258 C 472 256 508 248 466 240 C 432 234 412 240 402 240");
+  position:absolute;left:0;top:0;width:216px;height:150px;
+  offset-path:path("M -200 -110 C 60 20 150 150 260 216 C 348 268 424 258 452 208 C 482 152 432 104 390 128 C 344 154 362 232 428 258 C 472 197 508 189 466 181 C 432 175 412 181 402 181");
   offset-rotate:auto;
   offset-distance:0%;
   opacity:0;
 }
 .dove svg{width:100%;height:100%;overflow:visible}
-.bird path{fill:#fff}
-.beak{fill:#e8e2d6}
+.bird path,.bird circle{fill:#fff}
+.beak{fill:#d8ceb8}
+.eye{fill:#0a0a0c}
+/* the parcel rides with the bird until it is let go */
+.carry rect{fill:#ded7c7;stroke:#b9b0a0;stroke-width:1.6}
+.carry-seam{fill:none;stroke:#b9b0a0;stroke-width:1.4}
+#intro.t-drop .carry{opacity:0;transition:opacity .12s linear}
 .eye{fill:#000}
 .wing{transform-box:fill-box;transform-origin:88% 92%}
 #intro.t-fly .dove{animation:flyIn 2.35s cubic-bezier(.34,.16,.28,1) forwards}
@@ -225,8 +236,8 @@ html.js.intro-lock body{overflow:hidden}
 @keyframes flapN{from{transform:rotate(4deg) scaleY(1)}to{transform:rotate(-52deg) scaleY(.62)}}
 @keyframes flapF{from{transform:rotate(10deg) scaleY(.94)}to{transform:rotate(-42deg) scaleY(.6)}}
 /* once perched the wings fold and stay folded */
-#intro.t-perch .wing-near{animation:none;transform:rotate(34deg) scaleY(.5);transition:transform .35s ease}
-#intro.t-perch .wing-far {animation:none;transform:rotate(30deg) scaleY(.45);transition:transform .35s ease}
+#intro.t-perch .wing-near{animation:none;transform:rotate(19deg) scaleY(.72) scaleX(.86);transition:transform .4s ease}
+#intro.t-perch .wing-far {animation:none;transform:rotate(16deg) scaleY(.66) scaleX(.82);transition:transform .4s ease}
 /* stop mid-flight travel once it has landed */
 #intro.t-perch .dove{offset-rotate:0deg;transition:offset-rotate .3s ease}
 
@@ -239,7 +250,7 @@ html.js.intro-lock body{overflow:hidden}
 #intro.t-fly #introSkip{opacity:1}
 #introSkip:hover{color:rgba(255,255,255,.75)}
 
-@media(max-width:680px){ .iw-big{font-size:40px} .iw-small{font-size:10px;letter-spacing:.3em} }
+@media(max-width:680px){ .paper{min-width:0;padding:22px 26px 26px} .iw-big{font-size:30px} .iw-small{font-size:9px;letter-spacing:.3em} }
 
 /* ── section marker ──
    Replaces the old fixed rail, which spanned the full viewport height and
@@ -910,31 +921,38 @@ html.js .reveal.in{opacity:1;transform:none}
 <!-- ══════════════ INTRO ══════════════ -->
 <div id="intro" aria-hidden="true">
   <div class="scene">
-    <!-- envelope, black with a hairline so it reads on black -->
-    <svg class="env" viewBox="0 0 300 190" aria-hidden="true">
-      <rect class="env-body" x="2" y="42" width="296" height="146" rx="7"/>
-      <path class="env-back" d="M2 49 L150 138 L298 49"/>
-      <path class="env-flap" d="M2 49 L150 138 L298 49 L298 42 L2 42 Z"/>
+    <!-- envelope: cream, so it reads against the black -->
+    <svg class="env" viewBox="0 0 440 280" aria-hidden="true">
+      <rect class="env-body" x="3" y="62" width="434" height="215" rx="9"/>
+      <path class="env-seam" d="M3 68 L220 200 L437 68"/>
+      <path class="env-flap" d="M3 68 L220 200 L437 68 L437 60 L3 60 Z"/>
     </svg>
 
     <!-- what was inside -->
     <div class="letter">
-      <span class="iw-small">Platforms by</span>
-      <span class="iw-big">Isaiah Goodrich</span>
+      <div class="paper">
+        <span class="iw-small">Platforms by</span>
+        <span class="iw-big">Isaiah Goodrich</span>
+      </div>
     </div>
 
-    <!-- the dove, carrying it in -->
+    <!-- the dove, with the envelope in its feet -->
     <div class="dove">
-      <svg viewBox="0 0 120 80" aria-hidden="true">
+      <svg viewBox="0 0 150 130" aria-hidden="true">
         <g class="bird">
-          <path class="wing wing-far" d="M62 33 C52 9 30 0 10 9 C28 15 44 25 52 41 Z"/>
-          <path class="body" d="M30 44 C42 32 62 26 80 28 C92 29 102 26 110 19
-                                 C112 31 104 41 92 45 C78 50 62 54 52 60
-                                 C43 65 31 64 24 58 C19 53 23 46 30 44 Z"/>
-          <path class="beak" d="M110 19 L120 21 L110 25 Z"/>
-          <circle class="eye" cx="103" cy="24" r="1.7"/>
-          <path class="tail" d="M26 52 C15 55 7 61 0 70 C12 70 23 66 32 60 Z"/>
-          <path class="wing wing-near" d="M58 38 C50 12 28 3 8 13 C28 20 44 31 52 48 Z"/>
+          <path class="wing wing-far"  d="M72 52 C66 28 52 10 32 8 C46 22 58 36 64 54 Z"/>
+          <path class="tail" d="M40 70 C26 71 13 79 0 92 C16 95 33 90 45 81 Z"/>
+          <path class="body" d="M38 70 C34 52 54 36 80 36 C96 36 108 40 116 47
+                                 C110 60 96 68 80 72 C64 77 50 80 42 78 C35 77 36 74 38 70 Z"/>
+          <circle class="head" cx="114" cy="43" r="10.5"/>
+          <path class="beak" d="M123 41 L136 44 L123 47 Z"/>
+          <circle class="eye" cx="117" cy="40" r="1.8"/>
+          <path class="wing wing-near" d="M68 54 C60 26 42 6 18 6 C36 20 52 36 60 58 Z"/>
+        </g>
+        <!-- the parcel it is carrying -->
+        <g class="carry">
+          <rect x="70" y="73" width="36" height="24" rx="3"/>
+          <path class="carry-seam" d="M70 75 L88 89 L106 75"/>
         </g>
       </svg>
     </div>
