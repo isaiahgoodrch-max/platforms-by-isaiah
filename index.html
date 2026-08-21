@@ -169,10 +169,12 @@ html.js.intro-lock body{overflow:hidden}
   fill:#cbc3b1;stroke:#b9b0a0;stroke-width:2;
   transform-box:fill-box;transform-origin:50% 0;
 }
-#intro.t-drop .env{animation:envDrop .55s cubic-bezier(.3,1.4,.5,1) forwards}
+#intro.t-drop .env{animation:envDrop .78s cubic-bezier(.25,1.2,.4,1) forwards}
+/* it leaves the bird at the size the bird was carrying, then grows as it
+   settles, so the small parcel and the big envelope are the same object */
 @keyframes envDrop{
-  0%  {opacity:0;transform:translate(-50%,-230%) scale(.9) rotate(-9deg)}
-  60% {opacity:1}
+  0%  {opacity:0;transform:translate(-50%,-330%) scale(.17) rotate(-14deg)}
+  18% {opacity:1}
   100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0deg)}
 }
 #intro.t-open .env-flap{animation:flapOpen .42s cubic-bezier(.3,0,.2,1) forwards}
@@ -188,13 +190,13 @@ html.js.intro-lock body{overflow:hidden}
 #intro.t-read .letter{animation:letterUp .75s cubic-bezier(.22,1,.36,1) forwards}
 /* px, not percentages of its own height, so the gap to the bird is fixed */
 @keyframes letterUp{
-  0%  {opacity:0;transform:translate(-50%,-20px) scale(.9)}
+  0%  {opacity:0;transform:translate(-50%,40px) scale(.98)}
   35% {opacity:1}
-  100%{opacity:1;transform:translate(-50%,-413px) scale(1)}
+  100%{opacity:1;transform:translate(-50%,-215px) scale(1)}
 }
 .paper{
   background:#fff;border-radius:3px;
-  padding:30px 40px 34px;display:grid;justify-items:center;gap:12px;
+  padding:26px 40px 92px;display:grid;justify-items:center;gap:12px;
   box-shadow:0 26px 54px rgba(0,0,0,.6);
   min-width:420px;
 }
@@ -210,7 +212,7 @@ html.js.intro-lock body{overflow:hidden}
 /* ── the dove ── */
 .dove{
   position:absolute;left:0;top:0;width:216px;height:150px;
-  offset-path:path("M -200 -110 C 60 20 150 150 260 216 C 348 268 424 258 452 208 C 482 152 432 104 390 128 C 344 154 362 232 428 258 C 472 197 508 189 466 181 C 432 175 412 181 402 181");
+  offset-path:path("M -200 -110 C 60 20 150 150 260 216 C 348 268 424 258 452 208 C 482 152 432 104 390 128 C 344 154 362 232 428 258 C 470 276 520 300 580 348 C 660 412 760 500 900 700");
   offset-rotate:auto;
   offset-distance:0%;
   opacity:0;
@@ -225,21 +227,19 @@ html.js.intro-lock body{overflow:hidden}
 #intro.t-drop .carry{opacity:0;transition:opacity .12s linear}
 .eye{fill:#000}
 .wing{transform-box:fill-box;transform-origin:88% 92%}
-#intro.t-fly .dove{animation:flyIn 2.35s cubic-bezier(.34,.16,.28,1) forwards}
+#intro.t-fly .dove{animation:flyIn 2.9s cubic-bezier(.3,.1,.45,1) forwards}
 @keyframes flyIn{
   0%  {offset-distance:0%;opacity:0}
   6%  {opacity:1}
-  100%{offset-distance:100%;opacity:1}
+  88% {opacity:1}
+  100%{offset-distance:100%;opacity:0}
 }
 #intro.t-fly .wing-near{animation:flapN .17s ease-in-out infinite alternate}
 #intro.t-fly .wing-far {animation:flapF .17s ease-in-out infinite alternate}
 @keyframes flapN{from{transform:rotate(4deg) scaleY(1)}to{transform:rotate(-52deg) scaleY(.62)}}
 @keyframes flapF{from{transform:rotate(10deg) scaleY(.94)}to{transform:rotate(-42deg) scaleY(.6)}}
 /* once perched the wings fold and stay folded */
-#intro.t-perch .wing-near{animation:none;transform:rotate(19deg) scaleY(.72) scaleX(.86);transition:transform .4s ease}
-#intro.t-perch .wing-far {animation:none;transform:rotate(16deg) scaleY(.66) scaleX(.82);transition:transform .4s ease}
-/* stop mid-flight travel once it has landed */
-#intro.t-perch .dove{offset-rotate:0deg;transition:offset-rotate .3s ease}
+/* it keeps flapping all the way out of frame */
 
 #introSkip{
   position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
@@ -921,20 +921,25 @@ html.js .reveal.in{opacity:1;transform:none}
 <!-- ══════════════ INTRO ══════════════ -->
 <div id="intro" aria-hidden="true">
   <div class="scene">
-    <!-- envelope: cream, so it reads against the black -->
-    <svg class="env" viewBox="0 0 440 280" aria-hidden="true">
-      <rect class="env-body" x="3" y="62" width="434" height="215" rx="9"/>
-      <path class="env-seam" d="M3 68 L220 200 L437 68"/>
+
+    <!-- flap sits behind the card -->
+    <svg class="env env-rear" viewBox="0 0 440 280" aria-hidden="true">
       <path class="env-flap" d="M3 68 L220 200 L437 68 L437 60 L3 60 Z"/>
     </svg>
 
-    <!-- what was inside -->
+    <!-- the card, half out of the envelope -->
     <div class="letter">
       <div class="paper">
         <span class="iw-small">Platforms by</span>
         <span class="iw-big">Isaiah Goodrich</span>
       </div>
     </div>
+
+    <!-- the front of the envelope covers the card's lower half -->
+    <svg class="env env-front" viewBox="0 0 440 280" aria-hidden="true">
+      <rect class="env-body" x="3" y="62" width="434" height="215" rx="9"/>
+      <path class="env-seam" d="M3 68 L220 200 L437 68"/>
+    </svg>
 
     <!-- the dove, with the envelope in its feet -->
     <div class="dove">
@@ -1446,17 +1451,16 @@ document.documentElement.classList.add('js');
   document.documentElement.classList.add('intro-lock');
 
   /* 0.00  dove enters top left, loops, heads for centre
-     1.05  it lets the envelope go
-     1.80  the flap opens
-     2.05  the wordmark rises out
-     2.35  the dove settles and folds its wings
+     1.00  it lets the envelope go, which grows as it settles
+     1.78  the flap opens
+     2.02  the card lifts, staying tucked in the envelope
+     2.90  the dove leaves frame
      3.40  done                                            */
   var step=[
     [0,    't-fly'],
-    [1050, 't-drop'],
-    [1800, 't-open'],
-    [2050, 't-read'],
-    [2350, 't-perch']
+    [1000, 't-drop'],
+    [1780, 't-open'],
+    [2020, 't-read']
   ];
   step.forEach(function(pair){
     timers.push(setTimeout(function(){ overlay.classList.add(pair[1]); }, pair[0]));
