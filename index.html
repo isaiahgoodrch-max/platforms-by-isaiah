@@ -283,7 +283,7 @@ html.js.intro-lock body{overflow:hidden}
 /* ── start a build dialog ── */
 .modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:24px}
 .modal[hidden]{display:none}
-.modal-scrim{position:absolute;inset:0;background:rgba(3,3,4,.78);backdrop-filter:blur(6px);
+.modal-scrim{position:absolute;inset:0;background:rgba(3,3,4,.9);
   animation:fadeIn .25s ease}
 .modal-card{
   position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;
@@ -390,12 +390,11 @@ a.work-card:hover .work-shot img{transform:scale(1.06)}
 /* ══════════════ NAV ══════════════ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(5,5,6,.72);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  background:rgba(5,5,6,.9);
   border-bottom:1px solid var(--line-2);
   transition:background .3s,border-color .3s;
 }
-nav.solid{background:rgba(5,5,6,.94);border-bottom-color:var(--line)}
+nav.solid{background:#050506;border-bottom-color:var(--line)}
 .nav-in{
   max-width:1200px;margin:0 auto;padding:0 28px;
   height:74px;display:flex;align-items:center;gap:22px;
@@ -560,8 +559,7 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
 /* floating cards */
 .float{
   position:absolute;z-index:3;
-  background:rgba(10,10,11,.86);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:rgba(10,10,11,.94);
   border:1px solid var(--line);border-radius:15px;
   padding:13px 16px;
   box-shadow:0 22px 50px rgba(0,0,0,.6);
@@ -673,8 +671,7 @@ a.work-card:hover{border-color:rgba(255,255,255,.4);transform:translateY(-4px)}
 .work-tag{
   position:absolute;top:14px;left:14px;z-index:2;
   display:inline-flex;align-items:center;gap:7px;
-  padding:6px 12px;border-radius:999px;background:rgba(5,5,6,.8);
-  backdrop-filter:blur(10px);
+  padding:6px 12px;border-radius:999px;background:rgba(5,5,6,.92);
   font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
 }
 .work-tag.tag-build{color:var(--status-dim)}
