@@ -149,47 +149,46 @@ html.js #intro{display:block}
 html.js.intro-lock body{overflow:hidden}
 #intro.done{opacity:0;pointer-events:none}
 
-.intro-sky{position:absolute;inset:-12%;z-index:2}
-/* An opaque sheet, not a haze: the name must be completely hidden first. */
+.intro-sky{position:absolute;inset:0;z-index:2;overflow:hidden}
+/* An opaque sheet under the cloud, so the name is genuinely hidden first. */
 .intro-sky::before{
   content:'';position:absolute;inset:0;background:#0f1013;
-  transition:opacity .9s ease .55s;
+  transition:opacity 1s ease .5s;
 }
 #intro.blow .intro-sky::before{opacity:0}
-.intro-sky .c{
-  position:absolute;display:block;border-radius:50%;
-  background:radial-gradient(ellipse at center,
-    rgba(226,228,236,1) 0%,rgba(198,202,214,.96) 38%,
-    rgba(150,156,172,.7) 62%,rgba(150,156,172,0) 82%);
-  filter:blur(26px);
-}
-.c1{width:86vw;height:52vw;left:-18vw;top:-8vh}
-.c2{width:74vw;height:46vw;left:22vw;top:-4vh}
-.c3{width:98vw;height:60vw;left:-12vw;top:18vh}
-.c4{width:70vw;height:44vw;left:38vw;top:32vh}
-.c5{width:88vw;height:52vw;left:-22vw;top:50vh}
-.c6{width:76vw;height:46vw;left:28vw;top:64vh}
 
-#intro:not(.blow) .c{animation:cloudIdle 10s ease-in-out infinite alternate}
-.c2{animation-delay:-2s}.c3{animation-delay:-4s}
-.c4{animation-delay:-1s}.c5{animation-delay:-5s}.c6{animation-delay:-3s}
-@keyframes cloudIdle{
-  from{transform:translate3d(0,0,0) scale(1)}
-  to  {transform:translate3d(2.5vw,-1vh,0) scale(1.05)}
+/* Cloud is fractal noise, not gradients. Gradients give you a symmetrical
+   glow, which reads as a light bulb; turbulence gives an irregular edge with
+   thick and thin patches, which reads as weather. Each layer runs at its own
+   frequency so they do not repeat against each other. */
+.cl{
+  position:absolute;left:-30%;width:160%;height:92%;
+  will-change:transform,opacity;
+  /* each band is a rectangle, so its top and bottom edges would otherwise read
+     as straight seams across the sky; feather them so the layers merge */
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 22%,#000 78%,rgba(0,0,0,0) 100%);
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 22%,#000 78%,rgba(0,0,0,0) 100%);
 }
+.cl1{top:-26%;opacity:.95}
+.cl2{top:6%;opacity:.92}
+.cl3{top:36%;opacity:.88}
 
-/* the gust: the bank tears apart, upper layers going right, lower going left */
-#intro.blow .c{
+#intro:not(.blow) .cl1{animation:skyDrift1 26s linear infinite}
+#intro:not(.blow) .cl2{animation:skyDrift2 34s linear infinite}
+#intro:not(.blow) .cl3{animation:skyDrift3 21s linear infinite}
+@keyframes skyDrift1{from{transform:translate3d(-3%,0,0) scale(1.04)}to{transform:translate3d(3%,-2%,0) scale(1.1)}}
+@keyframes skyDrift2{from{transform:translate3d(3%,0,0) scale(1.06)}to{transform:translate3d(-3%,2%,0) scale(1.02)}}
+@keyframes skyDrift3{from{transform:translate3d(-2%,1%,0) scale(1)}to{transform:translate3d(4%,-1%,0) scale(1.08)}}
+
+/* the gust: the bank shears apart rather than sliding off as one sheet */
+#intro.blow .cl{
   animation:none;
-  transition:transform 1.6s cubic-bezier(.45,0,.15,1),opacity 1.5s ease;
+  transition:transform 1.7s cubic-bezier(.42,0,.12,1),opacity 1.5s ease;
   opacity:0;
 }
-#intro.blow .c1{transform:translate3d(120vw,-14vh,0) scale(1.5)}
-#intro.blow .c2{transform:translate3d(135vw,-8vh,0) scale(1.4);transition-delay:.05s}
-#intro.blow .c3{transform:translate3d(-125vw,-6vh,0) scale(1.5);transition-delay:.1s}
-#intro.blow .c4{transform:translate3d(128vw,6vh,0) scale(1.4);transition-delay:.16s}
-#intro.blow .c5{transform:translate3d(-130vw,10vh,0) scale(1.5);transition-delay:.22s}
-#intro.blow .c6{transform:translate3d(122vw,14vh,0) scale(1.4);transition-delay:.28s}
+#intro.blow .cl1{transform:translate3d(115%,-16%,0) scale(1.5)}
+#intro.blow .cl2{transform:translate3d(-115%,-4%,0) scale(1.45);transition-delay:.09s}
+#intro.blow .cl3{transform:translate3d(120%,14%,0) scale(1.5);transition-delay:.18s}
 
 /* lightning: two quick strikes inside the bank just before it breaks */
 .intro-flash{
@@ -951,8 +950,30 @@ html.js .reveal.in{opacity:1;transform:none}
 <!-- ══════════════ INTRO ══════════════ -->
 <div id="intro" aria-hidden="true">
   <div class="intro-sky">
-    <span class="c c1"></span><span class="c c2"></span><span class="c c3"></span>
-    <span class="c c4"></span><span class="c c5"></span><span class="c c6"></span>
+    <svg class="cl cl1" viewBox="0 0 800 500" preserveAspectRatio="none" aria-hidden="true">
+      <filter id="cf1" x="-25%" y="-25%" width="150%" height="150%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.0055 0.011" numOctaves="4" seed="11"/>
+        <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.7 0 0 0 -0.42"/>
+        <feGaussianBlur stdDeviation="7"/>
+      </filter>
+      <rect width="800" height="500" filter="url(#cf1)"/>
+    </svg>
+    <svg class="cl cl2" viewBox="0 0 800 500" preserveAspectRatio="none" aria-hidden="true">
+      <filter id="cf2" x="-25%" y="-25%" width="150%" height="150%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.009 0.016" numOctaves="5" seed="29"/>
+        <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.5 0 0 0 -0.36"/>
+        <feGaussianBlur stdDeviation="5"/>
+      </filter>
+      <rect width="800" height="500" filter="url(#cf2)"/>
+    </svg>
+    <svg class="cl cl3" viewBox="0 0 800 500" preserveAspectRatio="none" aria-hidden="true">
+      <filter id="cf3" x="-25%" y="-25%" width="150%" height="150%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.013 0.022" numOctaves="5" seed="47"/>
+        <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.3 0 0 0 -0.3"/>
+        <feGaussianBlur stdDeviation="3.5"/>
+      </filter>
+      <rect width="800" height="500" filter="url(#cf3)"/>
+    </svg>
   </div>
   <div class="intro-flash" aria-hidden="true"></div>
   <div class="intro-word">
