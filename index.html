@@ -136,150 +136,110 @@ a{color:inherit}
 .btn-primary:hover{animation:none}
 
 /* ══════════════ INTRO ══════════════ */
-/* A bank of cloud sitting over the page, which the wind takes off to the right.
-   Six blurred ellipses at staggered depths: the near ones leave fastest, so the
-   bank shears apart instead of sliding as one flat sheet. */
+/* A dove carries an envelope in from the top left, loops, drops it centre,
+   the envelope opens, the wordmark rises out of it, and the dove settles on
+   the lid. The whole thing runs 3.4s and can be skipped. */
 #intro{
   display:none;
   position:fixed;inset:0;z-index:10000;
-  background:#111114;overflow:hidden;
-  transition:opacity .5s ease;
+  background:#000;overflow:hidden;
+  transition:opacity .45s ease;
 }
 html.js #intro{display:block}
 html.js.intro-lock body{overflow:hidden}
 #intro.done{opacity:0;pointer-events:none}
 
-.intro-sky{position:absolute;inset:0;z-index:2;overflow:hidden}
-/* An opaque sheet under the cloud, so the name is genuinely hidden first. */
-.intro-sky::before{
-  content:'';position:absolute;inset:0;background:#0f1013;
-  transition:opacity 1s ease .5s;
+/* fixed coordinate space so the flight path is predictable at any size */
+.scene{
+  position:absolute;left:50%;top:50%;
+  width:1000px;height:600px;
+  transform:translate(-50%,-50%) scale(var(--scene,1));
+  transform-origin:50% 50%;
 }
-#intro.blow .intro-sky::before{opacity:0}
 
-/* Cloud is fractal noise, not gradients. Gradients give you a symmetrical
-   glow, which reads as a light bulb; turbulence gives an irregular edge with
-   thick and thin patches, which reads as weather. Each layer runs at its own
-   frequency so they do not repeat against each other. */
-.cl{
-  position:absolute;left:-30%;width:160%;height:92%;
-  will-change:transform,opacity;
-  /* each band is a rectangle, so its top and bottom edges would otherwise read
-     as straight seams across the sky; feather them so the layers merge */
-  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 22%,#000 78%,rgba(0,0,0,0) 100%);
-  mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 22%,#000 78%,rgba(0,0,0,0) 100%);
-}
-.cl1{top:-26%;opacity:.95}
-.cl2{top:6%;opacity:.92}
-.cl3{top:36%;opacity:.88}
-
-#intro:not(.blow) .cl1{animation:skyDrift1 26s linear infinite}
-#intro:not(.blow) .cl2{animation:skyDrift2 34s linear infinite}
-#intro:not(.blow) .cl3{animation:skyDrift3 21s linear infinite}
-@keyframes skyDrift1{from{transform:translate3d(-3%,0,0) scale(1.04)}to{transform:translate3d(3%,-2%,0) scale(1.1)}}
-@keyframes skyDrift2{from{transform:translate3d(3%,0,0) scale(1.06)}to{transform:translate3d(-3%,2%,0) scale(1.02)}}
-@keyframes skyDrift3{from{transform:translate3d(-2%,1%,0) scale(1)}to{transform:translate3d(4%,-1%,0) scale(1.08)}}
-
-/* the gust: the bank shears apart rather than sliding off as one sheet */
-#intro.blow .cl{
-  animation:none;
-  transition:transform 1.7s cubic-bezier(.42,0,.12,1),opacity 1.5s ease;
+/* ── envelope ── */
+.env{
+  position:absolute;left:50%;top:65%;width:300px;height:190px;
+  transform:translate(-50%,-50%) scale(.9);
   opacity:0;
 }
-#intro.blow .cl1{transform:translate3d(115%,-16%,0) scale(1.5)}
-#intro.blow .cl2{transform:translate3d(-115%,-4%,0) scale(1.45);transition-delay:.09s}
-#intro.blow .cl3{transform:translate3d(120%,14%,0) scale(1.5);transition-delay:.18s}
-
-/* lightning: two quick strikes inside the bank just before it breaks */
-.intro-flash{
-  position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
-  background:
-    radial-gradient(ellipse 40% 30% at 32% 28%,rgba(255,255,255,.95),rgba(255,255,255,0) 60%),
-    radial-gradient(ellipse 34% 26% at 70% 46%,rgba(226,236,255,.8),rgba(226,236,255,0) 62%);
+.env-body{fill:#0c0c0f;stroke:rgba(255,255,255,.42);stroke-width:2}
+.env-back{fill:none;stroke:rgba(255,255,255,.22);stroke-width:2}
+.env-flap{
+  fill:#141418;stroke:rgba(255,255,255,.42);stroke-width:2;
+  transform-box:fill-box;transform-origin:50% 0;
 }
-#intro.strike .intro-flash{animation:bolt 1.1s ease-out}
-@keyframes bolt{
-  0%{opacity:0}   6%{opacity:1}   12%{opacity:.15}
-  18%{opacity:.85} 26%{opacity:0}
-  54%{opacity:0}  60%{opacity:.9} 66%{opacity:.1}
-  72%{opacity:.6} 100%{opacity:0}
+#intro.t-drop .env{animation:envDrop .55s cubic-bezier(.3,1.4,.5,1) forwards}
+@keyframes envDrop{
+  0%  {opacity:0;transform:translate(-50%,-230%) scale(.9) rotate(-9deg)}
+  60% {opacity:1}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0deg)}
 }
+#intro.t-open .env-flap{animation:flapOpen .42s cubic-bezier(.3,0,.2,1) forwards}
+@keyframes flapOpen{to{transform:scaleY(-1)}}
 
-.intro-word{
-  position:absolute;inset:0;display:grid;place-content:center;justify-items:center;
-  gap:14px;text-align:center;padding:0 24px;z-index:1;
+/* ── the wordmark, rising out of it ── */
+.letter{
+  position:absolute;left:50%;top:65%;
+  transform:translate(-50%,-50%);
+  display:grid;justify-items:center;gap:10px;
+  opacity:0;text-align:center;padding:0 20px;
+}
+#intro.t-read .letter{animation:letterUp .75s cubic-bezier(.22,1,.36,1) forwards}
+/* px, not percentages of its own height, so the gap to the bird is fixed */
+@keyframes letterUp{
+  0%  {opacity:0;transform:translate(-50%,-20px) scale(.9)}
+  35% {opacity:1}
+  100%{opacity:1;transform:translate(-50%,-335px) scale(1)}
 }
 .iw-small{
-  font-family:var(--sans);font-size:clamp(10px,1.5vw,13px);font-weight:700;
-  letter-spacing:.34em;text-transform:uppercase;color:rgba(255,255,255,.72);
+  font-family:var(--sans);font-size:13px;font-weight:700;
+  letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.72);
 }
 .iw-big{
-  font-family:var(--serif);font-weight:600;
-  font-size:clamp(34px,7vw,92px);line-height:1;color:#fff;letter-spacing:-.01em;
-  text-shadow:0 0 50px rgba(255,255,255,.28);
+  font-family:var(--serif);font-weight:600;font-size:64px;line-height:1;
+  color:#fff;letter-spacing:-.01em;white-space:nowrap;
 }
-/* the name holds while the weather clears off it */
-#intro.blow .intro-word{transition:opacity .5s ease 1.5s;opacity:0}
+
+/* ── the dove ── */
+.dove{
+  position:absolute;left:0;top:0;width:164px;height:108px;
+  offset-path:path("M -200 -110 C 60 20 150 150 260 216 C 348 268 424 258 452 208 C 482 152 432 104 390 128 C 344 154 362 232 428 258 C 472 256 508 248 466 240 C 432 234 412 240 402 240");
+  offset-rotate:auto;
+  offset-distance:0%;
+  opacity:0;
+}
+.dove svg{width:100%;height:100%;overflow:visible}
+.bird path{fill:#fff}
+.beak{fill:#e8e2d6}
+.eye{fill:#000}
+.wing{transform-box:fill-box;transform-origin:88% 92%}
+#intro.t-fly .dove{animation:flyIn 2.35s cubic-bezier(.34,.16,.28,1) forwards}
+@keyframes flyIn{
+  0%  {offset-distance:0%;opacity:0}
+  6%  {opacity:1}
+  100%{offset-distance:100%;opacity:1}
+}
+#intro.t-fly .wing-near{animation:flapN .17s ease-in-out infinite alternate}
+#intro.t-fly .wing-far {animation:flapF .17s ease-in-out infinite alternate}
+@keyframes flapN{from{transform:rotate(4deg) scaleY(1)}to{transform:rotate(-52deg) scaleY(.62)}}
+@keyframes flapF{from{transform:rotate(10deg) scaleY(.94)}to{transform:rotate(-42deg) scaleY(.6)}}
+/* once perched the wings fold and stay folded */
+#intro.t-perch .wing-near{animation:none;transform:rotate(34deg) scaleY(.5);transition:transform .35s ease}
+#intro.t-perch .wing-far {animation:none;transform:rotate(30deg) scaleY(.45);transition:transform .35s ease}
+/* stop mid-flight travel once it has landed */
+#intro.t-perch .dove{offset-rotate:0deg;transition:offset-rotate .3s ease}
 
 #introSkip{
-  position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
   font-size:10px;letter-spacing:.24em;text-transform:uppercase;
-  color:rgba(255,255,255,.38);background:none;border:0;cursor:pointer;
-  font-family:var(--sans);opacity:0;transition:opacity .5s .9s ease;z-index:2;
+  color:rgba(255,255,255,.34);background:none;border:0;cursor:pointer;
+  font-family:var(--sans);opacity:0;transition:opacity .4s .8s ease;z-index:4;
 }
-#intro.armed #introSkip{opacity:1}
+#intro.t-fly #introSkip{opacity:1}
 #introSkip:hover{color:rgba(255,255,255,.75)}
 
-
-/* ── own your address ── */
-
-.spot{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-.spot-copy h2{
-  font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,44px);
-  line-height:1.12;color:var(--paper);margin-top:16px;text-wrap:balance;
-}
-.spot-copy h2 em{font-style:normal;color:inherit}
-.spot-copy p{margin-top:18px;font-size:16px;line-height:1.72}
-.spot-link{
-  display:inline-flex;margin-top:22px;font-size:14px;font-weight:700;
-  color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.28);
-  padding-bottom:3px;transition:border-color .25s;
-}
-.spot-link:hover{border-bottom-color:#fff}
-
-@media(max-width:920px){ .spot{grid-template-columns:1fr;gap:34px} }
-
-
-/* ── start a build dialog ── */
-.modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:24px}
-.modal[hidden]{display:none}
-.modal-scrim{position:absolute;inset:0;background:rgba(3,3,4,.9);
-  animation:fadeIn .25s ease}
-.modal-card{
-  position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;
-  padding:38px 36px 34px;border-radius:20px;
-  background:#1d1d22;border:1px solid rgba(255,255,255,.1);
-  box-shadow:0 40px 90px rgba(0,0,0,.75);
-  animation:cardIn .35s cubic-bezier(.22,1,.36,1);
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
-.modal-card h2{
-  font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,36px);
-  color:var(--paper);margin-top:14px;line-height:1.15;
-}
-.modal-sub{margin-top:10px;font-size:15px;line-height:1.65}
-.modal-card form{padding:0;border:0;background:none;margin-top:24px}
-.modal-x{
-  position:absolute;top:16px;right:18px;width:34px;height:34px;border-radius:50%;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);
-  color:var(--paper);font-size:20px;line-height:1;cursor:pointer;
-  transition:background .2s,border-color .2s;
-}
-.modal-x:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
-.modal-msg{margin-top:16px;font-size:14px;line-height:1.6;color:var(--accent-soft);display:none}
-.modal-msg.show{display:block}
-.modal-msg.bad{color:#ffb4b4}
+@media(max-width:680px){ .iw-big{font-size:40px} .iw-small{font-size:10px;letter-spacing:.3em} }
 
 /* ── section marker ──
    Replaces the old fixed rail, which spanned the full viewport height and
@@ -949,36 +909,35 @@ html.js .reveal.in{opacity:1;transform:none}
 
 <!-- ══════════════ INTRO ══════════════ -->
 <div id="intro" aria-hidden="true">
-  <div class="intro-sky">
-    <svg class="cl cl1" viewBox="0 0 800 500" preserveAspectRatio="none" aria-hidden="true">
-      <filter id="cf1" x="-25%" y="-25%" width="150%" height="150%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.0055 0.011" numOctaves="4" seed="11"/>
-        <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.7 0 0 0 -0.42"/>
-        <feGaussianBlur stdDeviation="7"/>
-      </filter>
-      <rect width="800" height="500" filter="url(#cf1)"/>
+  <div class="scene">
+    <!-- envelope, black with a hairline so it reads on black -->
+    <svg class="env" viewBox="0 0 300 190" aria-hidden="true">
+      <rect class="env-body" x="2" y="42" width="296" height="146" rx="7"/>
+      <path class="env-back" d="M2 49 L150 138 L298 49"/>
+      <path class="env-flap" d="M2 49 L150 138 L298 49 L298 42 L2 42 Z"/>
     </svg>
-    <svg class="cl cl2" viewBox="0 0 800 500" preserveAspectRatio="none" aria-hidden="true">
-      <filter id="cf2" x="-25%" y="-25%" width="150%" height="150%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.009 0.016" numOctaves="5" seed="29"/>
-        <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.5 0 0 0 -0.36"/>
-        <feGaussianBlur stdDeviation="5"/>
-      </filter>
-      <rect width="800" height="500" filter="url(#cf2)"/>
-    </svg>
-    <svg class="cl cl3" viewBox="0 0 800 500" preserveAspectRatio="none" aria-hidden="true">
-      <filter id="cf3" x="-25%" y="-25%" width="150%" height="150%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.013 0.022" numOctaves="5" seed="47"/>
-        <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.3 0 0 0 -0.3"/>
-        <feGaussianBlur stdDeviation="3.5"/>
-      </filter>
-      <rect width="800" height="500" filter="url(#cf3)"/>
-    </svg>
-  </div>
-  <div class="intro-flash" aria-hidden="true"></div>
-  <div class="intro-word">
-    <span class="iw-small">Platforms by</span>
-    <span class="iw-big">Isaiah Goodrich</span>
+
+    <!-- what was inside -->
+    <div class="letter">
+      <span class="iw-small">Platforms by</span>
+      <span class="iw-big">Isaiah Goodrich</span>
+    </div>
+
+    <!-- the dove, carrying it in -->
+    <div class="dove">
+      <svg viewBox="0 0 120 80" aria-hidden="true">
+        <g class="bird">
+          <path class="wing wing-far" d="M62 33 C52 9 30 0 10 9 C28 15 44 25 52 41 Z"/>
+          <path class="body" d="M30 44 C42 32 62 26 80 28 C92 29 102 26 110 19
+                                 C112 31 104 41 92 45 C78 50 62 54 52 60
+                                 C43 65 31 64 24 58 C19 53 23 46 30 44 Z"/>
+          <path class="beak" d="M110 19 L120 21 L110 25 Z"/>
+          <circle class="eye" cx="103" cy="24" r="1.7"/>
+          <path class="tail" d="M26 52 C15 55 7 61 0 70 C12 70 23 66 32 60 Z"/>
+          <path class="wing wing-near" d="M58 38 C50 12 28 3 8 13 C28 20 44 31 52 48 Z"/>
+        </g>
+      </svg>
+    </div>
   </div>
   <button id="introSkip" type="button">Skip</button>
 </div>
@@ -1432,41 +1391,59 @@ html.js .reveal.in{opacity:1;transform:none}
 <script>
 document.documentElement.classList.add('js');
 
-/* ════════ INTRO: cloud sits over the page, then the wind takes it ════════ */
+/* ════════ INTRO: dove, envelope, wordmark ════════ */
 (function(){
-  var overlay = document.getElementById('intro');
-  var skip    = document.getElementById('introSkip');
-  if(!overlay) return;
+  var overlay=document.getElementById('intro');
+  var skip=document.getElementById('introSkip');
+  var scene=overlay && overlay.querySelector('.scene');
+  if(!overlay||!scene) return;
 
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var gone = false, blowTimer, doneTimer;
+  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var gone=false, timers=[];
 
   function finish(){
     if(gone) return;
-    gone = true;
-    clearTimeout(blowTimer); clearTimeout(doneTimer);
+    gone=true;
+    timers.forEach(clearTimeout);
     overlay.classList.add('done');
     document.documentElement.classList.remove('intro-lock');
-    setTimeout(function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 700);
+    setTimeout(function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); },600);
   }
-
-  /* Hard safety net: the page never stays behind the cloud. */
-  setTimeout(finish, 7000);
-  skip.addEventListener('click', finish);
-  window.addEventListener('keydown', function(e){ if(e.key === 'Escape') finish(); });
+  /* the page can never be left behind the intro */
+  timers.push(setTimeout(finish,6000));
+  skip.addEventListener('click',finish);
+  window.addEventListener('keydown',function(e){ if(e.key==='Escape') finish(); });
 
   if(reduce){ finish(); return; }
 
-  document.documentElement.classList.add('intro-lock');
-  overlay.classList.add('armed');
+  /* the flight path is authored in a 1000x600 space, so scale that box to fit
+     rather than rewriting the path for every viewport */
+  function fitScene(){
+    var s=Math.min(window.innerWidth/1000, window.innerHeight/600, 1);
+    scene.style.setProperty('--scene', (s*0.92).toFixed(3));
+  }
+  fitScene();
+  window.addEventListener('resize',fitScene,{passive:true});
 
-  /* hold the bank long enough to read the name, then gust */
-  /* lightning inside the bank, then the wind takes it, then the name is left */
-  var strikeTimer = setTimeout(function(){ overlay.classList.add('strike'); }, 900);
-  blowTimer = setTimeout(function(){
-    overlay.classList.add('blow');
-    doneTimer = setTimeout(finish, 2150);
-  }, 2000);
+  document.documentElement.classList.add('intro-lock');
+
+  /* 0.00  dove enters top left, loops, heads for centre
+     1.05  it lets the envelope go
+     1.80  the flap opens
+     2.05  the wordmark rises out
+     2.35  the dove settles and folds its wings
+     3.40  done                                            */
+  var step=[
+    [0,    't-fly'],
+    [1050, 't-drop'],
+    [1800, 't-open'],
+    [2050, 't-read'],
+    [2350, 't-perch']
+  ];
+  step.forEach(function(pair){
+    timers.push(setTimeout(function(){ overlay.classList.add(pair[1]); }, pair[0]));
+  });
+  timers.push(setTimeout(finish, 3400));
 })();
 
 /* ════════ NAV ════════ */
