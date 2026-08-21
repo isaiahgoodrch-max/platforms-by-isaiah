@@ -295,6 +295,39 @@ html.js.intro-lock body{overflow:hidden}
 .modal-msg.show{display:block}
 .modal-msg.bad{color:#ffb4b4}
 
+/* ── section marker ──
+   Replaces the old fixed rail, which spanned the full viewport height and
+   dimmed the page behind it. This is a single pill with its own width and
+   height, it only exists while a section changes, and it never takes a hit. */
+#mark{
+  position:fixed;left:22px;bottom:26px;z-index:95;
+  display:inline-flex;align-items:center;gap:10px;
+  width:auto;height:auto;max-width:min(70vw,280px);
+  padding:9px 16px 9px 12px;border-radius:999px;
+  background:#1c1c22;border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 14px 34px rgba(0,0,0,.5);
+  pointer-events:none;
+  opacity:0;transform:translateY(8px) scale(.96);
+  transition:opacity .35s ease,transform .45s cubic-bezier(.22,1,.36,1);
+}
+#mark.show{opacity:1;transform:none}
+.mk-dot{
+  flex:none;width:8px;height:8px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 0 rgba(255,255,255,.55);
+}
+#mark.show .mk-dot{animation:mkPing 1.1s ease-out}
+@keyframes mkPing{
+  0%  {box-shadow:0 0 0 0 rgba(255,255,255,.55)}
+  70% {box-shadow:0 0 0 9px rgba(255,255,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
+}
+.mk-label{
+  font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:680px){ #mark{left:14px;bottom:16px;padding:8px 13px 8px 10px} .mk-label{font-size:9.5px} }
+@media(prefers-reduced-motion:reduce){ #mark{transition:none} #mark.show .mk-dot{animation:none} }
+
 /* ══════════════ MOTION ══════════════ */
 /* Reading position. Scales on the compositor rather than animating width. */
 #progress{
@@ -915,6 +948,7 @@ html.js .reveal.in{opacity:1;transform:none}
 </div>
 
 <div id="progress" aria-hidden="true"></div>
+<div id="mark" aria-live="polite" aria-atomic="true"><span class="mk-dot"></span><span class="mk-label"></span></div>
 <div id="cursor-glow" aria-hidden="true"></div>
 
 <!-- ══════════════ NAV ══════════════ -->
@@ -1556,6 +1590,51 @@ document.documentElement.classList.add('js');
     el.style.transitionDelay = (Math.min(i % 4, 3) * 70) + 'ms';
     io.observe(el);
   });
+})();
+
+/* ════════ SECTION MARKER ════════ */
+(function(){
+  var mark=document.getElementById('mark');
+  if(!mark) return;
+  var label=mark.querySelector('.mk-label');
+  var SECTIONS=[
+    {id:'top',      name:'Start your build'},
+    {id:'work',     name:'My portfolio'},
+    {id:'domain',   name:'Your own address'},
+    {id:'process',  name:'The steps'},
+    {id:'contact',  name:'Book a call'}
+  ].map(function(x){
+    x.el = x.id==='top' ? document.body : document.getElementById(x.id);
+    return x;
+  }).filter(function(x){ return x.el; });
+
+  var current=-1, hideTimer=null, ticking=false;
+
+  function show(i){
+    if(i===current) return;
+    current=i;
+    label.textContent=SECTIONS[i].name;
+    mark.classList.remove('show');
+    /* restart the ping rather than letting it finish from the last section */
+    void mark.offsetWidth;
+    mark.classList.add('show');
+    clearTimeout(hideTimer);
+    hideTimer=setTimeout(function(){ mark.classList.remove('show'); }, 2200);
+  }
+
+  function paint(){
+    ticking=false;
+    var mark_y=window.innerHeight*0.4, active=0;
+    SECTIONS.forEach(function(s,i){
+      var top = s.el===document.body ? 0 : s.el.getBoundingClientRect().top;
+      if(top<=mark_y) active=i;
+    });
+    show(active);
+  }
+  function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(paint); } }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll,{passive:true});
+  paint();
 })();
 
 /* ════════ LAPTOP: DRAG TO TURN ════════ */
