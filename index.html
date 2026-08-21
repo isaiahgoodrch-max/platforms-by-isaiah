@@ -332,8 +332,8 @@ html.js.intro-lock body{overflow:hidden}
   box-shadow:0 34px 70px rgba(0,0,0,.62),0 0 0 1px rgba(255,255,255,.09);
 }
 .mon-screen{
-  position:relative;border-radius:5px;overflow:hidden;aspect-ratio:16/10;
-  background:var(--mb-black);display:flex;flex-direction:column;
+  position:relative;border-radius:5px;overflow:hidden;
+  background:#0A0A0B;display:flex;flex-direction:column;
 }
 .mon-neck{
   display:block;width:13%;height:26px;margin:0 auto;
@@ -351,15 +351,6 @@ html.js.intro-lock body{overflow:hidden}
 }
 .monitor-link:hover .mon-cta{opacity:1}
 
-/* The real site, framed and scaled down. --mon-scale is written by JS from the
-   screen's measured width, so the frame always renders at a true desktop
-   viewport and is shrunk, rather than being served a narrow mobile layout. */
-.mon-frame{
-  position:absolute;top:0;left:0;
-  width:1440px;height:900px;border:0;
-  transform-origin:0 0;transform:scale(var(--mon-scale,.2));
-  pointer-events:none;
-}
 @media(max-width:680px){ .mon-cta{margin-top:16px;font-size:10px} }
 
 /* ══════════════ MOTION ══════════════ */
@@ -515,15 +506,34 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
 }
 .screen{
   position:relative;border-radius:6px;overflow:hidden;background:#fdfaf8;
-  aspect-ratio:16/10;
+  display:flex;flex-direction:column;
 }
 /* her real site, rendered at a desktop viewport and scaled to the lid */
-.lap-frame{
-  position:absolute;top:23px;left:0;
-  width:1440px;height:900px;border:0;
-  transform-origin:0 0;transform:scale(var(--lap-scale,.2));
-  pointer-events:none;
+/* the browser bar above the framed site */
+.chrome{
+  flex:none;background:#e9e6e1;padding:6px 10px;
+  display:flex;align-items:center;gap:5px;
+  border-bottom:1px solid rgba(0,0,0,.08);
 }
+.chrome .tl{width:6px;height:6px;border-radius:50%;background:#c9c5c0;flex:none}
+.chrome .url{
+  margin:0 auto;display:flex;align-items:center;gap:5px;
+  font-size:8px;color:#4a4340;font-weight:500;
+}
+.chrome .lock{width:5px;height:5px;border:1.1px solid #6b625d;border-radius:1.5px;position:relative;flex:none}
+.chrome .lock::before{content:'';position:absolute;top:-2.5px;left:.8px;width:2.6px;height:2.6px;
+  border:1.1px solid #6b625d;border-bottom:0;border-radius:2px 2px 0 0}
+
+/* Each site is cropped at a boundary of its own layout rather than at a fixed
+   16:10, so neither cuts a section in half: Mandi at 748 (end of her hero),
+   Mayson at 907 (end of his socials row). JS sizes the wrapper to crop*scale. */
+.frame-wrap{position:relative;overflow:hidden;flex:none;width:100%}
+.lap-frame,.mon-frame{
+  position:absolute;top:0;left:0;width:1440px;border:0;
+  transform-origin:0 0;pointer-events:none;
+}
+.lap-frame{height:748px;transform:scale(var(--lap-scale,.2))}
+.mon-frame{height:907px;transform:scale(var(--mon-scale,.2))}
 
 /* the hinge line between lid and deck */
 .hinge{
@@ -1015,9 +1025,11 @@ html.js .reveal.in{opacity:1;transform:none}
                 <span class="tl"></span><span class="tl"></span><span class="tl"></span>
                 <div class="url"><span class="lock"></span>mandibagleyugc.com</div>
               </div>
+              <div class="frame-wrap" data-crop="748">
               <iframe class="lap-frame" src="https://mandibagleyugc.com" title="Mandi Bagley's website"
-                    loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
-                    referrerpolicy="no-referrer"></iframe>
+                      loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
+                      referrerpolicy="no-referrer"></iframe>
+            </div>
           </div>
           <div class="hinge"></div>
           <div class="base">
@@ -1204,9 +1216,11 @@ html.js .reveal.in{opacity:1;transform:none}
        aria-label="Open Mayson Brown's site in a new tab">
       <div class="monitor">
         <div class="mon-screen">
-          <iframe class="mon-frame" src="https://themaysonbrown.com" title="Mayson Brown's website"
-                  loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
-                  referrerpolicy="no-referrer"></iframe>
+          <div class="frame-wrap" data-crop="907">
+            <iframe class="mon-frame" src="https://themaysonbrown.com" title="Mayson Brown's website"
+                    loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
+                    referrerpolicy="no-referrer"></iframe>
+          </div>
         </div>
       </div>
       <span class="mon-neck"></span>
@@ -1530,16 +1544,22 @@ document.documentElement.classList.add('js');
      device they sit in, so each shows its desktop layout rather than being
      served a mobile one by its own media queries. */
   var BASE=1440;
-  [['.mon-screen','.mon-frame','--mon-scale'],
-   ['.screen','.lap-frame','--lap-scale']].forEach(function(cfg){
-    var box=document.querySelector(cfg[0]), frame=document.querySelector(cfg[1]);
-    if(!box||!frame) return;
+  document.querySelectorAll('.frame-wrap').forEach(function(wrap){
+    var frame=wrap.querySelector('iframe');
+    if(!frame) return;
+    var crop=parseInt(wrap.getAttribute('data-crop'),10)||900;
+    var prop=frame.classList.contains('lap-frame') ? '--lap-scale' : '--mon-scale';
     function fit(){
-      var w=box.clientWidth;
-      if(w) box.style.setProperty(cfg[2],(w/BASE).toFixed(4));
+      var w=wrap.clientWidth;
+      if(!w) return;
+      var scale=w/BASE;
+      wrap.style.setProperty(prop,scale.toFixed(4));
+      /* the wrapper is exactly as tall as the cropped slice, so the site ends
+         on its own boundary instead of being cut mid-section */
+      wrap.style.height=Math.round(crop*scale)+'px';
     }
     fit();
-    if(window.ResizeObserver) new ResizeObserver(fit).observe(box);
+    if(window.ResizeObserver) new ResizeObserver(fit).observe(wrap);
     window.addEventListener('resize',fit,{passive:true});
     frame.addEventListener('load',fit);
   });
