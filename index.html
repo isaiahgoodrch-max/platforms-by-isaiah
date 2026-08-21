@@ -210,6 +210,40 @@ html.js.intro-lock body{overflow:hidden}
 
 
 /* ── own your address ── */
+/* ── the desk scene ── */
+.desk-scene{
+  display:block;position:relative;border-radius:16px;overflow:hidden;text-decoration:none;
+  background:#101013;border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 30px 64px rgba(0,0,0,.6);
+  transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s,border-color .5s;
+}
+.desk-scene:hover{transform:translateY(-6px);box-shadow:0 40px 80px rgba(0,0,0,.72);border-color:rgba(255,255,255,.22)}
+.desk-scene svg{display:block;width:100%;height:auto}
+.ds-brand{fill:#fff;font-family:var(--serif);font-size:19px;letter-spacing:.02em}
+.desk-cta{
+  position:absolute;left:0;right:0;bottom:0;
+  padding:14px 18px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;background:linear-gradient(180deg,transparent,rgba(6,6,8,.9) 55%);
+}
+/* he breathes, the screen breathes with him, and the cursor drifts */
+.ds-figure{transform-origin:380px 500px;animation:dsBreathe 6.5s ease-in-out infinite}
+@keyframes dsBreathe{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%    {transform:translateY(-3px) rotate(.5deg)}
+}
+.ds-glow{animation:dsGlow 5s ease-in-out infinite}
+@keyframes dsGlow{0%,100%{opacity:.75}50%{opacity:1}}
+.ds-cursor{animation:dsCursor 7s ease-in-out infinite}
+@keyframes dsCursor{
+  0%,100%{transform:translate(0,0)}
+  30%{transform:translate(-46px,-38px)}
+  55%{transform:translate(-88px,10px)}
+  80%{transform:translate(-14px,-56px)}
+}
+.ds-earring{animation:dsGlint 4.5s ease-in-out infinite}
+@keyframes dsGlint{0%,100%{opacity:.75}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.ds-figure,.ds-glow,.ds-cursor,.ds-earring{animation:none}}
+
 .spot{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
 .spot-copy h2{
   font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,44px);
@@ -224,24 +258,6 @@ html.js.intro-lock body{overflow:hidden}
 }
 .spot-link:hover{border-bottom-color:#fff}
 
-.spot-window{
-  display:block;text-decoration:none;border-radius:12px;overflow:hidden;
-  background:#e9e6e1;
-  box-shadow:0 30px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);
-  transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s;
-}
-.spot-window:hover{transform:translateY(-6px);box-shadow:0 38px 76px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.16)}
-.win-bar{display:flex;align-items:center;gap:6px;padding:9px 12px;background:#e9e6e1}
-.win-bar .tl{width:8px;height:8px;border-radius:50%;background:#c9c5c0;flex:none}
-.win-url{
-  margin:0 auto;display:flex;align-items:center;gap:5px;
-  font-size:10px;color:#4a4340;font-weight:500;
-}
-.win-url .lock{width:6px;height:6px;border:1.2px solid #6b625d;border-radius:1.5px;position:relative;flex:none}
-.win-url .lock::before{content:'';position:absolute;top:-3px;left:1px;width:3px;height:3px;
-  border:1.2px solid #6b625d;border-bottom:0;border-radius:2px 2px 0 0}
-.win-body{aspect-ratio:16/10;overflow:hidden;background:#141416}
-.win-body img{width:100%;height:100%;object-fit:cover;object-position:center 26%}
 @media(max-width:920px){ .spot{grid-template-columns:1fr;gap:34px} }
 
 /* ── section rail ──
@@ -277,7 +293,16 @@ html.js.intro-lock body{overflow:hidden}
   opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s;
 }
 .rail-item.is-on .rail-label,.rail-item:hover .rail-label{opacity:1;transform:none}
-@media(max-width:1100px){ .rail{display:none} }
+@media(max-width:1100px){
+  /* no room for labels beside the copy, so it becomes a bare scale of dots
+     tucked against the edge; the fill still tracks the whole page */
+  .rail{--rail-top:88px;--rail-bottom:26px;left:8px}
+  .rail-label{display:none}
+  .rail-item{gap:0}
+  .rail-dot{width:7px;height:7px}
+  .rail-track{left:3px}
+}
+@media(max-width:520px){ .rail{left:5px;--rail-bottom:18px} }
 
 /* ── start a build dialog ── */
 .modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:24px}
@@ -313,7 +338,8 @@ html.js.intro-lock body{overflow:hidden}
 /* ══════════════ MOTION ══════════════ */
 /* Reading position. Scales on the compositor rather than animating width. */
 #progress{
-  position:fixed;top:0;left:0;right:0;height:2px;z-index:200;
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:200;
+  box-shadow:0 0 10px rgba(255,255,255,.45);
   background:linear-gradient(90deg,var(--accent-dim),var(--accent),#ffffff);
   transform:scaleX(0);transform-origin:0 50%;
   will-change:transform;
@@ -487,8 +513,15 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
 .laptop-link{
   display:block;position:relative;text-decoration:none;
   transition:transform .5s cubic-bezier(.22,1,.36,1);
+  /* without these the browser starts its own link-drag and never sends
+     pointermove, which is why grabbing it did nothing */
+  -webkit-user-drag:none;user-select:none;-webkit-user-select:none;
+  touch-action:pan-y;cursor:grab;
 }
+.laptop-link:active{cursor:grabbing}
+.laptop-link img{-webkit-user-drag:none;user-select:none;pointer-events:none}
 .laptop-link:hover{transform:translateY(-7px)}
+.laptop-link.is-turning{transform:none}
 .laptop-link:focus-visible{outline:2px solid #fff;outline-offset:16px;border-radius:20px}
 .laptop{
   position:relative;width:100%;
@@ -924,17 +957,30 @@ html.js .reveal.in{opacity:1;transform:none}
   .step{padding:30px 26px}
   form{padding:28px 22px}
   .fields{grid-template-columns:1fr}
-  .float-a{top:76px;left:-18px;transform:scale(.8);transform-origin:left top}
-  .float-b{bottom:34px;right:-18px;transform:scale(.8);transform-origin:right bottom}
+  /* on a phone these sat on top of her site; move them clear of the lid */
+  .float-a{top:auto;bottom:-96px;left:0;transform:scale(.82);transform-origin:left bottom}
+  .float-b{bottom:-96px;right:0;transform:scale(.82);transform-origin:right bottom}
   .float-a,.float-b{animation:none}
+  .stage{min-height:auto;padding-bottom:104px}
   .after-steps{padding:26px 24px}
 }
-@media(max-width:400px){
-  .device{width:100%}
-  .site-body{grid-template-columns:1fr;gap:10px;padding:10px 12px}
-  .site-photo{display:none}
-  .site-name{font-size:18px}
-  .site-last{font-size:20px}
+@media(max-width:680px){
+  /* keep her photo: the mock is meaningless without her on it */
+  .site-body{grid-template-columns:1fr .74fr;gap:9px;padding:9px 11px}
+  .site-nav{padding:4px 8px;gap:6px}
+  .site-nav span{font-size:4.5px}
+  .site-nav .site-brand{font-size:6.5px}
+  .site-name{font-size:15px}
+  .site-last{font-size:17px}
+  .site-role{font-size:5px;margin-top:4px}
+  .site-meta{font-size:4.2px;margin-top:2px}
+  .site-socials{gap:3px;margin-top:6px}
+  .site-socials i{width:8px;height:8px}
+  .chrome{padding:4px 8px}
+  .chrome .url{font-size:6px}
+  .base{height:34px;padding-top:5px}
+  .keys{height:17px}
+  .trackpad{height:7px}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
@@ -1024,7 +1070,7 @@ html.js .reveal.in{opacity:1;transform:none}
         <div class="float-sub">UGC portfolio, zero templates</div>
       </div>
 
-      <a class="laptop-link" href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer"
+      <a class="laptop-link" href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer" draggable="false"
          aria-label="Open Mandi Bagley's UGC portfolio in a new tab">
         <div class="laptop">
           <div class="laptop-inner">
@@ -1235,15 +1281,81 @@ html.js .reveal.in{opacity:1;transform:none}
       </a>
     </div>
 
-    <a class="spot-window reveal" href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer"
+    <a class="desk-scene reveal" href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer"
        aria-label="Open Mayson Brown's site in a new tab">
-      <div class="win-bar">
-        <span class="tl"></span><span class="tl"></span><span class="tl"></span>
-        <span class="win-url"><span class="lock"></span>themaysonbrown.com</span>
-      </div>
-      <div class="win-body">
-        <img src="images/mayson-hero.jpg" alt="Mayson Brown's site" loading="lazy" width="770" height="770">
-      </div>
+      <svg viewBox="0 0 760 520" role="img" aria-label="Mayson at his desk looking at his site on a monitor">
+        <defs>
+          <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1b1b1f"/><stop offset="1" stop-color="#101013"/>
+          </linearGradient>
+          <linearGradient id="deskTop" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3a3a42"/><stop offset="1" stop-color="#26262c"/>
+          </linearGradient>
+          <linearGradient id="hairGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fdf4d6"/><stop offset="0.45" stop-color="#dcb964"/>
+            <stop offset="1" stop-color="#8a6c39"/>
+          </linearGradient>
+          <linearGradient id="hoodieGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#26262b"/><stop offset="1" stop-color="#141417"/>
+          </linearGradient>
+          <radialGradient id="screenGlow" cx="0.5" cy="0.5" r="0.6">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="0.20"/>
+            <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <rect width="760" height="520" fill="url(#wall)"/>
+        <ellipse cx="380" cy="196" rx="250" ry="150" fill="url(#screenGlow)" class="ds-glow"/>
+
+        <rect x="214" y="66" width="332" height="206" rx="9" fill="#0c0c0f" stroke="#3a3a42" stroke-width="3"/>
+        <rect x="226" y="78" width="308" height="182" rx="4" fill="#111114"/>
+        <text x="248" y="120" class="ds-brand">MAYSON BROWN</text>
+        <rect x="248" y="134" width="150" height="5" rx="2.5" fill="#ffffff" opacity=".5"/>
+        <rect x="248" y="150" width="196" height="4" rx="2" fill="#ffffff" opacity=".2"/>
+        <rect x="248" y="162" width="168" height="4" rx="2" fill="#ffffff" opacity=".2"/>
+        <rect x="248" y="186" width="86" height="20" rx="10" fill="#ffffff" opacity=".82"/>
+        <rect x="404" y="150" width="106" height="86" rx="5" fill="#2b2b31"/>
+        <circle cx="457" cy="182" r="15" fill="#3d3d45"/>
+        <rect x="418" y="206" width="78" height="4" rx="2" fill="#ffffff" opacity=".18"/>
+        <circle cx="470" cy="228" r="3.5" fill="#fff" class="ds-cursor"/>
+        <rect x="350" y="272" width="60" height="26" fill="#2a2a31"/>
+        <rect x="304" y="298" width="152" height="9" rx="4.5" fill="#33333a"/>
+
+        <rect x="40" y="304" width="680" height="19" rx="5" fill="url(#deskTop)"/>
+        <rect x="40" y="304" width="680" height="3" rx="1.5" fill="#5a5a66" opacity=".85"/>
+        <rect x="86" y="322" width="12" height="150" fill="#1d1d22"/>
+        <rect x="662" y="322" width="12" height="150" fill="#1d1d22"/>
+
+        <rect x="284" y="350" width="192" height="154" rx="28" fill="#3a3a44"/>
+        <rect x="296" y="362" width="168" height="130" rx="22" fill="#2a2a32"/>
+
+        <g class="ds-figure">
+          <!-- hoodie, with a rim of monitor light down the left shoulder -->
+          <path d="M296 504 q0-100 84-100 q84 0 84 100 z" fill="url(#hoodieGrad)"/>
+          <path d="M296 504 q0-100 84-100 q10 0 19 2 q-70 14-70 98 z" fill="#4d4d5a" opacity=".55"/>
+          <path d="M334 420 q46-24 92 0 l-11 27 q-35-17-70 0 z" fill="#101014"/>
+          <!-- hood bunched behind the neck -->
+          <path d="M328 416 q52-32 104 0 q-7 22-52 22 q-45 0-52-22z" fill="#2b2b34"/>
+          <path d="M328 416 q52-32 104 0" fill="none" stroke="#5c5c6b" stroke-width="2.5" opacity=".7"/>
+          <!-- neck and head -->
+          <rect x="366" y="384" width="28" height="28" rx="11" fill="#caa588"/>
+          <ellipse cx="380" cy="354" rx="39" ry="42" fill="#e2c0a0"/>
+          <path d="M341 356 q-2-44 39-44 q41 0 39 44 q-6-20-19-24 q-18 13-43 9 q-12-2-16 15z" fill="url(#hairGrad)"/>
+          <!-- frosted tips -->
+          <path d="M344 344 q13-11 21-5 M360 332 q12-10 22-4 M380 329 q12-8 22-1 M400 337 q9-6 17 1"
+                stroke="#fff8e0" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <!-- ear and stud -->
+          <ellipse cx="345" cy="360" rx="6.5" ry="9.5" fill="#caa588"/>
+          <circle cx="345" cy="371" r="3.4" fill="#eef0f6" class="ds-earring"/>
+          <!-- arm out to the desk -->
+          <path d="M448 452 q36-14 46-56" stroke="#1e1e25" stroke-width="27" stroke-linecap="round" fill="none"/>
+          <path d="M448 452 q36-14 46-56" stroke="#4d4d5a" stroke-width="3" stroke-linecap="round" fill="none" opacity=".5"/>
+          <circle cx="497" cy="392" r="11" fill="#caa588"/>
+        </g>
+
+        <rect x="372" y="502" width="16" height="18" fill="#1a1a1e"/>
+      </svg>
+      <span class="desk-cta">See it live at themaysonbrown.com &rarr;</span>
     </a>
   </div>
 </section>
@@ -1564,6 +1676,7 @@ document.documentElement.classList.add('js');
 
   function down(e){
     dragging=true; moved=0;
+    laptop.classList.add('is-turning'); link.classList.add('is-turning');
     startX=e.clientX; startSpin=spin;
     laptop.classList.remove('is-easing');
     link.setPointerCapture && link.setPointerCapture(e.pointerId);
@@ -1578,10 +1691,12 @@ document.documentElement.classList.add('js');
   function up(){
     if(!dragging) return;
     dragging=false;
+    link.classList.remove('is-turning');
     laptop.classList.add('is-easing');
     spin=0; set(spin);              /* settle back to square */
   }
 
+  link.addEventListener('dragstart',function(e){ e.preventDefault(); });
   link.addEventListener('pointerdown',down);
   link.addEventListener('pointermove',move);
   link.addEventListener('pointerup',up);
