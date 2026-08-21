@@ -213,39 +213,6 @@ html.js.intro-lock body{overflow:hidden}
 
 
 /* ── own your address ── */
-/* ── the desk scene ── */
-.desk-scene{
-  display:block;position:relative;border-radius:16px;overflow:hidden;text-decoration:none;
-  background:#101013;border:1px solid rgba(255,255,255,.1);
-  box-shadow:0 30px 64px rgba(0,0,0,.6);
-  transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s,border-color .5s;
-}
-.desk-scene:hover{transform:translateY(-6px);box-shadow:0 40px 80px rgba(0,0,0,.72);border-color:rgba(255,255,255,.22)}
-.desk-scene svg{display:block;width:100%;height:auto}
-.ds-brand{fill:#fff;font-family:var(--serif);font-size:19px;letter-spacing:.02em}
-.desk-cta{
-  position:absolute;left:0;right:0;bottom:0;
-  padding:14px 18px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:#fff;background:linear-gradient(180deg,rgba(6,6,8,0),rgba(6,6,8,.9) 55%);
-}
-/* he breathes, the screen breathes with him, and the cursor drifts */
-.ds-figure{transform-origin:380px 500px;animation:dsBreathe 6.5s ease-in-out infinite}
-@keyframes dsBreathe{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  50%    {transform:translateY(-3px) rotate(.5deg)}
-}
-.ds-glow{animation:dsGlow 5s ease-in-out infinite}
-@keyframes dsGlow{0%,100%{opacity:.75}50%{opacity:1}}
-.ds-cursor{animation:dsCursor 7s ease-in-out infinite}
-@keyframes dsCursor{
-  0%,100%{transform:translate(0,0)}
-  30%{transform:translate(-46px,-38px)}
-  55%{transform:translate(-88px,10px)}
-  80%{transform:translate(-14px,-56px)}
-}
-.ds-earring{animation:dsGlint 4.5s ease-in-out infinite}
-@keyframes dsGlint{0%,100%{opacity:.75}50%{opacity:1}}
-@media(prefers-reduced-motion:reduce){.ds-figure,.ds-glow,.ds-cursor,.ds-earring{animation:none}}
 
 .spot{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
 .spot-copy h2{
@@ -300,17 +267,17 @@ html.js.intro-lock body{overflow:hidden}
    dimmed the page behind it. This is a single pill with its own width and
    height, it only exists while a section changes, and it never takes a hit. */
 #mark{
-  position:fixed;left:22px;bottom:26px;z-index:95;
+  position:fixed;left:22px;top:50%;z-index:95;
   display:inline-flex;align-items:center;gap:10px;
   width:auto;height:auto;max-width:min(70vw,280px);
   padding:9px 16px 9px 12px;border-radius:999px;
   background:#1c1c22;border:1px solid rgba(255,255,255,.16);
   box-shadow:0 14px 34px rgba(0,0,0,.5);
   pointer-events:none;
-  opacity:0;transform:translateY(8px) scale(.96);
+  opacity:0;transform:translateY(-50%) translateX(-12px) scale(.96);
   transition:opacity .35s ease,transform .45s cubic-bezier(.22,1,.36,1);
 }
-#mark.show{opacity:1;transform:none}
+#mark.show{opacity:1;transform:translateY(-50%) translateX(0) scale(1)}
 .mk-dot{
   flex:none;width:8px;height:8px;border-radius:50%;background:#fff;
   box-shadow:0 0 0 0 rgba(255,255,255,.55);
@@ -325,8 +292,80 @@ html.js.intro-lock body{overflow:hidden}
   font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
   color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-@media(max-width:680px){ #mark{left:14px;bottom:16px;padding:8px 13px 8px 10px} .mk-label{font-size:9.5px} }
+@media(max-width:680px){ #mark{left:12px;padding:8px 13px 8px 10px} .mk-label{font-size:9.5px} }
 @media(prefers-reduced-motion:reduce){ #mark{transition:none} #mark.show .mk-dot{animation:none} }
+
+
+/* ── his site, on a monitor ──
+   No surrounding card: the display sits on the page itself. Colours are taken
+   from themaysonbrown.com so the miniature reads as his site, not as ours. */
+.monitor-link{
+  --mb-black:#0A0A0B; --mb-cream:#F2EDE4; --mb-dim:#C9C2B6; --mb-brown:#A5734F;
+  display:block;position:relative;text-decoration:none;
+  transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+.monitor-link:hover{transform:translateY(-6px)}
+.monitor-link:focus-visible{outline:2px solid #fff;outline-offset:18px;border-radius:16px}
+.monitor{
+  position:relative;border-radius:12px;padding:9px 9px 11px;
+  background:linear-gradient(168deg,#3a3a42,#17171b 46%,#24242a);
+  box-shadow:0 34px 70px rgba(0,0,0,.62),0 0 0 1px rgba(255,255,255,.09);
+}
+.mon-screen{
+  position:relative;border-radius:5px;overflow:hidden;aspect-ratio:16/10;
+  background:var(--mb-black);display:flex;flex-direction:column;
+}
+.mon-neck{
+  display:block;width:13%;height:26px;margin:0 auto;
+  background:linear-gradient(180deg,#2e2e35,#1c1c21);
+}
+.mon-base{
+  display:block;width:34%;height:9px;margin:0 auto;border-radius:0 0 7px 7px;
+  background:linear-gradient(180deg,#33333b,#151519);
+  box-shadow:0 16px 26px rgba(0,0,0,.55);
+}
+.mon-cta{
+  display:block;margin-top:22px;text-align:center;
+  font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;opacity:.72;transition:opacity .3s;
+}
+.monitor-link:hover .mon-cta{opacity:1}
+
+/* the miniature itself */
+.mb-nav{
+  flex:none;display:flex;align-items:center;justify-content:space-between;
+  padding:9px 16px;border-bottom:1px solid rgba(242,237,228,.1);
+}
+.mb-mark{font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.02em;color:var(--mb-cream)}
+.mb-mark b{color:var(--mb-brown);font-weight:700}
+.mb-links{display:flex;align-items:center;gap:9px}
+.mb-links i{font-style:normal;font-size:5.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mb-dim)}
+.mb-links .mb-cta-sm{
+  color:var(--mb-black);background:var(--mb-cream);
+  padding:3px 7px;border-radius:999px;font-weight:700;
+}
+.mb-hero{
+  flex:1;min-height:0;display:grid;grid-template-columns:1.15fr .85fr;
+  gap:16px;align-items:center;padding:14px 16px 16px;
+}
+.mb-copy{display:flex;flex-direction:column;min-width:0}
+.mb-eyebrow{font-size:5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mb-brown)}
+.mb-h1{
+  font-family:var(--sans);font-weight:700;font-size:19px;line-height:1.06;
+  letter-spacing:-.02em;color:var(--mb-cream);margin-top:8px;
+}
+.mb-loc{font-size:5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mb-dim);margin-top:9px}
+.mb-photo{
+  display:block;border-radius:6px;overflow:hidden;aspect-ratio:1/1.04;
+  box-shadow:0 10px 24px rgba(0,0,0,.55);
+}
+.mb-photo img{width:100%;height:100%;object-fit:cover;object-position:center 18%}
+@media(max-width:680px){
+  .mb-h1{font-size:14px}
+  .mb-hero{padding:10px 12px 12px;gap:11px}
+  .mb-nav{padding:7px 12px}
+  .mon-cta{margin-top:16px;font-size:10px}
+}
 
 /* ══════════════ MOTION ══════════════ */
 /* Reading position. Scales on the compositor rather than animating width. */
@@ -1211,81 +1250,29 @@ html.js .reveal.in{opacity:1;transform:none}
       </a>
     </div>
 
-    <a class="desk-scene reveal" href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer"
+    <a class="monitor-link reveal" href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer"
        aria-label="Open Mayson Brown's site in a new tab">
-      <svg viewBox="0 0 760 520" role="img" aria-label="Mayson at his desk looking at his site on a monitor">
-        <defs>
-          <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#1b1b1f"/><stop offset="1" stop-color="#101013"/>
-          </linearGradient>
-          <linearGradient id="deskTop" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#3a3a42"/><stop offset="1" stop-color="#26262c"/>
-          </linearGradient>
-          <linearGradient id="hairGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#fdf4d6"/><stop offset="0.45" stop-color="#dcb964"/>
-            <stop offset="1" stop-color="#8a6c39"/>
-          </linearGradient>
-          <linearGradient id="hoodieGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#31313a"/><stop offset="1" stop-color="#111114"/>
-          </linearGradient>
-          <radialGradient id="screenGlow" cx="0.5" cy="0.5" r="0.6">
-            <stop offset="0" stop-color="#ffffff" stop-opacity="0.20"/>
-            <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-
-        <rect width="760" height="520" fill="url(#wall)"/>
-        <ellipse cx="380" cy="196" rx="250" ry="150" fill="url(#screenGlow)" class="ds-glow"/>
-
-        <rect x="214" y="66" width="332" height="206" rx="9" fill="#0c0c0f" stroke="#3a3a42" stroke-width="3"/>
-        <rect x="226" y="78" width="308" height="182" rx="4" fill="#111114"/>
-        <text x="248" y="120" class="ds-brand">MAYSON BROWN</text>
-        <rect x="248" y="134" width="150" height="5" rx="2.5" fill="#ffffff" opacity=".5"/>
-        <rect x="248" y="150" width="196" height="4" rx="2" fill="#ffffff" opacity=".2"/>
-        <rect x="248" y="162" width="168" height="4" rx="2" fill="#ffffff" opacity=".2"/>
-        <rect x="248" y="186" width="86" height="20" rx="10" fill="#ffffff" opacity=".82"/>
-        <rect x="404" y="150" width="106" height="86" rx="5" fill="#2c2c34"/>
-        <circle cx="457" cy="182" r="15" fill="#3d3d45"/>
-        <rect x="418" y="206" width="78" height="4" rx="2" fill="#ffffff" opacity=".18"/>
-        <circle cx="470" cy="228" r="3.5" fill="#fff" class="ds-cursor"/>
-        <rect x="350" y="272" width="60" height="26" fill="#2a2a31"/>
-        <rect x="304" y="298" width="152" height="9" rx="4.5" fill="#33333a"/>
-
-        <rect x="40" y="304" width="680" height="19" rx="5" fill="url(#deskTop)"/>
-        <rect x="40" y="304" width="680" height="3" rx="1.5" fill="#5a5a66" opacity=".85"/>
-        <rect x="86" y="322" width="12" height="150" fill="#1d1d22"/>
-        <rect x="662" y="322" width="12" height="150" fill="#1d1d22"/>
-
-        <rect x="284" y="350" width="192" height="154" rx="28" fill="#3a3a44"/>
-        <rect x="296" y="362" width="168" height="130" rx="22" fill="#2a2a32"/>
-
-        <g class="ds-figure">
-          <!-- hoodie, with a rim of monitor light down the left shoulder -->
-          <path d="M296 504 q0-100 84-100 q84 0 84 100 z" fill="url(#hoodieGrad)"/>
-          <path d="M296 504 q0-100 84-100 q10 0 19 2 q-70 14-70 98 z" fill="#4d4d5a" opacity=".55"/>
-          <path d="M334 420 q46-24 92 0 l-11 27 q-35-17-70 0 z" fill="#101014"/>
-          <!-- hood bunched behind the neck -->
-          <path d="M328 416 q52-32 104 0 q-7 22-52 22 q-45 0-52-22z" fill="#2b2b34"/>
-          <path d="M328 416 q52-32 104 0" fill="none" stroke="#5c5c6b" stroke-width="2.5" opacity=".7"/>
-          <!-- neck and head -->
-          <rect x="366" y="384" width="28" height="28" rx="11" fill="#caa588"/>
-          <ellipse cx="380" cy="354" rx="39" ry="42" fill="#e2c0a0"/>
-          <path d="M341 356 q-2-44 39-44 q41 0 39 44 q-6-20-19-24 q-18 13-43 9 q-12-2-16 15z" fill="url(#hairGrad)"/>
-          <!-- frosted tips -->
-          <path d="M344 344 q13-11 21-5 M360 332 q12-10 22-4 M380 329 q12-8 22-1 M400 337 q9-6 17 1"
-                stroke="#fff8e0" stroke-width="5" stroke-linecap="round" fill="none"/>
-          <!-- ear and stud -->
-          <ellipse cx="345" cy="360" rx="6.5" ry="9.5" fill="#caa588"/>
-          <circle cx="345" cy="371" r="3.4" fill="#eef0f6" class="ds-earring"/>
-          <!-- arm out to the desk -->
-          <path d="M448 452 q36-14 46-56" stroke="#1e1e25" stroke-width="27" stroke-linecap="round" fill="none"/>
-          <path d="M448 452 q36-14 46-56" stroke="#4d4d5a" stroke-width="3" stroke-linecap="round" fill="none" opacity=".5"/>
-          <circle cx="497" cy="392" r="11" fill="#caa588"/>
-        </g>
-
-        <rect x="372" y="502" width="16" height="18" fill="#2c2c34"/>
-      </svg>
-      <span class="desk-cta">See it live at themaysonbrown.com &rarr;</span>
+      <div class="monitor">
+        <div class="mon-screen">
+          <div class="mb-nav">
+            <span class="mb-mark">Mayson <b>Brown</b></span>
+            <span class="mb-links"><i class="mb-cta-sm">Work With Me</i><i>Shop</i><i>About</i></span>
+          </div>
+          <div class="mb-hero">
+            <div class="mb-copy">
+              <span class="mb-eyebrow">Creator &middot; Luxury Content &middot; Marketing Manager</span>
+              <span class="mb-h1">Luxury content,<br>built to convert.</span>
+              <span class="mb-loc">Scottsdale, Arizona</span>
+            </div>
+            <span class="mb-photo">
+              <img src="images/mayson-hero.jpg" alt="Mayson Brown" loading="lazy" width="900" height="900">
+            </span>
+          </div>
+        </div>
+      </div>
+      <span class="mon-neck"></span>
+      <span class="mon-base"></span>
+      <span class="mon-cta">themaysonbrown.com &rarr;</span>
     </a>
   </div>
 </section>
