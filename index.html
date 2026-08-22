@@ -483,9 +483,13 @@ header.hero{
     radial-gradient(900px 620px at 18% 28%,rgba(150,150,168,.14),rgba(150,150,168,0) 70%),
     radial-gradient(760px 560px at 84% 66%,rgba(120,120,140,.11),rgba(120,120,140,0) 70%);
 }
-.hero-grid{
-  display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;
+/* Desktop follows the mobile order: copy and portrait on top, laptop beneath.
+   Squeezing the laptop into a side column made it too small to read. */
+.hero-top{
+  display:grid;grid-template-columns:1.08fr .92fr;gap:64px;align-items:center;
 }
+.hero-copy{min-width:0}
+.hero-portrait{display:flex;justify-content:center;align-items:center}
 .pill{
   display:inline-flex;align-items:center;gap:9px;
   padding:8px 17px;border-radius:999px;
@@ -498,26 +502,30 @@ header.hero{
 
 h1{
   font-family:var(--serif);font-weight:400;
-  font-size:clamp(40px,4.7vw,66px);line-height:1.06;
+  font-size:clamp(42px,5.3vw,78px);line-height:1.04;
   color:var(--paper);letter-spacing:-.015em;
   text-wrap:balance;
 }
 h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
-.hero-intro{margin-top:26px;display:flex;align-items:center;gap:30px}
-/* narrower measure so the copy breaks to four lines and leaves room beside it */
-.hero-sub{font-size:17px;line-height:1.7;color:var(--text);max-width:392px;flex:0 1 auto}
+.hero-sub{margin-top:28px;font-size:18.5px;line-height:1.72;color:var(--text);max-width:30ch}
 
 /* the portrait, lit from behind */
 .me{
-  position:relative;flex:none;width:170px;height:170px;border-radius:50%;
+  position:relative;flex:none;width:min(380px,100%);aspect-ratio:1;border-radius:50%;
   padding:0;border:0;cursor:pointer;background:#26262b;overflow:visible;
-  box-shadow:0 0 0 1px rgba(255,255,255,.34), 0 0 34px 4px rgba(255,255,255,.24),
-             0 0 80px 10px rgba(255,255,255,.12);
+  box-shadow:0 0 0 1px rgba(255,255,255,.34), 0 0 46px 6px rgba(255,255,255,.26),
+             0 0 120px 18px rgba(255,255,255,.13);
   transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s;
 }
-.me img{
-  width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center 40%;
-  display:block;
+.me-frame{
+  position:absolute;inset:0;border-radius:50%;overflow:hidden;display:block;
+  background:#26262b;
+}
+.me-frame img{
+  position:absolute;display:block;
+  /* the global img rule caps width at 100%, which would undo the zoom */
+  max-width:none;
+  width:165%;height:auto;left:-44%;top:-79%;
 }
 .me:hover,.me:focus-visible{
   transform:translateY(-4px) scale(1.03);
@@ -525,7 +533,7 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
              0 0 110px 16px rgba(255,255,255,.18);
 }
 .me-hint{
-  position:absolute;left:50%;bottom:-16px;transform:translate(-50%,6px);
+  position:absolute;left:50%;bottom:-19px;transform:translate(-50%,6px);
   white-space:nowrap;padding:7px 14px;border-radius:999px;
   background:#fff;color:#0d0d10;
   font-family:var(--sans);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
@@ -534,22 +542,23 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
 }
 .me:hover .me-hint,.me:focus-visible .me-hint{opacity:1;transform:translate(-50%,0)}
 @media(max-width:920px){
-  .hero-intro{flex-direction:column;align-items:flex-start;gap:24px}
+  .hero-top{grid-template-columns:1fr;gap:36px}
   .hero-sub{max-width:100%}
-  .me{width:132px;height:132px}
+  .me{width:min(230px,62vw)}
+  .stage{margin-top:52px}
 }
 .hero-sub strong{color:var(--paper);font-weight:500}
 .hero-actions{margin-top:36px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
 .hero-note{margin-top:24px;font-size:12.5px;color:var(--muted);letter-spacing:.03em}
 
 /* ── laptop ── */
-.stage{position:relative;display:flex;justify-content:center;align-items:center;min-height:560px}
+.stage{position:relative;display:flex;justify-content:center;align-items:center;margin-top:82px}
 .stage::before{
   content:'';position:absolute;width:520px;height:420px;border-radius:50%;
   background:radial-gradient(circle,rgba(150,150,166,.26),rgba(150,150,166,0) 70%);
   
 }
-.device{position:relative;width:min(520px,100%)}
+.device{position:relative;width:min(760px,100%)}
 .laptop-link{
   display:block;position:relative;text-decoration:none;
   transition:transform .5s cubic-bezier(.22,1,.36,1);
@@ -965,7 +974,6 @@ html.js .reveal.in{opacity:1;transform:none}
   .nav-links{gap:22px}
 }
 @media(max-width:920px){
-  .hero-grid{grid-template-columns:1fr;gap:60px}
   .stage{min-height:auto;order:2}
   .steps{grid-template-columns:1fr}
   .contact-single{max-width:100%}
@@ -1095,29 +1103,34 @@ html.js .reveal.in{opacity:1;transform:none}
 
 <!-- ══════════════ HERO ══════════════ -->
 <header class="hero" id="top">
-  <div class="wrap hero-grid">
-    <div>
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="hero-copy">
       <span class="pill"><i></i>Custom websites for creators &amp; small businesses</span>
       <h1>
         Your link in bio was never a website.
         <span class="accent">You've outgrown it.</span>
       </h1>
-      <div class="hero-intro">
         <p class="hero-sub">
           I build custom websites for creators and small businesses. Designed around your
           brand, coded from scratch, and <strong>maintained for you</strong> after launch.
           No templates. No page builders.
         </p>
-        <button class="me" type="button" data-open-story aria-label="Read my story">
-          <img src="images/isaiah.jpg?v=1" alt="Isaiah Goodrich" width="1365" height="2048">
-          <span class="me-hint">Click for story</span>
-        </button>
-      </div>
       <div class="hero-actions">
         <a href="#contact" class="btn btn-primary">Start your build</a>
         <a href="#work" class="btn btn-ghost">See the work</a>
       </div>
       <p class="hero-note">One flat price · Your own domain · Maintained, not abandoned</p>
+      </div>
+
+      <div class="hero-portrait">
+        <button class="me" type="button" data-open-story aria-label="Read my story">
+          <span class="me-frame">
+            <img src="images/isaiah.jpg?v=1" alt="Isaiah Goodrich" width="1365" height="2048">
+          </span>
+          <span class="me-hint">Click for story</span>
+        </button>
+      </div>
     </div>
 
     <div class="stage">
