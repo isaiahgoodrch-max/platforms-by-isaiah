@@ -287,37 +287,6 @@ html.js.intro-lock body{overflow:hidden}
 
 
 
-/* ── who I am ── */
-.about-grid{display:grid;grid-template-columns:.62fr 1fr;gap:60px;align-items:center}
-.about-photo{
-  position:relative;width:100%;max-width:360px;aspect-ratio:1;
-  border-radius:50%;overflow:hidden;justify-self:center;
-  background:#26262b;
-  box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.14);
-}
-.about-photo img{
-  width:100%;height:100%;object-fit:cover;
-  /* portrait crop: his face sits in the upper third of the frame */
-  object-position:center 24%;
-}
-/* until the file is added, the circle holds its shape rather than breaking */
-.photo-fallback{
-  position:absolute;inset:0;display:none;place-items:center;
-  font-family:var(--serif);font-size:56px;color:rgba(255,255,255,.3);
-}
-.about-photo.no-photo img{display:none}
-.about-photo.no-photo .photo-fallback{display:grid}
-
-.about-copy h2{
-  font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.6vw,46px);
-  line-height:1.1;color:var(--paper);margin-top:16px;text-wrap:balance;
-}
-.about-copy p{margin-top:18px;font-size:16.5px;line-height:1.75;max-width:60ch}
-@media(max-width:920px){
-  .about-grid{grid-template-columns:1fr;gap:34px;justify-items:center;text-align:center}
-  .about-photo{max-width:260px}
-  .about-copy p{margin-left:auto;margin-right:auto}
-}
 
 /* ── his site, on a monitor ──
    No surrounding card: the display sits on the page itself. Colours are taken
@@ -355,6 +324,76 @@ html.js.intro-lock body{overflow:hidden}
 .monitor-link:hover .mon-cta{opacity:1}
 
 @media(max-width:680px){ .mon-cta{margin-top:16px;font-size:10px} }
+
+/* ── own your address ── */
+
+.spot{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.spot-copy h2{
+  font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,44px);
+  line-height:1.12;color:var(--paper);margin-top:16px;text-wrap:balance;
+}
+.spot-copy h2 em{font-style:normal;color:inherit}
+.spot-copy p{margin-top:18px;font-size:16px;line-height:1.72}
+.spot-link{
+  display:inline-flex;margin-top:22px;font-size:14px;font-weight:700;
+  color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.28);
+  padding-bottom:3px;transition:border-color .25s;
+}
+.spot-link:hover{border-bottom-color:#fff}
+
+@media(max-width:920px){ .spot{grid-template-columns:1fr;gap:34px} }
+
+
+/* ── start a build dialog ── */
+.modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:24px}
+.modal[hidden]{display:none}
+.modal-scrim{position:absolute;inset:0;background:rgba(3,3,4,.9);
+  animation:fadeIn .25s ease}
+.modal-card{
+  position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;
+  padding:38px 36px 34px;border-radius:20px;
+  background:#1d1d22;border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 40px 90px rgba(0,0,0,.75);
+  animation:cardIn .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.modal-card h2{
+  font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,36px);
+  color:var(--paper);margin-top:14px;line-height:1.15;
+}
+.modal-sub{margin-top:10px;font-size:15px;line-height:1.65}
+.modal-card form{padding:0;border:0;background:none;margin-top:24px}
+.modal-x{
+  position:absolute;top:16px;right:18px;width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);
+  color:var(--paper);font-size:20px;line-height:1;cursor:pointer;
+  transition:background .2s,border-color .2s;
+}
+.modal-x:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
+.modal-msg{margin-top:16px;font-size:14px;line-height:1.6;color:var(--accent-soft);display:none}
+.modal-msg.show{display:block}
+.modal-msg.bad{color:#ffb4b4}
+
+
+/* ── my story popup ── */
+.story-card{max-width:600px}
+.story-top{display:flex;align-items:center;gap:22px;margin-bottom:6px}
+/* square here on purpose: the circle is the hero treatment, this is the detail */
+.story-photo{
+  flex:none;width:132px;height:132px;border-radius:10px;object-fit:cover;object-position:center 40%;
+  box-shadow:0 14px 34px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.16);
+}
+.story-card h2{
+  font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.2vw,34px);
+  color:var(--paper);margin-top:10px;line-height:1.12;
+}
+.story-card p{margin-top:16px;font-size:15.5px;line-height:1.75}
+.story-cta{margin-top:26px}
+@media(max-width:560px){
+  .story-top{flex-direction:column;align-items:flex-start;gap:16px}
+  .story-photo{width:110px;height:110px}
+}
 
 /* ══════════════ MOTION ══════════════ */
 /* Reading position. Scales on the compositor rather than animating width. */
@@ -464,8 +503,40 @@ h1{
   text-wrap:balance;
 }
 h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
-.hero-sub{
-  margin-top:26px;font-size:17px;line-height:1.7;color:var(--text);max-width:520px;
+.hero-intro{margin-top:26px;display:flex;align-items:center;gap:30px}
+/* narrower measure so the copy breaks to four lines and leaves room beside it */
+.hero-sub{font-size:17px;line-height:1.7;color:var(--text);max-width:392px;flex:0 1 auto}
+
+/* the portrait, lit from behind */
+.me{
+  position:relative;flex:none;width:170px;height:170px;border-radius:50%;
+  padding:0;border:0;cursor:pointer;background:#26262b;overflow:visible;
+  box-shadow:0 0 0 1px rgba(255,255,255,.34), 0 0 34px 4px rgba(255,255,255,.24),
+             0 0 80px 10px rgba(255,255,255,.12);
+  transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s;
+}
+.me img{
+  width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center 40%;
+  display:block;
+}
+.me:hover,.me:focus-visible{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 0 0 1px rgba(255,255,255,.6), 0 0 46px 6px rgba(255,255,255,.4),
+             0 0 110px 16px rgba(255,255,255,.18);
+}
+.me-hint{
+  position:absolute;left:50%;bottom:-16px;transform:translate(-50%,6px);
+  white-space:nowrap;padding:7px 14px;border-radius:999px;
+  background:#fff;color:#0d0d10;
+  font-family:var(--sans);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  opacity:0;pointer-events:none;transition:opacity .28s ease,transform .28s ease;
+  box-shadow:0 8px 22px rgba(0,0,0,.5);
+}
+.me:hover .me-hint,.me:focus-visible .me-hint{opacity:1;transform:translate(-50%,0)}
+@media(max-width:920px){
+  .hero-intro{flex-direction:column;align-items:flex-start;gap:24px}
+  .hero-sub{max-width:100%}
+  .me{width:132px;height:132px}
 }
 .hero-sub strong{color:var(--paper);font-weight:500}
 .hero-actions{margin-top:36px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
@@ -1031,11 +1102,17 @@ html.js .reveal.in{opacity:1;transform:none}
         Your link in bio was never a website.
         <span class="accent">You've outgrown it.</span>
       </h1>
-      <p class="hero-sub">
-        I build custom websites for creators and small businesses. Designed around your
-        brand, coded from scratch, and <strong>maintained for you</strong> after launch.
-        No templates. No page builders.
-      </p>
+      <div class="hero-intro">
+        <p class="hero-sub">
+          I build custom websites for creators and small businesses. Designed around your
+          brand, coded from scratch, and <strong>maintained for you</strong> after launch.
+          No templates. No page builders.
+        </p>
+        <button class="me" type="button" data-open-story aria-label="Read my story">
+          <img src="images/isaiah.jpg?v=1" alt="Isaiah Goodrich" width="1365" height="2048">
+          <span class="me-hint">Click for story</span>
+        </button>
+      </div>
       <div class="hero-actions">
         <a href="#contact" class="btn btn-primary">Start your build</a>
         <a href="#work" class="btn btn-ghost">See the work</a>
@@ -1090,34 +1167,6 @@ html.js .reveal.in{opacity:1;transform:none}
 
 
 
-<!-- ══════════════ WHO I AM ══════════════ -->
-<section id="about">
-  <div class="wrap about-grid">
-    <div class="about-photo reveal">
-      <img src="images/isaiah.jpg" alt="Isaiah Goodrich" width="1333" height="2000"
-           loading="lazy" onerror="this.closest('.about-photo').classList.add('no-photo')">
-      <span class="photo-fallback" aria-hidden="true">IG</span>
-    </div>
-
-    <div class="about-copy reveal">
-      <span class="eyebrow">Who's behind it</span>
-      <h2>Hey, I'm Isaiah.</h2>
-      <p>
-        I build custom websites for creators, small brands and personal brands. One person from
-        the first conversation to launch, and I stay on afterwards to keep it current.
-      </p>
-      <p>
-        I do it because almost everyone online ends up looking the same. Same template, same
-        layout, same list of links. I want yours to look like it was made for you, because it
-        was. Something that sparks a bit of creativity instead of blending in.
-      </p>
-      <p>
-        And it isn't only about looking good. A page that's properly put together gets taken
-        seriously, and it turns more of the people who land on it into actual clients.
-      </p>
-    </div>
-  </div>
-</section>
 
 <!-- ══════════════ PORTFOLIO ══════════════ -->
 <section id="work">
@@ -1435,6 +1484,35 @@ html.js .reveal.in{opacity:1;transform:none}
   </div>
 </footer>
 
+<!-- ══════════════ MY STORY ══════════════ -->
+<div class="modal" id="storyModal" role="dialog" aria-modal="true" aria-labelledby="storyTitle" hidden>
+  <div class="modal-scrim" data-close></div>
+  <div class="modal-card story-card">
+    <button class="modal-x" type="button" aria-label="Close" data-close>&times;</button>
+    <div class="story-top">
+      <img class="story-photo" src="images/isaiah.jpg?v=1" alt="Isaiah Goodrich" width="1365" height="2048" loading="lazy">
+      <div>
+        <span class="eyebrow">Who's behind it</span>
+        <h2 id="storyTitle">Hey, I'm Isaiah.</h2>
+      </div>
+    </div>
+    <p>
+      I build custom websites for creators, small brands and personal brands. One person from
+      the first conversation to launch, and I stay on afterwards to keep it current.
+    </p>
+    <p>
+      I do it because almost everyone online ends up looking the same. Same template, same
+      layout, same list of links. I want yours to look like it was made for you, because it
+      was. Something that sparks a bit of creativity instead of blending in.
+    </p>
+    <p>
+      And it isn't only about looking good. A page that's properly put together gets taken
+      seriously, and it turns more of the people who land on it into actual clients.
+    </p>
+    <a class="btn btn-primary story-cta" href="#contact" data-open-build>Start your build &rarr;</a>
+  </div>
+</div>
+
 <!-- ══════════════ START A BUILD DIALOG ══════════════ -->
 <div class="modal" id="buildModal" role="dialog" aria-modal="true" aria-labelledby="buildTitle" hidden>
   <div class="modal-scrim" data-close></div>
@@ -1654,7 +1732,6 @@ document.documentElement.classList.add('js');
   var label=mark.querySelector('.mk-label');
   var SECTIONS=[
     {id:'top',      name:'Start your build'},
-    {id:'about',    name:'Who I am'},
     {id:'work',     name:'My portfolio'},
     {id:'domain',   name:'Your own address'},
     {id:'process',  name:'The steps'},
@@ -1739,6 +1816,33 @@ document.documentElement.classList.add('js');
   window.addEventListener('pointerup',function(){ link.style.cursor='grab'; });
 })();
 
+
+/* ════════ MY STORY POPUP ════════ */
+(function(){
+  var modal=document.getElementById('storyModal');
+  if(!modal) return;
+  var last=null;
+  function open(e){
+    if(e) e.preventDefault();
+    last=document.activeElement;
+    modal.hidden=false;
+    document.documentElement.style.overflow='hidden';
+    var x=modal.querySelector('.modal-x'); if(x) x.focus();
+  }
+  function close(){
+    modal.hidden=true;
+    document.documentElement.style.overflow='';
+    if(last&&last.focus) last.focus();
+  }
+  document.querySelectorAll('[data-open-story]').forEach(function(el){
+    el.addEventListener('click',open);
+  });
+  modal.addEventListener('click',function(e){ if(e.target.hasAttribute('data-close')) close(); });
+  window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!modal.hidden) close(); });
+  /* the build dialog opens from in here, so this one has to get out of the way */
+  var cta=modal.querySelector('[data-open-build]');
+  if(cta) cta.addEventListener('click',close);
+})();
 
 /* ════════ START A BUILD DIALOG ════════ */
 (function(){
