@@ -611,12 +611,31 @@ h1 .accent{display:block;font-style:normal;font-weight:500;color:var(--paper)}
    16:10, so neither cuts a section in half: Mandi at 748 (end of her hero),
    Mayson at 907 (end of his socials row). JS sizes the wrapper to crop*scale. */
 .frame-wrap{position:relative;overflow:hidden;flex:none;width:100%}
+/* Two transforms, two elements. The reel carries the scale that fits the site
+   into the device; the iframe inside it carries the auto-scroll. Putting both
+   on one element means one overwrites the other. */
+.reel{position:absolute;top:0;left:0;width:1440px;transform-origin:0 0}
+.reel-lap{transform:scale(var(--lap-scale,.2))}
+.reel-mon{transform:scale(var(--mon-scale,.2))}
+/* The frame is as tall as the whole client page, not one screen of it. A
+   cross-origin document cannot be scrolled from here, so instead the page is
+   rendered full height and slid upward under the crop. --page is set from
+   data-page; the fallback is one crop's worth, so a JS failure just shows the
+   top of the site the way it did before. */
 .lap-frame,.mon-frame{
-  position:absolute;top:0;left:0;width:1440px;border:0;
-  transform-origin:0 0;pointer-events:none;
+  display:block;width:1440px;border:0;pointer-events:none;
+  height:var(--page,900px);
 }
-.lap-frame{height:748px;transform:scale(var(--lap-scale,.2))}
-.mon-frame{height:907px;transform:scale(var(--mon-scale,.2))}
+@keyframes reel-scroll{
+  0%,7%       {transform:translate3d(0,0,0)}
+  91%,97%     {transform:translate3d(0,var(--shift,0px),0)}
+  97.01%,100% {transform:translate3d(0,0,0)}
+}
+/* Runs only once the client site's own intro has finished, and only while the
+   device is on screen: two full desktop pages painting off-screen for nothing
+   is a lot of compositing for something nobody is looking at. */
+html.js .reel-run iframe{animation:reel-scroll var(--dur,36s) linear infinite}
+html.js .reel-run.reel-hold iframe{animation-play-state:paused}
 
 /* the hinge line between lid and deck */
 .hinge{
@@ -1029,6 +1048,7 @@ html.js .reveal.in{opacity:1;transform:none}
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .eyebrow{animation:none;background-position:0 0}
   a.work-card:hover .work-shot img{transform:none}
+  html.js .reel-run iframe{animation:none}
   #cursor-glow{display:none}
   .pill::after{animation:none;opacity:0}
   .pill,.btn-primary{animation:none}
@@ -1159,10 +1179,12 @@ html.js .reveal.in{opacity:1;transform:none}
                 <span class="tl"></span><span class="tl"></span><span class="tl"></span>
                 <div class="url"><span class="lock"></span>mandibagleyugc.com</div>
               </div>
-              <div class="frame-wrap" data-crop="748">
+              <div class="frame-wrap" data-crop="748" data-page="6539">
+              <div class="reel reel-lap">
               <iframe class="lap-frame" src="https://mandibagleyugc.com" title="Mandi Bagley's website"
                       loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
                       referrerpolicy="no-referrer"></iframe>
+              </div>
             </div>
           </div>
           <div class="hinge"></div>
@@ -1419,10 +1441,12 @@ html.js .reveal.in{opacity:1;transform:none}
        aria-label="Open Mayson Brown's site in a new tab">
       <div class="monitor">
         <div class="mon-screen">
-          <div class="frame-wrap" data-crop="907">
+          <div class="frame-wrap" data-crop="907" data-page="5259">
+            <div class="reel reel-mon">
             <iframe class="mon-frame" src="https://themaysonbrown.com" title="Mayson Brown's website"
                     loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
                     referrerpolicy="no-referrer"></iframe>
+            </div>
           </div>
         </div>
       </div>
@@ -1793,11 +1817,26 @@ document.documentElement.classList.add('js');
      device they sit in, so each shows its desktop layout rather than being
      served a mobile one by its own media queries. */
   var BASE=1440;
+  /* unscaled px per second the site travels; the device scales it down to
+     roughly a quarter of this, which reads as a slow pan rather than a scroll */
+  var SPEED=190;
+  var SCROLL_PHASE=.84;          /* 7% to 91% of the cycle, see the keyframes */
+  var INTRO_GRACE=4200;          /* both client sites play their own intro first */
+  var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
+
   document.querySelectorAll('.frame-wrap').forEach(function(wrap){
     var frame=wrap.querySelector('iframe');
     if(!frame) return;
     var crop=parseInt(wrap.getAttribute('data-crop'),10)||900;
+    var page=parseInt(wrap.getAttribute('data-page'),10)||crop;
     var prop=frame.classList.contains('lap-frame') ? '--lap-scale' : '--mon-scale';
+    var travel=Math.max(0,page-crop);
+
+    wrap.style.setProperty('--page',page+'px');
+    wrap.style.setProperty('--shift',(-travel)+'px');
+    var dur=travel/SPEED/SCROLL_PHASE;
+    wrap.style.setProperty('--dur',Math.min(52,Math.max(22,dur)).toFixed(1)+'s');
+
     function fit(){
       var w=wrap.clientWidth;
       if(!w) return;
@@ -1811,6 +1850,25 @@ document.documentElement.classList.add('js');
     if(window.ResizeObserver) new ResizeObserver(fit).observe(wrap);
     window.addEventListener('resize',fit,{passive:true});
     frame.addEventListener('load',fit);
+
+    if(reduce||!travel) return;
+
+    /* Hold the reel paused whenever the device is off screen. Both frames are a
+       full desktop page tall, and compositing that for nobody is the kind of
+       load this page has been bitten by before. */
+    wrap.classList.add('reel-hold');
+    if(window.IntersectionObserver){
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          wrap.classList.toggle('reel-hold',!e.isIntersecting);
+        });
+      },{rootMargin:'120px'}).observe(wrap);
+    }else{
+      wrap.classList.remove('reel-hold');
+    }
+    frame.addEventListener('load',function(){
+      setTimeout(function(){ wrap.classList.add('reel-run'); },INTRO_GRACE);
+    });
   });
 })();
 
