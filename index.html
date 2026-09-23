@@ -2088,11 +2088,13 @@ document.documentElement.classList.add('js');
 
 /* ════════ START A BUILD DIALOG ════════ */
 (function(){
-  /* Paste the Web3Forms access key issued for isaiahgoodrch@gmail.com.
-     While it is empty the form falls back to opening the visitor's mail app,
-     so the dialog still works, it just cannot collect anything server side.
-     Do not paste another client's key: it delivers to them, not to you. */
-  var WEB3FORMS_KEY = '';
+  /* Web3Forms access key issued for isaiahgoodrch@gmail.com, wired 2026-09-23.
+     It is a public key by design and ships in the page, so it is not a secret,
+     but it IS the address these leads land at: swapping in another client's key
+     silently delivers every enquiry to them instead. If this is ever emptied the
+     form falls back to opening the visitor's mail app, which sends nothing on
+     its own and leaves no record of what was lost. */
+  var WEB3FORMS_KEY = '6f2b3a48-5a85-4ebb-943f-6ce5977cbc9f';
   var TO = 'isaiahgoodrch@gmail.com';
 
   var modal=document.getElementById('buildModal');
