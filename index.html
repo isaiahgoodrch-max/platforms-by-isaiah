@@ -1351,7 +1351,7 @@ html.js .reveal.in{opacity:1;transform:none}
                 <span class="tl"></span><span class="tl"></span><span class="tl"></span>
                 <div class="url"><span class="lock"></span>mandibagleyugc.com</div>
               </div>
-              <div class="frame-wrap" data-crop="748" data-page="6539">
+              <div class="frame-wrap" data-crop="748" data-page="6539" data-grace="2700">
               <div class="reel reel-lap">
               <iframe class="lap-frame" src="https://mandibagleyugc.com" title="Mandi Bagley's website"
                       scrolling="no" tabindex="-1" aria-hidden="true"
@@ -1774,7 +1774,7 @@ html.js .reveal.in{opacity:1;transform:none}
        aria-label="Open Mayson Brown's site in a new tab">
       <div class="monitor">
         <div class="mon-screen">
-          <div class="frame-wrap" data-crop="907" data-page="5259">
+          <div class="frame-wrap" data-crop="907" data-page="5259" data-grace="3200">
             <div class="reel reel-mon">
             <iframe class="mon-frame" src="https://themaysonbrown.com" title="Mayson Brown's website"
                     loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
@@ -2357,7 +2357,7 @@ document.documentElement.classList.add('js');
      roughly a quarter of this, which reads as a slow pan rather than a scroll */
   var SPEED=190;
   var SCROLL_PHASE=.84;          /* 7% to 91% of the cycle, see the keyframes */
-  var INTRO_GRACE=3200;          /* clears the longer client intro (Mayson, 3.05s) */
+  var INTRO_GRACE=3200;          /* default; each frame sets data-grace to clear its own client's intro */
   var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
 
   document.querySelectorAll('.frame-wrap').forEach(function(wrap){
@@ -2403,7 +2403,7 @@ document.documentElement.classList.add('js');
       wrap.classList.remove('reel-hold');
     }
     frame.addEventListener('load',function(){
-      setTimeout(function(){ wrap.classList.add('reel-run'); },INTRO_GRACE);
+      setTimeout(function(){ wrap.classList.add('reel-run'); },parseInt(wrap.getAttribute('data-grace'),10)||INTRO_GRACE);
     });
   });
 })();
