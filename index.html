@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -23,11 +23,15 @@
 <meta name="twitter:title" content="Platforms by Isaiah Goodrich">
 <meta name="twitter:description" content="Custom websites for creators and small businesses. Built from scratch. Maintained for you.">
 <meta name="twitter:image" content="https://byisaiahgoodrich.com/images/og-image.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23111114'/%3E%3Cg%20fill='none'%20stroke='%23eaeaef'%20stroke-width='4'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M41%2011.2%20L32%206%20L9.5%2019%20L9.5%2045%20L32%2058%20L41%2052.8'/%3E%3Cpath%20d='M54.5%2019%20L46.2%2014.2'/%3E%3Cpath%20d='M54.5%2045%20L46.2%2049.8'/%3E%3C/g%3E%3Ctext%20x='20'%20y='31'%20font-family='Helvetica,Arial,sans-serif'%20font-weight='700'%20font-size='21'%20fill='%23fff'%3EI%3C/text%3E%3Ctext%20x='34'%20y='50'%20font-family='Helvetica,Arial,sans-serif'%20font-weight='700'%20font-size='21'%20fill='%23fff'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23111114'/%3E%3Cpath%20d='M%2044.3842%2013.1500%20L%2036.7631%208.7500%20Q%2032.0000%206.0000%2027.2369%208.7500%20L%2014.2465%2016.2500%20Q%209.4833%2019.0000%209.4833%2024.5000%20L%209.4833%2039.5000%20Q%209.4833%2045.0000%2014.2465%2047.7500%20L%2027.2369%2055.2500%20Q%2032.0000%2058.0000%2036.7631%2055.2500%20L%2044.3842%2050.8500'%20fill='none'%20stroke='%23eaeaef'%20stroke-width='6.4'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ctext%20x='21'%20y='32'%20font-family='Helvetica,Arial,sans-serif'%20font-weight='700'%20font-size='19'%20fill='%23fff'%3EI%3C/text%3E%3Ctext%20x='33'%20y='46.5'%20font-family='Helvetica,Arial,sans-serif'%20font-weight='700'%20font-size='19'%20fill='%23fff'%3EG%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Fraunces:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
+<script>document.documentElement.classList.add("js","intro-on");</script>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/fonts/droid/droid_sans_bold.typeface.json" as="fetch" crossorigin>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <style>
 :root{
   color-scheme:dark;
@@ -139,267 +143,6 @@ a{color:inherit}
 }
 .btn-primary{animation:ctaGlow 3.2s ease-in-out infinite}
 .btn-primary:hover{animation:none}
-
-/* ══════════════ INTRO ══════════════ */
-/* A dove carries an envelope in from the top left, loops, drops it centre,
-   the envelope opens, the wordmark rises out of it, and the dove settles on
-   the lid. The whole thing runs 3.4s and can be skipped. */
-#intro{
-  display:none;
-  position:fixed;inset:0;z-index:10000;
-  background:#000;overflow:hidden;
-  transition:opacity .45s ease;
-}
-html.js #intro{display:block}
-html.js.intro-lock body{overflow:hidden}
-#intro.done{opacity:0;pointer-events:none}
-
-/* fixed coordinate space so the flight path is predictable at any size */
-.scene{
-  position:absolute;left:50%;top:50%;
-  width:1000px;height:600px;
-  transform:translate(-50%,-50%) scale(var(--scene,1));
-  transform-origin:50% 50%;
-}
-
-/* ── envelope ── */
-.env{
-  position:absolute;left:50%;top:66%;width:440px;height:280px;
-  transform:translate(-50%,-50%) scale(.9);
-  opacity:0;
-}
-.env-body{fill:#ded7c7;stroke:#b9b0a0;stroke-width:2}
-.env-seam{fill:none;stroke:#b9b0a0;stroke-width:2}
-.env-flap{
-  fill:#cbc3b1;stroke:#b9b0a0;stroke-width:2;
-  transform-box:fill-box;transform-origin:50% 0;
-}
-#intro.t-drop .env{animation:envDrop .78s cubic-bezier(.25,1.2,.4,1) forwards}
-/* it leaves the bird at the size the bird was carrying, then grows as it
-   settles, so the small parcel and the big envelope are the same object */
-@keyframes envDrop{
-  0%  {opacity:0;transform:translate(-50%,-330%) scale(.17) rotate(-14deg)}
-  18% {opacity:1}
-  100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0deg)}
-}
-#intro.t-open .env-flap{animation:flapOpen .42s cubic-bezier(.3,0,.2,1) forwards}
-@keyframes flapOpen{to{transform:scaleY(-1)}}
-
-/* ── the wordmark, rising out of it ── */
-.letter{
-  position:absolute;left:50%;top:65%;
-  transform:translate(-50%,-50%);
-  display:grid;justify-items:center;gap:10px;
-  opacity:0;text-align:center;padding:0 20px;
-}
-#intro.t-read .letter{animation:letterUp .75s cubic-bezier(.22,1,.36,1) forwards}
-/* px, not percentages of its own height, so the gap to the bird is fixed */
-@keyframes letterUp{
-  0%  {opacity:0;transform:translate(-50%,40px) scale(.98)}
-  35% {opacity:1}
-  100%{opacity:1;transform:translate(-50%,-215px) scale(1)}
-}
-.paper{
-  background:#fff;border-radius:3px;
-  padding:26px 40px 92px;display:grid;justify-items:center;gap:12px;
-  box-shadow:0 26px 54px rgba(0,0,0,.6);
-  min-width:420px;
-}
-.iw-small{
-  font-family:var(--sans);font-size:11px;font-weight:700;
-  letter-spacing:.36em;text-transform:uppercase;color:#5c5c66;
-}
-.iw-big{
-  font-family:var(--serif);font-weight:600;font-size:46px;line-height:1;
-  color:#0a0a0c;letter-spacing:-.01em;white-space:nowrap;
-}
-
-/* ── the dove ── */
-.dove{
-  position:absolute;left:0;top:0;width:216px;height:150px;
-  offset-path:path("M -200 -110 C 60 20 150 150 260 216 C 348 268 424 258 452 208 C 482 152 432 104 390 128 C 344 154 362 232 428 258 C 470 276 520 300 580 348 C 660 412 760 500 900 700");
-  offset-rotate:auto;
-  offset-distance:0%;
-  opacity:0;
-}
-.dove svg{width:100%;height:100%;overflow:visible}
-.bird path,.bird circle{fill:#fff}
-.beak{fill:#d8ceb8}
-.eye{fill:#0a0a0c}
-/* the parcel rides with the bird until it is let go */
-.carry rect{fill:#ded7c7;stroke:#b9b0a0;stroke-width:1.6}
-.carry-seam{fill:none;stroke:#b9b0a0;stroke-width:1.4}
-#intro.t-drop .carry{opacity:0;transition:opacity .12s linear}
-.eye{fill:#000}
-.wing{transform-box:fill-box;transform-origin:88% 92%}
-#intro.t-fly .dove{animation:flyIn 2.9s cubic-bezier(.3,.1,.45,1) forwards}
-@keyframes flyIn{
-  0%  {offset-distance:0%;opacity:0}
-  6%  {opacity:1}
-  88% {opacity:1}
-  100%{offset-distance:100%;opacity:0}
-}
-#intro.t-fly .wing-near{animation:flapN .17s ease-in-out infinite alternate}
-#intro.t-fly .wing-far {animation:flapF .17s ease-in-out infinite alternate}
-@keyframes flapN{from{transform:rotate(4deg) scaleY(1)}to{transform:rotate(-52deg) scaleY(.62)}}
-@keyframes flapF{from{transform:rotate(10deg) scaleY(.94)}to{transform:rotate(-42deg) scaleY(.6)}}
-/* once perched the wings fold and stay folded */
-/* it keeps flapping all the way out of frame */
-
-#introSkip{
-  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
-  font-size:10px;letter-spacing:.24em;text-transform:uppercase;
-  color:rgba(255,255,255,.34);background:none;border:0;cursor:pointer;
-  font-family:var(--sans);opacity:0;transition:opacity .4s .8s ease;z-index:4;
-}
-#intro.t-fly #introSkip{opacity:1}
-#introSkip:hover{color:rgba(255,255,255,.75)}
-
-@media(max-width:680px){ .paper{min-width:0;padding:22px 26px 26px} .iw-big{font-size:30px} .iw-small{font-size:9px;letter-spacing:.3em} }
-
-/* ── section marker ──
-   Replaces the old fixed rail, which spanned the full viewport height and
-   dimmed the page behind it. This is a single pill with its own width and
-   height, it only exists while a section changes, and it never takes a hit. */
-#mark{
-  position:fixed;left:22px;top:50%;z-index:95;
-  display:inline-flex;align-items:center;gap:10px;
-  width:auto;height:auto;max-width:min(70vw,280px);
-  padding:9px 16px 9px 12px;border-radius:999px;
-  background:#1c1c22;border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 14px 34px rgba(0,0,0,.5);
-  pointer-events:none;
-  opacity:0;transform:translateY(-50%) translateX(-12px) scale(.96);
-  transition:opacity .35s ease,transform .45s cubic-bezier(.22,1,.36,1);
-}
-#mark.show{opacity:1;transform:translateY(-50%) translateX(0) scale(1)}
-.mk-dot{
-  flex:none;width:8px;height:8px;border-radius:50%;background:#fff;
-  box-shadow:0 0 0 0 rgba(255,255,255,.55);
-}
-#mark.show .mk-dot{animation:mkPing 1.1s ease-out}
-@keyframes mkPing{
-  0%  {box-shadow:0 0 0 0 rgba(255,255,255,.55)}
-  70% {box-shadow:0 0 0 9px rgba(255,255,255,0)}
-  100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
-}
-.mk-label{
-  font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-  color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-@media(max-width:680px){ #mark{left:12px;padding:8px 13px 8px 10px} .mk-label{font-size:9.5px} }
-@media(prefers-reduced-motion:reduce){ #mark{transition:none} #mark.show .mk-dot{animation:none} }
-
-
-
-
-/* ── his site, on a monitor ──
-   No surrounding card: the display sits on the page itself. Colours are taken
-   from themaysonbrown.com so the miniature reads as his site, not as ours. */
-.monitor-link{
-  --mb-black:#0A0A0B; --mb-cream:#F2EDE4; --mb-dim:#C9C2B6; --mb-brown:#A5734F;
-  display:block;position:relative;text-decoration:none;
-  transition:transform .5s cubic-bezier(.22,1,.36,1);
-}
-.monitor-link:hover{transform:translateY(-6px)}
-.monitor-link:focus-visible{outline:2px solid #fff;outline-offset:18px;border-radius:16px}
-.monitor{
-  position:relative;border-radius:12px;padding:9px 9px 11px;
-  background:linear-gradient(168deg,#3a3a42,#17171b 46%,#24242a);
-  box-shadow:0 34px 70px rgba(0,0,0,.62),0 0 0 1px rgba(255,255,255,.09);
-}
-.mon-screen{
-  position:relative;border-radius:5px;overflow:hidden;
-  background:#0A0A0B;display:flex;flex-direction:column;
-}
-.mon-neck{
-  display:block;width:13%;height:26px;margin:0 auto;
-  background:linear-gradient(180deg,#2e2e35,#1c1c21);
-}
-.mon-base{
-  display:block;width:34%;height:9px;margin:0 auto;border-radius:0 0 7px 7px;
-  background:linear-gradient(180deg,#33333b,#151519);
-  box-shadow:0 16px 26px rgba(0,0,0,.55);
-}
-.mon-cta{
-  display:block;margin-top:22px;text-align:center;
-  font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:#fff;opacity:.72;transition:opacity .3s;
-}
-.monitor-link:hover .mon-cta{opacity:1}
-
-@media(max-width:680px){ .mon-cta{margin-top:16px;font-size:10px} }
-
-/* ── own your address ── */
-
-.spot{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-.spot-copy h2{
-  font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,44px);
-  line-height:1.12;color:var(--paper);margin-top:16px;text-wrap:balance;
-}
-.spot-copy h2 em{font-style:normal;color:inherit}
-.spot-copy p{margin-top:18px;font-size:16px;line-height:1.72}
-.spot-link{
-  display:inline-flex;margin-top:22px;font-size:14px;font-weight:700;
-  color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.28);
-  padding-bottom:3px;transition:border-color .25s;
-}
-.spot-link:hover{border-bottom-color:#fff}
-
-@media(max-width:920px){ .spot{grid-template-columns:1fr;gap:34px} }
-
-
-/* ── start a build dialog ── */
-.modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:24px}
-.modal[hidden]{display:none}
-.modal-scrim{position:absolute;inset:0;background:rgba(3,3,4,.9);
-  animation:fadeIn .25s ease}
-.modal-card{
-  position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;
-  padding:38px 36px 34px;border-radius:20px;
-  background:#1d1d22;border:1px solid rgba(255,255,255,.1);
-  box-shadow:0 40px 90px rgba(0,0,0,.75);
-  animation:cardIn .35s cubic-bezier(.22,1,.36,1);
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
-.modal-card h2{
-  font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,36px);
-  color:var(--paper);margin-top:14px;line-height:1.15;
-}
-.modal-sub{margin-top:10px;font-size:15px;line-height:1.65}
-.modal-card form{padding:0;border:0;background:none;margin-top:24px}
-.modal-x{
-  position:absolute;top:16px;right:18px;width:34px;height:34px;border-radius:50%;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);
-  color:var(--paper);font-size:20px;line-height:1;cursor:pointer;
-  transition:background .2s,border-color .2s;
-}
-.modal-x:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
-.modal-msg{margin-top:16px;font-size:14px;line-height:1.6;color:var(--accent-soft);display:none}
-.modal-msg.show{display:block}
-.modal-msg.bad{color:var(--bad)}
-.modal-msg.ok{color:var(--good)}
-
-
-/* ── my story popup ── */
-.story-card{max-width:600px}
-.story-top{display:flex;align-items:center;gap:22px;margin-bottom:6px}
-/* square here on purpose: the circle is the hero treatment, this is the detail */
-.story-photo{
-  flex:none;width:132px;height:132px;border-radius:10px;object-fit:cover;object-position:center 40%;
-  box-shadow:0 14px 34px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.16);
-}
-.story-card h2{
-  font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.2vw,34px);
-  color:var(--paper);margin-top:10px;line-height:1.12;
-}
-.story-card p{margin-top:16px;font-size:15.5px;line-height:1.75}
-.story-cta{margin-top:26px}
-@media(max-width:560px){
-  .story-top{flex-direction:column;align-items:flex-start;gap:16px}
-  .story-photo{width:110px;height:110px}
-}
 
 /* ══════════════ MOTION ══════════════ */
 /* Reading position. Scales on the compositor rather than animating width. */
@@ -1232,66 +975,194 @@ html.js .reveal.in{opacity:1;transform:none}
   .pill,.btn-primary{animation:none}
   html{scroll-behavior:auto}
 }
+
+/* ══════════════ V2: INTRO ══════════════ */
+#intro{position:fixed;inset:0;z-index:1000;background:#0b0b0e;display:grid;place-items:center;overflow:hidden;transition:opacity .7s ease}
+#intro.out{opacity:0;pointer-events:none}
+#intro canvas{position:absolute;inset:0;width:100%;height:100%}
+#intro .word{position:relative;z-index:2;text-align:center;margin-top:min(44vh,330px);opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
+#intro .word.on{opacity:1;transform:none}
+#intro .k{font-size:11px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;color:#9a9aa6}
+#intro .n{font-family:'Anton',var(--sans);font-size:clamp(30px,5.4vw,58px);letter-spacing:.02em;color:#fff;margin-top:6px;min-height:1.2em}
+#intro .n::after{content:"";display:inline-block;width:3px;height:.85em;background:#fff;margin-left:4px;vertical-align:-.08em;animation:caret .8s steps(1) infinite}
+#intro .n.done::after{display:none}
+@keyframes caret{50%{opacity:0}}
+#intro .skip{position:absolute;right:20px;bottom:18px;z-index:2;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7c7c88;background:none;border:0;cursor:pointer}
+html.intro-on body{overflow:hidden}
+
+/* ══════════════ V2: HERO ══════════════ */
+header.hero{padding:104px 0 20px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center;min-height:calc(100vh - 104px)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.hero-eyebrow .hx{width:10px;height:10px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,#fff,#8a8a96)}
+.h-quiet{font-family:var(--serif);font-weight:500;font-size:clamp(32px,3.7vw,52px);line-height:1.1;letter-spacing:-.012em;color:var(--paper);margin:20px 0 0;text-wrap:balance}
+.h-quiet .dim{color:#9a9aa6}
+.hero-sub{margin-top:22px;font-size:17px;line-height:1.7;max-width:38ch}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero-note{margin-top:20px;font-size:12.5px;color:var(--muted);letter-spacing:.03em}
+html:not(.intro-on) .hero-copy>*{animation:rise .8s cubic-bezier(.22,1,.36,1) both}
+html:not(.intro-on) .hero-copy>*:nth-child(2){animation-delay:.08s}
+html:not(.intro-on) .hero-copy>*:nth-child(3){animation-delay:.16s}
+html:not(.intro-on) .hero-copy>*:nth-child(4){animation-delay:.24s}
+html:not(.intro-on) .hero-copy>*:nth-child(5){animation-delay:.32s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* the photo on its own: colour, a card, a slight tilt that follows the cursor */
+.hero-visual{perspective:1400px;justify-self:center;width:min(100%,440px)}
+.hero-photo{position:relative;width:100%;aspect-ratio:4/5;border:0;padding:0;margin:0;background:#0b0b0e;border-radius:24px;overflow:hidden;cursor:pointer;display:block;
+  box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);
+  transform:rotateY(var(--ry,-6deg)) rotateX(var(--rx,2deg));transition:transform .5s cubic-bezier(.22,1,.36,1);transform-style:preserve-3d}
+html:not(.intro-on) .hero-visual{animation:photoIn 1.1s cubic-bezier(.22,1,.36,1) both .1s}
+@keyframes photoIn{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block;transition:transform 1.2s cubic-bezier(.22,1,.36,1)}
+.hero-photo:hover img{transform:scale(1.04)}
+.hp-frame{position:absolute;inset:12px;border:1px solid rgba(255,255,255,.26);border-radius:16px;pointer-events:none}
+.hp-tag{position:absolute;right:20px;bottom:22px;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--paper);background:rgba(17,17,20,.72);padding:8px 12px;border:1px solid rgba(255,255,255,.18);border-radius:999px;white-space:nowrap}
+@media(max-width:980px){header.hero{padding-top:96px}.hero-grid{grid-template-columns:1fr 1fr;gap:28px;min-height:0}.hero-visual{width:min(100%,360px)}.h-quiet{font-size:clamp(28px,4.2vw,42px)}}
+@media(max-width:700px){.hero-grid{grid-template-columns:1fr}.hero-visual{order:-1;width:min(72vw,340px)}}
+
+/* ══════════════ V2: LAPTOP SHOWCASE ══════════════ */
+#showcase{position:relative;height:380vh;z-index:1}
+#showcase .sticky{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:40px;overflow:hidden}
+#showcase .sticky{overflow:visible}
+#showcase{overflow-x:clip}
+.sc-copy{position:relative}
+.sc-stack{position:relative;min-height:300px}
+.sc-cap{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s;pointer-events:none}
+.sc-cap.on{opacity:1;transform:none;pointer-events:auto}
+.sc-k{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
+.sc-k i{width:26px;height:1px;background:var(--line)}
+.sc-t{font-family:var(--serif);font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:var(--paper);margin-top:14px;letter-spacing:-.01em}
+.sc-d{font-size:16.5px;line-height:1.7;margin-top:14px;max-width:40ch}
+.sc-link{display:inline-flex;margin-top:18px;font-size:13.5px;font-weight:700;color:var(--paper);text-decoration:none;border-bottom:1px solid var(--line)}
+.sc-steps{display:flex;gap:8px;margin-top:26px}
+.sc-steps i{width:28px;height:2px;background:var(--line-2);border-radius:2px;transition:background .3s}
+.sc-steps i.on{background:var(--paper)}
+.sc-value{margin-top:34px;padding-top:22px;border-top:1px solid var(--line-2);font-size:14.5px;line-height:1.65;color:var(--text);max-width:42ch}
+.sc-value b{color:var(--paper);font-weight:600}
+/* the machine: a rendered laptop photograph; the screenshots are projected onto its
+   screen with a matrix3d computed from the screen's four corners, so they stay sharp
+   and still crossfade. The whole picture sways gently with scroll. */
+.mac-wrap{perspective:2000px;perspective-origin:50% 40%;display:grid;place-items:center}
+.mac-slide{transform:translateX(34%) rotateY(-28deg);opacity:0;transition:transform 1.25s cubic-bezier(.22,1,.36,1),opacity .7s ease;width:min(760px,100%)}
+.mac-slide.in{transform:none;opacity:1}
+.mac{position:relative;width:100%;aspect-ratio:1948/1502;transform:translateX(var(--tx,0)) scale(var(--zm,1)) rotateY(var(--ry,0deg));transition:transform 1.15s cubic-bezier(.22,1,.36,1);will-change:transform;transform-style:preserve-3d}
+.mac::before{content:"";position:absolute;left:8%;right:8%;bottom:1%;height:16%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,0,0,.7),transparent 70%);z-index:-1}
+.view{position:absolute;left:0;right:0;bottom:0;opacity:0;transition:opacity .6s ease;pointer-events:none;will-change:opacity;backface-visibility:hidden}
+.view.on{opacity:1}
+.lap-img{display:block;width:100%;height:auto}
+.lap-screen{position:absolute;left:0;top:0;width:720px;height:450px;transform-origin:0 0;overflow:hidden;background:#000;border-radius:2px;will-change:transform;backface-visibility:hidden}
+.lap-screen .fr{position:absolute;inset:0;opacity:0;transition:opacity .6s ease}
+.lap-screen .fr.on{opacity:1}
+.lap-screen .fr img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.lap-screen .glass{position:absolute;inset:0;pointer-events:none;background:linear-gradient(108deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 26%,rgba(255,255,255,0) 48%,rgba(255,255,255,.03) 80%,rgba(255,255,255,.07) 100%)}
+@media(max-width:980px){
+  #showcase{height:340vh}
+  #showcase .sticky{grid-template-columns:1fr;align-content:center;gap:18px;padding-top:70px}
+  .sc-copy{order:2}
+  .sc-stack{min-height:196px}
+  .sc-d{font-size:15px}
+  .sc-t{font-size:clamp(24px,6.4vw,34px)}
+  .mac-slide{width:min(94vw,560px);transform:translateX(24%) rotateY(-22deg);}
+  .mac-slide.in{transform:none}
+  .sc-value{margin-top:18px;padding-top:14px;font-size:13.5px}
+}
+
+/* ══════════════ V2: PROOF BAR ══════════════ */
+.proof{border:0;background:none;padding:40px 0 10px}
+.proof .wrap{display:block;padding:0 28px}
+.pbar{position:relative;height:2px;background:var(--line-2);overflow:hidden;border-radius:2px}
+.pbar i{position:absolute;inset:0;background:linear-gradient(90deg,#fff,#9a9aa6);transform:scaleX(0);transform-origin:left;transition:transform 1.3s cubic-bezier(.22,1,.36,1)}
+.proof.in .pbar i{transform:scaleX(1)}
+.pstats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:26px}
+.pstats>div{opacity:0;transform:translateX(-18px);transition:opacity .6s,transform .6s;transition-delay:var(--d,0s)}
+.proof.in .pstats>div{opacity:1;transform:none}
+.proof-n{font-family:var(--serif);font-weight:600;font-size:clamp(34px,4vw,54px);line-height:1;color:var(--paper);font-variant-numeric:tabular-nums}
+.proof-l{margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.proof-s{margin-top:5px;font-size:13px;color:var(--text);line-height:1.5;max-width:24ch}
+@media(max-width:860px){.pstats{grid-template-columns:1fr 1fr;gap:22px 16px}}
+
+/* ══════════════ V2: ORBIT ══════════════ */
+#work{padding:90px 0 60px;overflow:hidden}
+.orbit{position:relative;width:min(92vw,960px);aspect-ratio:1;margin:30px auto 0}
+.orbit::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.07),rgba(255,255,255,.02) 40%,transparent 70%)}
+.core{position:absolute;left:50%;top:50%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%);z-index:3}
+.core canvas{width:100%;height:100%;display:block}
+.core .fallback{width:100%;height:100%;display:none}
+.edges{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+.edges line{stroke:rgba(255,255,255,.13);stroke-width:1;transition:stroke .3s}
+.edges line.t1{stroke:rgba(255,255,255,.26);stroke-width:1.2}
+.edges line.hot{stroke:rgba(255,255,255,.8);stroke-width:1.4}
+.ring{position:absolute;left:50%;top:50%;margin:0;padding:0;list-style:none;border-radius:50%;border:1px dashed rgba(255,255,255,.055);z-index:2;transform:translate(-50%,-50%) rotate(var(--rot,0deg));animation:spin var(--dur) linear infinite}
+.ring.r1{width:46%;--dur:36s}.ring.r2{width:74%;--dur:58s;animation-direction:reverse}.ring.r3{width:98%;--dur:84s}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(calc(var(--rot,0deg) + 360deg))}}
+.ring li{position:absolute;left:50%;top:50%;transform:rotate(var(--a)) translate(calc(var(--ring-r) + var(--dr,0px))) rotate(calc(-1 * var(--a)))}
+.ring.r1 li{--ring-r:23cqw}.ring.r2 li{--ring-r:37cqw}.ring.r3 li{--ring-r:49cqw}
+.orbit{container-type:inline-size}
+.pl{position:relative;display:block;text-decoration:none;color:var(--text);transform:translate(-50%,-50%);animation:counter var(--dur) linear infinite}
+.ring.r2 .pl{animation-direction:reverse}
+@keyframes counter{to{transform:translate(-50%,-50%) rotate(-360deg)}}
+.pl-img{display:block;border-radius:50%;overflow:hidden;background:#1b1b1f;box-shadow:0 0 0 2px #111114,0 0 0 3px rgba(255,255,255,.22),0 14px 34px rgba(0,0,0,.6);transition:transform .35s,box-shadow .35s}
+.pl-img img{width:100%;height:100%;object-fit:cover;display:block}
+.t1 .pl-img{width:clamp(64px,11cqw,112px);height:clamp(64px,11cqw,112px)}
+.t2 .pl-img{width:clamp(44px,7cqw,74px);height:clamp(44px,7cqw,74px)}
+.t3 .pl-img{width:clamp(36px,5.4cqw,56px);height:clamp(36px,5.4cqw,56px);filter:grayscale(.4)}
+.pl.dim .pl-img{opacity:.7}
+a.pl:hover .pl-img{transform:scale(1.1);box-shadow:0 0 0 2px #111114,0 0 0 3px #fff,0 18px 44px rgba(0,0,0,.7)}
+.pl-l{position:absolute;left:50%;top:100%;transform:translate(-50%,8px);white-space:nowrap;text-align:center;font-size:11px;line-height:1.3;opacity:0;transition:opacity .25s;pointer-events:none;background:rgba(17,17,20,.92);padding:6px 10px;border-radius:8px;border:1px solid var(--line-2)}
+.pl-l b{display:block;color:var(--paper);font-weight:600}
+.pl-l i{font-style:normal;color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.pl:hover .pl-l,.pl:focus-visible .pl-l,.t1 .pl-l{opacity:1}
+.t1 .pl-l{transform:translate(-50%,10px)}
+.all{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:40px auto 0;max-width:920px}
+.all a,.all span{font-size:12.5px;padding:7px 12px;border-radius:999px;border:1px solid var(--line-2);color:var(--text);text-decoration:none}
+.all a:hover{border-color:var(--paper);color:var(--paper)}
+.all span{color:var(--muted)}
+.all em{font-style:normal;margin-left:6px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7c7c88}
+@media(max-width:680px){
+  .orbit{width:100vw;margin-left:calc(50% - 50vw)}
+  .ring.r1{width:44%}.ring.r2{width:68%}.ring.r3{width:88%}
+  .ring.r1 li{--ring-r:22cqw}.ring.r2 li{--ring-r:34cqw}.ring.r3 li{--ring-r:42.5cqw}
+  .t1 .pl-l{display:none}
+}
+@media(prefers-reduced-motion:reduce){.ring,.pl{animation:none}}
+
+/* ══════════════ V2: COMPARE ══════════════ */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+.cmp>div{border-radius:22px;padding:30px 32px;border:1px solid var(--line-2)}
+.cmp .bad{background:#17171b}
+.cmp .good{background:#e8e8ec;color:#121215;border-color:rgba(255,255,255,.3)}
+.cmp h3{font-family:var(--serif);font-weight:600;font-size:24px;margin:0}
+.cmp .good h3{color:#0d0d10}
+.cmp .bad h3{color:var(--paper)}
+.cmp .e{font-size:10.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;margin-bottom:12px}
+.cmp .bad .e{color:#7c7c88}.cmp .good .e{color:#5c5c66}
+.cmp ul{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:12px}
+.cmp li{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.55;opacity:0;transform:translateX(-10px);transition:opacity .5s,transform .5s;transition-delay:var(--d,0s)}
+.cmp.in li{opacity:1;transform:none}
+.cmp li::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;margin-top:2px;display:grid;place-items:center;font-size:11px;font-weight:700}
+.cmp .bad li::before{content:"×";background:rgba(248,113,113,.14);color:#f87171;border:1px solid rgba(248,113,113,.4)}
+.cmp .good li::before{content:"✓";background:rgba(21,128,61,.14);color:#15803d;border:1px solid rgba(21,128,61,.45);display:flex;justify-content:center;align-items:center}
+.cmp .bad li{color:var(--text)}.cmp .good li{color:#1f1f26}
+.cmp-note{margin-top:22px;font-size:14px;color:var(--muted);line-height:1.65;max-width:70ch}
+.cmp-note b{color:var(--text);font-weight:500}
+@media(max-width:860px){.cmp{grid-template-columns:1fr}.cmp>div{padding:24px 22px}}
 </style>
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><clipPath id="hexclip" clipPathUnits="objectBoundingBox"><path d="M 0.7774 0.2539 L 0.5744 0.1367 Q 0.5000 0.0938 0.4256 0.1367 L 0.2226 0.2539 Q 0.1482 0.2969 0.1482 0.3828 L 0.1482 0.6172 Q 0.1482 0.7031 0.2226 0.7461 L 0.4256 0.8633 Q 0.5000 0.9062 0.5744 0.8633 L 0.7774 0.7461 Q 0.8518 0.7031 0.8518 0.6172 L 0.8518 0.3828 Q 0.8518 0.2969 0.7774 0.2539 Z"/></clipPath></defs></svg>
+
 <!-- ══════════════ INTRO ══════════════ -->
 <div id="intro" aria-hidden="true">
-  <div class="scene">
-
-    <!-- flap sits behind the card -->
-    <svg class="env env-rear" viewBox="0 0 440 280" aria-hidden="true">
-      <path class="env-flap" d="M3 68 L220 200 L437 68 L437 60 L3 60 Z"/>
-    </svg>
-
-    <!-- the card, half out of the envelope -->
-    <div class="letter">
-      <div class="paper">
-        <span class="iw-small">Platforms by</span>
-        <span class="iw-big">Isaiah Goodrich</span>
-      </div>
-    </div>
-
-    <!-- the front of the envelope covers the card's lower half -->
-    <svg class="env env-front" viewBox="0 0 440 280" aria-hidden="true">
-      <rect class="env-body" x="3" y="62" width="434" height="215" rx="9"/>
-      <path class="env-seam" d="M3 68 L220 200 L437 68"/>
-    </svg>
-
-    <!-- the dove, with the envelope in its feet -->
-    <div class="dove">
-      <svg viewBox="0 0 150 130" aria-hidden="true">
-        <g class="bird">
-          <path class="wing wing-far"  d="M72 52 C66 28 52 10 32 8 C46 22 58 36 64 54 Z"/>
-          <path class="tail" d="M40 70 C26 71 13 79 0 92 C16 95 33 90 45 81 Z"/>
-          <path class="body" d="M38 70 C34 52 54 36 80 36 C96 36 108 40 116 47
-                                 C110 60 96 68 80 72 C64 77 50 80 42 78 C35 77 36 74 38 70 Z"/>
-          <circle class="head" cx="114" cy="43" r="10.5"/>
-          <path class="beak" d="M123 41 L136 44 L123 47 Z"/>
-          <circle class="eye" cx="117" cy="40" r="1.8"/>
-          <path class="wing wing-near" d="M68 54 C60 26 42 6 18 6 C36 20 52 36 60 58 Z"/>
-        </g>
-        <!-- the parcel it is carrying -->
-        <g class="carry">
-          <rect x="70" y="73" width="36" height="24" rx="3"/>
-          <path class="carry-seam" d="M70 75 L88 89 L106 75"/>
-        </g>
-      </svg>
-    </div>
-  </div>
-  <button id="introSkip" type="button">Skip</button>
+  <canvas></canvas>
+  <div class="word"><div class="k">Platforms by</div><div class="n"></div></div>
+  <button class="skip" type="button">Skip</button>
 </div>
 
-<div id="progress" aria-hidden="true"></div>
-<div id="mark" aria-live="polite" aria-atomic="true"><span class="mk-dot"></span><span class="mk-label"></span></div>
-<div id="cursor-glow" aria-hidden="true"></div>
-
-<!-- ══════════════ NAV ══════════════ -->
 <nav id="nav">
   <div class="nav-in">
     <a href="#top" class="brand">
-      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><linearGradient id="mkg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f4f7"/><stop offset=".55" stop-color="#c9c9d1"/><stop offset="1" stop-color="#7e7e88"/></linearGradient></defs><g fill="none" stroke="url(#mkg1)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M41 11.2 L32 6 L9.5 19 L9.5 45 L32 58 L41 52.8"/><path d="M54.5 19 L46.2 14.2"/><path d="M54.5 45 L46.2 49.8"/></g><text x="21.5" y="30" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="19" fill="#f4f4f7">I</text><text x="35.5" y="49" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="19" fill="#f4f4f7">G</text></svg>
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><linearGradient id="mkn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".48" stop-color="#cfcfd8"/><stop offset="1" stop-color="#80808c"/></linearGradient></defs><path d="M 44.3842 13.1500 L 36.7631 8.7500 Q 32.0000 6.0000 27.2369 8.7500 L 14.2465 16.2500 Q 9.4833 19.0000 9.4833 24.5000 L 9.4833 39.5000 Q 9.4833 45.0000 14.2465 47.7500 L 27.2369 55.2500 Q 32.0000 58.0000 36.7631 55.2500 L 44.3842 50.8500" fill="none" stroke="#1d1d22" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(1.4 1.9)"/><path d="M 44.3842 13.1500 L 36.7631 8.7500 Q 32.0000 6.0000 27.2369 8.7500 L 14.2465 16.2500 Q 9.4833 19.0000 9.4833 24.5000 L 9.4833 39.5000 Q 9.4833 45.0000 14.2465 47.7500 L 27.2369 55.2500 Q 32.0000 58.0000 36.7631 55.2500 L 44.3842 50.8500" fill="none" stroke="url(#mkn)" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M 44.3842 13.1500 L 36.7631 8.7500 Q 32.0000 6.0000 27.2369 8.7500 L 14.2465 16.2500 Q 9.4833 19.0000 9.4833 24.5000 L 9.4833 39.5000 Q 9.4833 45.0000 14.2465 47.7500 L 27.2369 55.2500 Q 32.0000 58.0000 36.7631 55.2500 L 44.3842 50.8500" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round" transform="translate(-.9 -1.1)"/><text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">I</text><text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#fff">I</text><text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">G</text><text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#fff">G</text></svg>
       <span class="brand-name"><span class="brand-kicker">Platforms by</span><span class="brand-main">Isaiah Goodrich</span></span>
     </a>
     <span class="nav-tag">Custom websites, built from scratch</span>
@@ -1311,623 +1182,127 @@ html.js .reveal.in{opacity:1;transform:none}
 
 <!-- ══════════════ HERO ══════════════ -->
 <header class="hero" id="top">
-  <div class="wrap">
-    <div class="hero-top">
-      <div class="hero-copy">
-      <span class="pill"><i></i>Custom websites for creators &amp; small businesses</span>
-      <h1>
-        Your link in bio was never a website.
-        <span class="accent">You've outgrown it.</span>
-      </h1>
-        <p class="hero-sub">
-          I build custom websites for creators and small businesses. Designed around your
-          brand, coded from scratch, and <strong>maintained for you</strong> after launch.
-          No templates. No page builders.
-        </p>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="hero-eyebrow"><span class="hx"></span>Custom websites for creators and small businesses</div>
+      <h1 class="h-quiet">A website built to scale your brand. <span class="dim">Not a template that sits there.</span></h1>
+      <p class="hero-sub">
+        Designed and coded from scratch around what you do, launched on your own domain, and
+        kept growing with you: new offers, new brands, new proof, added as you scale. One flat
+        price, and one person who keeps it running.
+      </p>
       <div class="hero-actions">
         <a href="#contact" class="btn btn-primary">Start your build</a>
         <a href="#work" class="btn btn-ghost">See the work</a>
       </div>
-      <p class="hero-note">Same-day reply · One flat price · Your own domain · Maintained, not abandoned</p>
-      </div>
-
-      <div class="hero-portrait">
-        <button class="me" type="button" data-open-story aria-label="Read my story">
-          <span class="me-frame">
-            <img src="images/isaiah.jpg?v=1" alt="Isaiah Goodrich" width="1365" height="2048">
-          </span>
-          <span class="me-hint">Click for story</span>
-        </button>
-      </div>
+      <p class="hero-note">Same-day reply · Your own domain · Maintained, not abandoned</p>
     </div>
-
-    <div class="stage">
-     <div class="device">
-      <div class="float float-a">
-        <div class="float-head"><span class="dot"></span>Live</div>
-        <div class="float-main">mandibagleyugc.com</div>
-        <div class="float-sub">UGC portfolio, zero templates</div>
-      </div>
-
-      <a class="laptop-link" href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer" draggable="false"
-         aria-label="Open Mandi Bagley's UGC portfolio in a new tab">
-        <div class="laptop">
-          <div class="laptop-inner">
-          <div class="lid">
-            <div class="screen">
-              <div class="chrome">
-                <span class="tl"></span><span class="tl"></span><span class="tl"></span>
-                <div class="url"><span class="lock"></span>mandibagleyugc.com</div>
-              </div>
-              <div class="frame-wrap" data-crop="748" data-page="6539" data-grace="2700">
-              <div class="reel reel-lap">
-              <iframe class="lap-frame" src="https://mandibagleyugc.com" title="Mandi Bagley's website"
-                      scrolling="no" tabindex="-1" aria-hidden="true"
-                      referrerpolicy="no-referrer"></iframe>
-              </div>
-            </div>
-          </div>
-          <div class="hinge"></div>
-          <div class="base">
-            <div class="keys" aria-hidden="true"></div>
-            <div class="trackpad" aria-hidden="true"></div>
-          </div>
-          <div class="foot" aria-hidden="true"></div>
-          </div>
-        </div>
-        <span class="phone-cta">Open the live site &rarr;</span>
-      </a>
-
-      <div class="float float-b">
-        <div class="float-head"><span class="dot"></span>Maintained</div>
-        <div class="float-main">New photos added</div>
-        <div class="float-sub">You send it. I ship it.</div>
-      </div>
-     </div>
+    <div class="hero-visual">
+      <button class="hero-photo" type="button" data-open-story aria-label="Read my story">
+        <img src="images/isaiah-color.jpg" alt="Isaiah Goodrich" width="1100" height="1375">
+        <span class="hp-frame" aria-hidden="true"></span>
+        <span class="hp-tag">Click for story</span>
+      </button>
     </div>
   </div>
 </header>
 
+<!-- ══════════════ SHOWCASE ══════════════ -->
+<section id="showcase" aria-label="Recent builds on screen">
+  <div class="sticky wrap">
+    <div class="sc-copy">
+      <div class="sc-stack">
+      <div class="sc-cap on"><div class="sc-k"><i></i>UGC portfolio</div><div class="sc-t">Mandi Bagley</div><p class="sc-d">A creator with a seven-figure following, with her brand work, partnership history and rate card in one place, updated as fast as she shoots it.</p><a class="sc-link" href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer">mandibagleyugc.com</a></div>
+      <div class="sc-cap"><div class="sc-k"><i></i>Coaching funnel</div><div class="sc-t">Dylan Kolak</div><p class="sc-d">A natural bodybuilder and former D1 gymnast. His method, his story and a qualifying application, so he only gets on calls that fit.</p></div>
+      <div class="sc-cap"><div class="sc-k"><i></i>One on one coaching</div><div class="sc-t">Josh Thar</div><p class="sc-d">A landing page, a results page and a story page, all feeding one application that Josh reads himself.</p><a class="sc-link" href="https://joshthar.com" target="_blank" rel="noopener noreferrer">joshthar.com</a></div>
+      <div class="sc-cap"><div class="sc-k"><i></i>Coach hub</div><div class="sc-t">Gabe McKenney</div><p class="sc-d">Not a website. The private system behind one: client roster, check-ins, leads and the follow-up emails that send themselves.</p><a class="sc-link" href="https://gabe-coach-hub-demo.vercel.app" target="_blank" rel="noopener noreferrer">Try the demo</a></div>
+      </div>
+      <div class="sc-steps"><i class="on"></i><i></i><i></i><i></i></div>
+      <p class="sc-value"><b>One flat payment.</b> You get the site on your own domain, and you get me after launch: keeping it current and helping you scale your socials and brand deals as they come. You send it, I ship it.</p>
+    </div>
+    <div class="mac-wrap">
+      <div class="mac-slide">
+      <div class="mac">
+        <div class="view on" data-view="left" data-tl="0.42607,0.07328" data-tr="0.91632,0.09982" data-br="0.85516,0.63734" data-bl="0.37177,0.53364">
+          <img class="lap-img" src="images/laptop/black-left.jpg?v=4" alt="" width="2197" height="1520">
+          <div class="lap-screen" aria-hidden="true">
+            <div class="fr on"><img src="images/laptop/mandi.jpg" alt="" width="1440" height="900"></div>
+            <div class="fr"><img src="images/laptop/dylan.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <div class="fr"><img src="images/laptop/josh.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <div class="fr"><img src="images/laptop/gabe.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <span class="glass"></span>
+          </div>
+        </div>
+        <div class="view" data-view="front" data-tl="0.17497,0.08667" data-tr="0.83324,0.08667" data-br="0.8317,0.5811" data-bl="0.17446,0.58044">
+          <img class="lap-img" src="images/laptop/black-front.jpg?v=4" alt="" width="1948" height="1520" loading="lazy">
+          <div class="lap-screen" aria-hidden="true">
+            <div class="fr on"><img src="images/laptop/mandi.jpg" alt="" width="1440" height="900"></div>
+            <div class="fr"><img src="images/laptop/dylan.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <div class="fr"><img src="images/laptop/josh.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <div class="fr"><img src="images/laptop/gabe.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <span class="glass"></span>
+          </div>
+        </div>
+        <div class="view" data-view="right" data-tl="0.08368,0.09982" data-tr="0.57393,0.07328" data-br="0.62823,0.53364" data-bl="0.14484,0.63734">
+          <img class="lap-img" src="images/laptop/black-right.jpg?v=4" alt="" width="2197" height="1520" loading="lazy">
+          <div class="lap-screen" aria-hidden="true">
+            <div class="fr on"><img src="images/laptop/mandi.jpg" alt="" width="1440" height="900"></div>
+            <div class="fr"><img src="images/laptop/dylan.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <div class="fr"><img src="images/laptop/josh.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <div class="fr"><img src="images/laptop/gabe.jpg" alt="" width="1440" height="900" loading="lazy"></div>
+            <span class="glass"></span>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-
-
-<!-- ══════════════ PROOF ══════════════
-     The first two numbers are counted off the portfolio cards below by script,
-     so they cannot drift from what the page shows. -->
+<!-- ══════════════ PROOF ══════════════ -->
 <div class="proof" id="proof">
   <div class="wrap">
-    <div class="reveal">
-      <div class="proof-n" data-count="builds">21</div>
-      <div class="proof-l">Builds</div>
-      <div class="proof-s">Every one designed and coded from scratch.</div>
-    </div>
-    <div class="reveal">
-      <div class="proof-n" data-count="live">16</div>
-      <div class="proof-l"><span class="dot"></span>Live right now</div>
-      <div class="proof-s">On the client's own domain, maintained by me.</div>
-    </div>
-    <div class="reveal">
-      <div class="proof-n" data-count="1">1</div>
-      <div class="proof-l">Person you deal with</div>
-      <div class="proof-s">No agency, no ticket queue, no account manager.</div>
-    </div>
-    <div class="reveal">
-      <div class="proof-n" data-count="0">0</div>
-      <div class="proof-l">Templates</div>
-      <div class="proof-s">Nothing reused from one client to the next.</div>
+    <div class="pbar"><i></i></div>
+    <div class="pstats">
+      <div style="--d:.15s"><div class="proof-n" data-count="19">19</div><div class="proof-l">Builds</div><div class="proof-s">Every one designed and coded from scratch.</div></div>
+      <div style="--d:.3s"><div class="proof-n" data-count="16">16</div><div class="proof-l"><span class="dot"></span>Live right now</div><div class="proof-s">On the client's own domain, maintained by me.</div></div>
+      <div style="--d:.45s"><div class="proof-n" data-count="1">1</div><div class="proof-l">Person you deal with</div><div class="proof-s">No agency, no ticket queue, no account manager.</div></div>
+      <div style="--d:.6s"><div class="proof-n" data-count="0">0</div><div class="proof-l">Templates</div><div class="proof-s">Nothing reused from one client to the next.</div></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ PORTFOLIO ══════════════ -->
+<!-- ══════════════ WORK: ORBIT ══════════════ -->
 <section id="work">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head reveal" style="text-align:center;max-width:none;margin-bottom:0">
       <span class="eyebrow">Portfolio</span>
-      <h2>Real work. <em>Real people.</em></h2>
-      <p>
-        Every one of these was designed and coded from scratch for the person whose name is
-        on it. No templates, no page builders, no two alike.
-      </p>
+      <h2>Everything I have built, <em>in orbit.</em></h2>
+      <p style="margin-left:auto;margin-right:auto;max-width:56ch">Every build is tied back to the mark. The closest ones are the biggest. Every live site opens in a new tab. Tap or hover for the name.</p>
     </div>
-
-    <div class="work-grid">
-      <a class="work-card reveal" href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/mandi-phone.jpg" alt="Mandi Bagley's custom portfolio site" loading="lazy" width="900" height="1126">
-        </div>
-        <div class="work-body">
-          <h3>Mandi Bagley</h3>
-          <div class="cat">Creator · Fitness, Faith &amp; Travel</div>
-          <p>
-            A full UGC portfolio for a creator with a seven-figure following. Brand work,
-            partnership history, and a rate card in one place, updated as fast as she shoots it.
-          </p>
-          <span class="work-link">mandibagleyugc.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-mayson">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/mayson-hero.jpg" alt="Mayson Brown" loading="lazy" width="900" height="900">
-        </div>
-        <div class="work-body">
-          <h3>Mayson Brown</h3>
-          <div class="cat">Creator &amp; Marketer · Scottsdale, AZ</div>
-          <p>
-            A creator site built on proof instead of follower counts. Per-video numbers, real
-            sponsor work, and his apparel brand, so a partner can judge him on what the content
-            actually did rather than on a vanity metric.
-          </p>
-          <span class="work-link">themaysonbrown.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://gabe-coach-hub-demo.vercel.app" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot app-shot">
-          <span class="work-tag tag-dev"><span class="dot"></span>Built</span>
-          <div class="app-bar">
-            <i></i><i></i><i></i><b>Peak Natty · Coach Hub</b>
-          </div>
-          <div class="app-body">
-            <div class="app-side">
-              <b>Menu</b>
-              <u class="on"></u><u></u><u></u><u></u>
-            </div>
-            <div class="app-main">
-              <div class="app-h">This week's check-ins</div>
-              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-ok">Done</span></div>
-              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-due">Due</span></div>
-              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-ok">Done</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="work-body">
-          <h3>Gabe McKenney</h3>
-          <div class="cat">Peak Natty · Online Coaching</div>
-          <p>
-            Not a website. A private hub for running the coaching business behind one: client
-            roster, lead pipeline, weekly check-ins, and the follow-up emails that go out on
-            their own. His real hub is private, so this opens a sandbox running on
-            invented clients instead.
-          </p>
-          <span class="work-link">Try the demo →</span>
-          <span class="work-note">Password: peaknatty</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://edwardbanks.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-eddie">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/eddie-hero.jpg" alt="Edward Banks" loading="lazy" width="1100" height="1467">
-        </div>
-        <div class="work-body">
-          <h3>Edward Banks</h3>
-          <div class="cat">Creator · Kansas City, MO</div>
-          <p>
-            A UGC portfolio for a natural athlete who shoots and edits everything himself.
-            Brand work grouped by partner, his sponsor codes on the page, and an enquiry popup
-            that reaches him directly instead of sending a brand to his DMs.
-          </p>
-          <span class="work-link">edwardbanks.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://peaknattysaucecall.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-pncall">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/peaknatty-call.jpg" alt="Gabe McKenney and Liam Gordon on stage" loading="lazy" width="1024" height="1024">
-        </div>
-        <div class="work-body">
-          <h3>Natty Academy</h3>
-          <div class="cat">Peak Natty · Webinar Funnel</div>
-          <p>
-            The public sign-up page for Gabe's weekly live call. One page, one form, and its own
-            project on purpose: registrations pass through a server route here and land in the
-            coach hub, so the app holding real client data never has a public door in it.
-          </p>
-          <span class="work-link">peaknattysaucecall.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://stevenhowardwritingcoach.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-steven">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/steven-with-books.jpg" alt="Steven Howard holding two of his books" loading="lazy" width="1400" height="933">
-        </div>
-        <div class="work-body">
-          <h3>Steven Howard</h3>
-          <div class="cat">Author · Writing &amp; Publishing Coach</div>
-          <p>
-            A one-on-one coaching site for an award-winning author of 26 books. His catalogue
-            and awards do the selling, and the contact form gathers enough detail that he can
-            vet an inquiry before he ever gets on a call.
-          </p>
-          <span class="work-link">stevenhowardwritingcoach.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://luisgarciaugc.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-luis">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/luis-hero.jpg" alt="Luis Garcia" loading="lazy" width="760" height="760">
-        </div>
-        <div class="work-body">
-          <h3>Luis Garcia</h3>
-          <div class="cat">Videographer &amp; Brand Films</div>
-          <p>
-            A portfolio for a videographer shooting lifting content and brand films for
-            supplement, apparel and gear companies. Built so a brand watches the work first
-            and reads about him second, with his partner brands and their codes on the page.
-          </p>
-          <span class="work-link">luisgarciaugc.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://fushifit.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-ty">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/ty-hero.jpg" alt="Ty of FushiFit" loading="lazy" width="1080" height="1080">
-        </div>
-        <div class="work-body">
-          <h3>Ty</h3>
-          <div class="cat">FushiFit &middot; One-on-One Coaching</div>
-          <p>
-            A landing page and application funnel for an online coach. Training, nutrition and
-            weekly check-ins built around the week someone actually has, with a qualifying
-            application so he only gets on calls that fit.
-          </p>
-          <span class="work-link">fushifit.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://iveylifts.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-ivey">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/ivey-hero.jpg?v=2" alt="Ivey" loading="lazy" width="576" height="407">
-        </div>
-        <div class="work-body">
-          <h3>Ivey</h3>
-          <div class="cat">Ivey Lifts · One-on-One Coaching</div>
-          <p>
-            A coaching funnel for a limited roster. The page says plainly who this is not for
-            before it asks anyone for anything, then an application does the rest of the
-            filtering so Ivey only gets on calls worth having.
-          </p>
-          <span class="work-link">iveylifts.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://jordandownton.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-jordan">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/jordan-hero.jpg" alt="Jordan Downton" loading="lazy" width="1200" height="666">
-        </div>
-        <div class="work-body">
-          <h3>Jordan Downton</h3>
-          <div class="cat">Creator · Kansas City, MO</div>
-          <p>
-            A UGC portfolio for a creator whose brand work has passed millions of views. Paid
-            partnerships sorted by category, the brands he runs with, and commissioned shoots
-            for people who are not a supplement label.
-          </p>
-          <span class="work-link">jordandownton.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://therealcameraman.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-colton">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/colton-hero.jpg" alt="Colton Tidwell" loading="lazy" width="800" height="800">
-        </div>
-        <div class="work-body">
-          <h3>Colton Tidwell</h3>
-          <div class="cat">Videographer · Gym &amp; Athlete Content</div>
-          <p>
-            Cinematic training footage for gyms, athletes and brands, shot and graded by an
-            active duty Marine who taught himself the craft between duty days. The page leads
-            with his work, and every clip waits for a click before it downloads anything.
-          </p>
-          <span class="work-link">therealcameraman.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://joshthar.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-josh">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/josh-hero.jpg" alt="Josh Thar" loading="lazy" width="1206" height="600">
-        </div>
-        <div class="work-body">
-          <h3>Josh Thar</h3>
-          <div class="cat">One-on-One Coaching</div>
-          <p>
-            A landing page, a results page and a story page, all feeding one qualifying
-            application. Josh runs the whole thing himself and reads every application, so the
-            site says that outright instead of implying a team behind him.
-          </p>
-          <span class="work-link">joshthar.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://dommadih.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-dom">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/dom-hero.jpg" alt="Dom" loading="lazy" width="634" height="792">
-        </div>
-        <div class="work-body">
-          <h3>Dom</h3>
-          <div class="cat">One on One Coaching</div>
-          <p>
-            A coaching funnel with a darker edge than the rest: near-black canvas, ink grain,
-            sharp corners and a crimson that only shows up as cuts and rules. Training, nutrition
-            and a weekly check-in, with the application in front of it.
-          </p>
-          <span class="work-link">dommadih.com →</span>
-        </div>
-      </a>
-
-      <a class="work-card reveal" href="https://alvielifts.com" target="_blank" rel="noopener noreferrer">
-        <div class="work-shot shot-alvi">
-          <span class="work-tag"><span class="dot"></span>Live</span>
-          <img src="images/alvi-hero.jpg" alt="Dominic Alvarez" loading="lazy" width="1100" height="1375">
-        </div>
-        <div class="work-body">
-          <h3>Dominic Alvarez</h3>
-          <div class="cat">Creator · Gym &amp; UGC</div>
-          <p>
-            A UGC portfolio for an Army National Guard soldier and gym creator. Cinematic
-            training content for brands, shot and cut by him, with his sponsor work grouped by
-            partner so a brand sees the proof before it reads a word.
-          </p>
-          <span class="work-link">alvielifts.com →</span>
-        </div>
-      </a>
-
-      <div class="work-card reveal">
-        <div class="work-shot app-shot">
-          <span class="work-tag tag-dev"><span class="dot"></span>Built</span>
-          <div class="app-bar">
-            <i></i><i></i><i></i><b>Team Buff · Coach Hub</b>
-          </div>
-          <div class="app-body">
-            <div class="app-side">
-              <b>Menu</b>
-              <u class="on"></u><u></u><u></u><u></u>
-            </div>
-            <div class="app-main">
-              <div class="app-h">Today's check-ins</div>
-              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-ok">Done</span></div>
-              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-ok">Done</span></div>
-              <div class="app-row"><span class="app-av"></span><span class="app-nm"></span><span class="app-chip chip-due">Due</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="work-body">
-          <h3>Jerrdan Buff</h3>
-          <div class="cat">Team Buff · Online Coaching</div>
-          <p>
-            Not a website. A private hub for running his coaching business: who checks in today,
-            the whole roster, leads, and the follow-up emails that go out on their own. It runs a
-            real roster, so it stays behind a login and there is no demo.
-          </p>
-          <span class="work-link">Private</span>
-        </div>
-      </div>
-
-      <div class="work-card reveal">
-        <div class="work-shot shot-madeline">
-          <span class="work-tag tag-build"><span class="dot"></span>In build</span>
-          <img src="images/madeline-hero.jpg" alt="Madeline Grimming" loading="lazy" width="1100" height="1375">
-        </div>
-        <div class="work-body">
-          <h3>Madeline Grimming</h3>
-          <div class="cat">Creator · Model &amp; Nutrition Coach</div>
-          <p>
-            A portfolio and a coaching funnel in one scroll: a free guide, one on one coaching, brand
-            work, her codes and her story. The first light build in the house, cream and oxblood
-            lifted straight from her own feed.
-          </p>
-          <span class="work-link">Launching soon</span>
-        </div>
-      </div>
-
-      <div class="work-card reveal">
-        <div class="work-shot shot-keith">
-          <span class="work-tag tag-build"><span class="dot"></span>In build</span>
-          <img src="images/keith-hero.jpg" alt="Keith Beaudry" loading="lazy" width="1280" height="720">
-        </div>
-        <div class="work-body">
-          <h3>Keith Beaudry</h3>
-          <div class="cat">Creator · Natural Bodybuilder</div>
-          <p>
-            A creator portfolio for a natural bodybuilder: gym and lifestyle content for brands, free
-            training guides, and a one on one coaching offer, on a white page with a light blue
-            accent instead of the usual black.
-          </p>
-          <span class="work-link">Launching soon</span>
-        </div>
-      </div>
-
-      <div class="work-card reveal">
-        <div class="work-shot shot-kmedia">
-          <span class="work-tag tag-build"><span class="dot"></span>In build</span>
-          <img src="images/kmedia-hero.jpg" alt="KMEDIA" loading="lazy" width="1200" height="900">
-        </div>
-        <div class="work-body">
-          <h3>KMEDIA</h3>
-          <div class="cat">Kenyon · Photography &amp; Marketing</div>
-          <p>
-            A photography and marketing studio, so a different shape from a creator site: image grids
-            and a lightbox instead of reels. Built for sports and athlete coverage, portrait
-            sessions and marketing content.
-          </p>
-          <span class="work-link">Launching soon</span>
-        </div>
-      </div>
-
-      <div class="work-card reveal">
-        <div class="work-shot shot-kent">
-          <span class="work-tag tag-build"><span class="dot"></span>In build</span>
-          <img src="images/kent-hero.jpg" alt="Kentrail Milligan" loading="lazy" width="480" height="600">
-        </div>
-        <div class="work-body">
-          <h3>Coach Kent</h3>
-          <div class="cat">Coach · Powerlifting &amp; Hypertrophy</div>
-          <p>
-            A one page site for a USPA Kansas state record holder and Army NCO taking his coaching
-            online: in person training, remote powerlifting and hypertrophy coaching, and the six
-            brands already sponsoring him, in one place.
-          </p>
-          <span class="work-link">Launching soon</span>
-        </div>
-      </div>
-
-      <div class="work-card reveal">
-        <div class="work-shot shot-anthony">
-          <span class="work-tag tag-build"><span class="dot"></span>In build</span>
-          <img src="images/anthony-hero.jpg" alt="Anthony Jimenez" loading="lazy" width="800" height="1000">
-        </div>
-        <div class="work-body">
-          <h3>Anthony Jimenez</h3>
-          <div class="cat">Creator · Gym Edits &amp; UGC</div>
-          <p>
-            A UGC portfolio for a Las Vegas gym creator moving into brand work. Late night cinematic
-            edits, filmed and cut by him, laid out so a fitness brand sees the work before it reads a
-            word.
-          </p>
-          <span class="work-link">Launching soon</span>
-        </div>
-      </div>
-
-      <div class="work-card reveal">
-        <div class="work-shot shot-dylan">
-          <span class="work-tag tag-build"><span class="dot"></span>In build</span>
-          <img src="images/dylan-hero.jpg" alt="Dylan Kolak" loading="lazy" width="648" height="972">
-        </div>
-        <div class="work-body">
-          <h3>Dylan Kolak</h3>
-          <div class="cat">Coach &amp; Creator · Natural Bodybuilder</div>
-          <p>
-            A coaching funnel, landing page and portfolio in one for a natural bodybuilder and former
-            D1 gymnast. The 360 Kolak Method, training through mindset, with the application in
-            front of it.
-          </p>
-          <span class="work-link">Launching soon</span>
-        </div>
-      </div>
-
-      <div class="work-card work-soon reveal">
-        <div>
-          <span class="badge">Your slot</span>
-          <h3>This could be yours</h3>
-          <p>Tell me what you're building and it lands on this page next.</p>
-        </div>
-      </div>
+    <div class="orbit">
+      <svg class="edges" aria-hidden="true"></svg>
+      <div class="core"><canvas aria-hidden="true"></canvas></div>
+      <ul class="ring r1" style="--n:4"><li style="--a:-90.0deg;--i:0"><a class="pl t1" href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer" aria-label="Mandi Bagley, Live"><span class="pl-img"><img src="images/mandi-phone.jpg" alt="" loading="lazy" style="object-position:50% 18%"></span><span class="pl-l"><b>Mandi Bagley</b><i>Live</i></span></a></li><li style="--a:0.0deg;--i:1"><a class="pl t1" href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer" aria-label="Mayson Brown, Live"><span class="pl-img"><img src="images/mayson-hero.jpg" alt="" loading="lazy" style="object-position:50% 24%"></span><span class="pl-l"><b>Mayson Brown</b><i>Live</i></span></a></li><li style="--a:90.0deg;--i:2"><a class="pl t1" href="https://edwardbanks.com" target="_blank" rel="noopener noreferrer" aria-label="Edward Banks, Live"><span class="pl-img"><img src="images/eddie-hero.jpg" alt="" loading="lazy" style="object-position:50% 14%"></span><span class="pl-l"><b>Edward Banks</b><i>Live</i></span></a></li><li style="--a:180.0deg;--i:3"><span class="pl t1 dim" aria-label="Dylan Kolak, In build"><span class="pl-img"><img src="images/dylan-hero.jpg" alt="" loading="lazy" style="object-position:50% 10%"></span><span class="pl-l"><b>Dylan Kolak</b><i>In build</i></span></span></li></ul><ul class="ring r2" style="--n:11"><li style="--a:-90.0deg;--i:0"><a class="pl t2" href="https://peaknattysaucecall.com" target="_blank" rel="noopener noreferrer" aria-label="Natty Academy, Live"><span class="pl-img"><img src="images/peaknatty-call.jpg" alt="" loading="lazy" style="object-position:50% 16%"></span><span class="pl-l"><b>Natty Academy</b><i>Live</i></span></a></li><li style="--a:-57.3deg;--i:1"><a class="pl t2" href="https://stevenhowardwritingcoach.com" target="_blank" rel="noopener noreferrer" aria-label="Steven Howard, Live"><span class="pl-img"><img src="images/steven-with-books.jpg" alt="" loading="lazy" style="object-position:50% 26%"></span><span class="pl-l"><b>Steven Howard</b><i>Live</i></span></a></li><li style="--a:-24.5deg;--i:2"><a class="pl t2" href="https://luisgarciaugc.com" target="_blank" rel="noopener noreferrer" aria-label="Luis Garcia, Live"><span class="pl-img"><img src="images/luis-hero.jpg" alt="" loading="lazy" style="object-position:50% 30%"></span><span class="pl-l"><b>Luis Garcia</b><i>Live</i></span></a></li><li style="--a:8.2deg;--i:3"><a class="pl t2" href="https://fushifit.com" target="_blank" rel="noopener noreferrer" aria-label="Ty, Live"><span class="pl-img"><img src="images/ty-hero.jpg" alt="" loading="lazy" style="object-position:50% 38%"></span><span class="pl-l"><b>Ty</b><i>Live</i></span></a></li><li style="--a:40.9deg;--i:4"><a class="pl t2" href="https://iveylifts.com" target="_blank" rel="noopener noreferrer" aria-label="Ivey, Live"><span class="pl-img"><img src="images/ivey-hero.jpg?v=2" alt="" loading="lazy" style="object-position:50% 22%"></span><span class="pl-l"><b>Ivey</b><i>Live</i></span></a></li><li style="--a:73.6deg;--i:5"><a class="pl t2" href="https://jordandownton.com" target="_blank" rel="noopener noreferrer" aria-label="Jordan Downton, Live"><span class="pl-img"><img src="images/jordan-hero.jpg" alt="" loading="lazy" style="object-position:58% 28%"></span><span class="pl-l"><b>Jordan Downton</b><i>Live</i></span></a></li><li style="--a:106.4deg;--i:6"><a class="pl t2" href="https://therealcameraman.com" target="_blank" rel="noopener noreferrer" aria-label="Colton Tidwell, Live"><span class="pl-img"><img src="images/colton-hero.jpg" alt="" loading="lazy" style="object-position:50% 40%"></span><span class="pl-l"><b>Colton Tidwell</b><i>Live</i></span></a></li><li style="--a:139.1deg;--i:7"><a class="pl t2" href="https://joshthar.com" target="_blank" rel="noopener noreferrer" aria-label="Josh Thar, Live"><span class="pl-img"><img src="images/josh-hero.jpg" alt="" loading="lazy" style="object-position:46% 22%"></span><span class="pl-l"><b>Josh Thar</b><i>Live</i></span></a></li><li style="--a:171.8deg;--i:8"><a class="pl t2" href="https://dommadih.com" target="_blank" rel="noopener noreferrer" aria-label="Dom, Live"><span class="pl-img"><img src="images/dom-hero.jpg" alt="" loading="lazy" style="object-position:50% 18%"></span><span class="pl-l"><b>Dom</b><i>Live</i></span></a></li><li style="--a:204.5deg;--i:9"><a class="pl t2" href="https://alvielifts.com" target="_blank" rel="noopener noreferrer" aria-label="Dominic Alvarez, Live"><span class="pl-img"><img src="images/alvi-hero.jpg" alt="" loading="lazy" style="object-position:50% 28%"></span><span class="pl-l"><b>Dominic Alvarez</b><i>Live</i></span></a></li><li style="--a:237.3deg;--i:10"><a class="pl t2" href="https://maddiegrimming.com" target="_blank" rel="noopener noreferrer" aria-label="Madeline Grimming, Live"><span class="pl-img"><img src="images/madeline-hero.jpg" alt="" loading="lazy" style="object-position:50% 16%"></span><span class="pl-l"><b>Madeline Grimming</b><i>Live</i></span></a></li></ul><ul class="ring r3" style="--n:4"><li style="--a:-90.0deg;--i:0"><span class="pl t3" aria-label="Gabe McKenney, Built"><span class="pl-img"><img src="images/hub-peaknatty.jpg" alt="" loading="lazy" style="object-position:50% 50%"></span><span class="pl-l"><b>Gabe McKenney</b><i>Built</i></span></span></li><li style="--a:0.0deg;--i:1"><span class="pl t3" aria-label="Jerrdan Buff, Built"><span class="pl-img"><img src="images/hub-teambuff.jpg" alt="" loading="lazy" style="object-position:50% 50%"></span><span class="pl-l"><b>Jerrdan Buff</b><i>Built</i></span></span></li><li style="--a:90.0deg;--i:2"><span class="pl t3 dim" aria-label="KMEDIA, In build"><span class="pl-img"><img src="images/kmedia-hero.jpg" alt="" loading="lazy" style="object-position:50% 50%"></span><span class="pl-l"><b>KMEDIA</b><i>In build</i></span></span></li><li style="--a:180.0deg;--i:3"><span class="pl t3 dim" aria-label="Anthony Jimenez, In build"><span class="pl-img"><img src="images/anthony-hero.jpg" alt="" loading="lazy" style="object-position:50% 20%"></span><span class="pl-l"><b>Anthony Jimenez</b><i>In build</i></span></span></li></ul>
     </div>
+    <div class="all"><a href="https://mandibagleyugc.com" target="_blank" rel="noopener noreferrer">Mandi Bagley</a><a href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer">Mayson Brown</a><span>Gabe McKenney<em>Built</em></span><a href="https://edwardbanks.com" target="_blank" rel="noopener noreferrer">Edward Banks</a><a href="https://peaknattysaucecall.com" target="_blank" rel="noopener noreferrer">Natty Academy</a><a href="https://stevenhowardwritingcoach.com" target="_blank" rel="noopener noreferrer">Steven Howard</a><a href="https://luisgarciaugc.com" target="_blank" rel="noopener noreferrer">Luis Garcia</a><a href="https://fushifit.com" target="_blank" rel="noopener noreferrer">Ty</a><a href="https://iveylifts.com" target="_blank" rel="noopener noreferrer">Ivey</a><a href="https://jordandownton.com" target="_blank" rel="noopener noreferrer">Jordan Downton</a><a href="https://therealcameraman.com" target="_blank" rel="noopener noreferrer">Colton Tidwell</a><a href="https://joshthar.com" target="_blank" rel="noopener noreferrer">Josh Thar</a><a href="https://dommadih.com" target="_blank" rel="noopener noreferrer">Dom</a><a href="https://alvielifts.com" target="_blank" rel="noopener noreferrer">Dominic Alvarez</a><a href="https://maddiegrimming.com" target="_blank" rel="noopener noreferrer">Madeline Grimming</a><span>Jerrdan Buff<em>Built</em></span><span>KMEDIA<em>In build</em></span><span>Anthony Jimenez<em>In build</em></span><span>Dylan Kolak<em>In build</em></span></div>
   </div>
 </section>
 
-
-<!-- ══════════════ OWN YOUR ADDRESS ══════════════ -->
-<section id="domain">
-  <div class="wrap spot">
-    <div class="spot-copy reveal">
-      <span class="eyebrow">Your own address</span>
-      <h2>Your own <em>address.</em></h2>
-      <p>
-        Not a profile on someone else's platform. Somewhere to send a brand, print on a card,
-        and point every piece of content you make, without it disappearing because an app
-        changed its mind.
-      </p>
-      <a class="spot-link" href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer">
-        See it live at themaysonbrown.com &rarr;
-      </a>
-    </div>
-
-    <a class="monitor-link reveal" href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer"
-       aria-label="Open Mayson Brown's site in a new tab">
-      <div class="monitor">
-        <div class="mon-screen">
-          <div class="frame-wrap" data-crop="907" data-page="5259" data-grace="3200">
-            <div class="reel reel-mon">
-            <iframe class="mon-frame" src="https://themaysonbrown.com" title="Mayson Brown's website"
-                    loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
-                    referrerpolicy="no-referrer"></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-      <span class="mon-neck"></span>
-      <span class="mon-base"></span>
-      <span class="mon-cta">themaysonbrown.com &rarr;</span>
-    </a>
-  </div>
-</section>
-
-<!-- ══════════════ STRIP ══════════════ -->
-<div class="strip">
-  <div class="track">
-    <span>Built from scratch</span><span>Not a template</span><span>Your own domain</span>
-    <span>Creators &amp; small businesses</span><span>Maintained, not abandoned</span><span>One flat price</span>
-    <span>Built from scratch</span><span>Not a template</span><span>Your own domain</span>
-    <span>Creators &amp; small businesses</span><span>Maintained, not abandoned</span><span>One flat price</span>
-  </div>
-</div>
-
-<!-- ══════════════ COST ══════════════ -->
-<section id="cost">
+<!-- ══════════════ COMPARE ══════════════ -->
+<section id="compare">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">The math</span>
-      <h2>A template is never <em>paid off.</em></h2>
-      <p>
-        A site builder, a link page, a booking tool, an email list and a domain each look
-        cheap by the month. Together, by the year, they are not, and the bill never ends. This
-        is what the usual stack adds up to.
-      </p>
+      <span class="eyebrow">Why a real site</span>
+      <h2>A link page lists you. <em>A site sells you.</em></h2>
     </div>
-
-    <div class="cost-grid">
-      <div class="chart reveal" id="costChart">
-        <div class="chart-head">
-          <span class="t">The template stack, over time</span>
-          <span class="s">Typical published prices</span>
-        </div>
-        <div class="bars">
-          <div class="bar"><div class="bar-v" data-to="1232">$0</div><div class="bar-col" data-h="58px" style="--d:0s"></div><div class="bar-l">Year 1</div></div>
-          <div class="bar"><div class="bar-v" data-to="2464">$0</div><div class="bar-col" data-h="116px" style="--d:.15s"></div><div class="bar-l">Year 2</div></div>
-          <div class="bar"><div class="bar-v" data-to="3696">$0</div><div class="bar-col" data-h="174px" style="--d:.3s"></div><div class="bar-l">Year 3</div></div>
-        </div>
-        <div class="legend">
-          <span><b>Site builder</b> about $36 a month</span>
-          <span><b>Link page</b> about $24 a month</span>
-          <span><b>Booking tool</b> about $12 a month</span>
-          <span><b>Email list</b> about $29 a month</span>
-          <span><b>Domain</b> about $20 a year</span>
-          <span class="legend-bad">Billed monthly, the way most people pay. Year 4 costs the same as year 1.</span>
-        </div>
-      </div>
-
-      <div class="own reveal" id="ownCard">
-        <span class="e">One build</span>
-        <div class="t">Paid once. Yours after that.</div>
-        <div class="own-line">
-          <div class="blk"><span>Paid once</span></div>
-          <div class="flat"><span>Still yours, still maintained</span></div>
-        </div>
-        <p>
-          One flat price, quoted up front. After launch the site is yours on your own domain,
-          and keeping it current is part of the deal rather than a second subscription.
-        </p>
-        <ul>
-          <li>No monthly platform fee</li>
-          <li>No template to outgrow</li>
-          <li>Changes included, not billed by the hour</li>
-        </ul>
-      </div>
+    <div class="cmp reveal">
+      <div class="bad"><div class="e">A link page</div><h3>What they see today</h3>
+        <ul><li style="--d:.05s">A list of buttons with no story and no proof</li><li style="--d:.15s">Looks like every other creator they checked this week</li><li style="--d:.25s">Lives on someone else's platform, with their logo on it</li><li style="--d:.35s">Nowhere to put your rates, your results or your brands</li><li style="--d:.45s">A monthly fee for the rest of your career</li></ul></div>
+      <div class="good"><div class="e">Your own site</div><h3>What they see instead</h3>
+        <ul><li style="--d:.1s">Your name on your own domain, built around your brand</li><li style="--d:.2s">Your work, your numbers and the brands you have run with, up front</li><li style="--d:.3s">A reason to stay, and one clear thing to do next</li><li style="--d:.4s">Updated whenever you send something new, by me</li><li style="--d:.5s">Paid once. Yours after that.</li></ul></div>
     </div>
+    <p class="cmp-note reveal">Most people are already paying <b>around $100 a month</b> across a site builder, a link page, a booking tool and an email list, year after year. One build replaces the lot, and the price is quoted up front before anything starts.</p>
   </div>
 </section>
 
@@ -2001,25 +1376,6 @@ html.js .reveal.in{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-
-<!-- ══════════════ PAIN TICKER ══════════════ -->
-<div class="pain">
-  <div class="track">
-    <span>Your website looks like everybody else's</span>
-    <span>Your link in bio is a dead end</span>
-    <span>Nobody can find your hours or your prices</span>
-    <span>Paying monthly for a site you can't change</span>
-    <span>Your last update was two years ago</span>
-    <span>Sending brands a Google Drive folder</span>
-    <span>Your website looks like everybody else's</span>
-    <span>Your link in bio is a dead end</span>
-    <span>Nobody can find your hours or your prices</span>
-    <span>Paying monthly for a site you can't change</span>
-    <span>Your last update was two years ago</span>
-    <span>Sending brands a Google Drive folder</span>
-  </div>
-</div>
 
 <!-- ══════════════ FAQ ══════════════ -->
 <section id="faq">
@@ -2101,13 +1457,12 @@ html.js .reveal.in{opacity:1;transform:none}
   </div>
 </section>
 
-<!-- ══════════════ FOOTER ══════════════ -->
 <footer>
   <div class="wrap">
     <div class="foot-top">
       <div>
         <a href="#top" class="brand">
-          <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><linearGradient id="mkg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f4f7"/><stop offset=".55" stop-color="#c9c9d1"/><stop offset="1" stop-color="#7e7e88"/></linearGradient></defs><g fill="none" stroke="url(#mkg2)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M41 11.2 L32 6 L9.5 19 L9.5 45 L32 58 L41 52.8"/><path d="M54.5 19 L46.2 14.2"/><path d="M54.5 45 L46.2 49.8"/></g><text x="21.5" y="30" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="19" fill="#f4f4f7">I</text><text x="35.5" y="49" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="19" fill="#f4f4f7">G</text></svg>
+          <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><linearGradient id="mkf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".48" stop-color="#cfcfd8"/><stop offset="1" stop-color="#80808c"/></linearGradient></defs><path d="M 44.3842 13.1500 L 36.7631 8.7500 Q 32.0000 6.0000 27.2369 8.7500 L 14.2465 16.2500 Q 9.4833 19.0000 9.4833 24.5000 L 9.4833 39.5000 Q 9.4833 45.0000 14.2465 47.7500 L 27.2369 55.2500 Q 32.0000 58.0000 36.7631 55.2500 L 44.3842 50.8500" fill="none" stroke="#1d1d22" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(1.4 1.9)"/><path d="M 44.3842 13.1500 L 36.7631 8.7500 Q 32.0000 6.0000 27.2369 8.7500 L 14.2465 16.2500 Q 9.4833 19.0000 9.4833 24.5000 L 9.4833 39.5000 Q 9.4833 45.0000 14.2465 47.7500 L 27.2369 55.2500 Q 32.0000 58.0000 36.7631 55.2500 L 44.3842 50.8500" fill="none" stroke="url(#mkf)" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M 44.3842 13.1500 L 36.7631 8.7500 Q 32.0000 6.0000 27.2369 8.7500 L 14.2465 16.2500 Q 9.4833 19.0000 9.4833 24.5000 L 9.4833 39.5000 Q 9.4833 45.0000 14.2465 47.7500 L 27.2369 55.2500 Q 32.0000 58.0000 36.7631 55.2500 L 44.3842 50.8500" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round" transform="translate(-.9 -1.1)"/><text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">I</text><text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#fff">I</text><text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">G</text><text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#fff">G</text></svg>
       <span class="brand-name"><span class="brand-kicker">Platforms by</span><span class="brand-main">Isaiah Goodrich</span></span>
         </a>
         <p class="foot-tag">Your brand doesn't fit a template. Your website shouldn't either.</p>
@@ -2124,8 +1479,6 @@ html.js .reveal.in{opacity:1;transform:none}
     </div>
   </div>
 </footer>
-
-<!-- ══════════════ MY STORY ══════════════ -->
 <div class="modal" id="storyModal" role="dialog" aria-modal="true" aria-labelledby="storyTitle" hidden>
   <div class="modal-scrim" data-close></div>
   <div class="modal-card story-card">
@@ -2153,8 +1506,6 @@ html.js .reveal.in{opacity:1;transform:none}
     <a class="btn btn-primary story-cta" href="#contact" data-open-build>Start your build &rarr;</a>
   </div>
 </div>
-
-<!-- ══════════════ START A BUILD DIALOG ══════════════ -->
 <div class="modal" id="buildModal" role="dialog" aria-modal="true" aria-labelledby="buildTitle" hidden>
   <div class="modal-scrim" data-close></div>
   <div class="modal-card">
@@ -2201,63 +1552,12 @@ html.js .reveal.in{opacity:1;transform:none}
   </div>
 </div>
 
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
 <script>
-document.documentElement.classList.add('js');
-
-/* ════════ INTRO: dove, envelope, wordmark ════════ */
-(function(){
-  var overlay=document.getElementById('intro');
-  var skip=document.getElementById('introSkip');
-  var scene=overlay && overlay.querySelector('.scene');
-  if(!overlay||!scene) return;
-
-  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var gone=false, timers=[];
-
-  function finish(){
-    if(gone) return;
-    gone=true;
-    timers.forEach(clearTimeout);
-    overlay.classList.add('done');
-    document.documentElement.classList.remove('intro-lock');
-    setTimeout(function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); },600);
-  }
-  /* the page can never be left behind the intro */
-  timers.push(setTimeout(finish,6000));
-  skip.addEventListener('click',finish);
-  window.addEventListener('keydown',function(e){ if(e.key==='Escape') finish(); });
-
-  if(reduce){ finish(); return; }
-
-  /* the flight path is authored in a 1000x600 space, so scale that box to fit
-     rather than rewriting the path for every viewport */
-  function fitScene(){
-    var s=Math.min(window.innerWidth/1000, window.innerHeight/600, 1);
-    scene.style.setProperty('--scene', (s*0.92).toFixed(3));
-  }
-  fitScene();
-  window.addEventListener('resize',fitScene,{passive:true});
-
-  document.documentElement.classList.add('intro-lock');
-
-  /* 0.00  dove enters top left, loops, heads for centre
-     1.00  it lets the envelope go, which grows as it settles
-     1.78  the flap opens
-     2.02  the card lifts, staying tucked in the envelope
-     2.90  the dove leaves frame
-     3.40  done                                            */
-  var step=[
-    [0,    't-fly'],
-    [1000, 't-drop'],
-    [1780, 't-open'],
-    [2020, 't-read']
-  ];
-  step.forEach(function(pair){
-    timers.push(setTimeout(function(){ overlay.classList.add(pair[1]); }, pair[0]));
-  });
-  timers.push(setTimeout(finish, 3400));
-})();
+/* ════════ V2: INTRO SAFETY NET ════════
+   If the module script or the CDN never arrives, nothing else would ever lift
+   the intro or unlock scrolling. This does, no matter what. */
+setTimeout(function(){ var i=document.getElementById('intro'); document.documentElement.classList.remove('intro-on'); if(i){ i.classList.add('out'); setTimeout(function(){ i.remove(); },800); } },7000);
 
 /* ════════ NAV ════════ */
 (function(){
@@ -2279,51 +1579,6 @@ document.documentElement.classList.add('js');
       btn.setAttribute('aria-expanded','false');
     }
   });
-})();
-
-/* ════════ SCROLL PROGRESS + PHONE PARALLAX ════════ */
-(function(){
-  var bar=document.getElementById('progress');
-  var device=document.querySelector('.device');
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ticking=false;
-  function paint(){
-    ticking=false;
-    var max=document.documentElement.scrollHeight-window.innerHeight;
-    if(bar) bar.style.transform='scaleX('+(max>0?Math.min(1,window.scrollY/max):0)+')';
-    /* the phone lags the page slightly, which reads as depth rather than movement */
-    if(device&&!reduce){
-      var shift=Math.max(-40,Math.min(40,(window.scrollY-260)*0.045));
-      device.style.transform='translateY('+(-shift).toFixed(2)+'px)';
-    }
-  }
-  function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(paint); } }
-  window.addEventListener('scroll',onScroll,{passive:true});
-  window.addEventListener('resize',onScroll,{passive:true});
-  paint();
-})();
-
-/* ════════ CURSOR GLOW ════════ */
-(function(){
-  var el=document.getElementById('cursor-glow');
-  if(!el) return;
-  /* pointer only: on touch there is no cursor to follow, and it would just
-     sit wherever the last tap landed */
-  if(!(window.matchMedia&&window.matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var x=0,y=0,pending=false;
-  window.addEventListener('pointermove',function(e){
-    x=e.clientX;y=e.clientY;
-    if(!pending){
-      pending=true;
-      requestAnimationFrame(function(){
-        pending=false;
-        el.style.transform='translate('+x+'px,'+y+'px)';
-        el.style.opacity='1';
-      });
-    }
-  },{passive:true});
-  document.addEventListener('mouseleave',function(){el.style.opacity='0';});
 })();
 
 /* ════════ REVEAL ════════ */
@@ -2348,235 +1603,6 @@ document.documentElement.classList.add('js');
     io.observe(el);
   });
 })();
-
-/* ════════ NUMBERS THAT MOVE ════════
-   Proof counters, the cost bars and the timeline animate once, when scrolled
-   into view. The build and live counts are read off the portfolio cards, so
-   they cannot say something the page does not. */
-(function(){
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var cards = document.querySelectorAll('.work-card:not(.work-soon)');
-  var live = 0;
-  cards.forEach(function(c){
-    var t = c.querySelector('.work-tag');
-    if(t && /live|built/i.test(t.textContent)) live++;
-  });
-  var COUNTS = { builds: cards.length, live: live };
-
-  function ease(t){ return 1 - Math.pow(1 - t, 3); }
-  function countTo(el, to, prefix, ms){
-    if(reduce || !window.requestAnimationFrame){ el.textContent = prefix + to.toLocaleString(); return; }
-    var start = null;
-    function step(ts){
-      if(start === null) start = ts;
-      var p = Math.min(1, (ts - start) / ms);
-      el.textContent = prefix + Math.round(to * ease(p)).toLocaleString();
-      if(p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  document.querySelectorAll('.proof-n[data-count]').forEach(function(el){
-    var k = el.getAttribute('data-count');
-    var n = (k in COUNTS) ? COUNTS[k] : parseInt(k, 10);
-    el.setAttribute('data-final', n);
-    el.textContent = reduce ? n : '0';
-  });
-
-  function runProof(){
-    document.querySelectorAll('.proof-n[data-final]').forEach(function(el){
-      countTo(el, parseInt(el.getAttribute('data-final'), 10), '', 1100);
-    });
-  }
-  function runChart(){
-    var chart = document.getElementById('costChart');
-    if(!chart) return;
-    chart.querySelectorAll('.bar').forEach(function(b){
-      var col = b.querySelector('.bar-col'), v = b.querySelector('.bar-v');
-      col.style.setProperty('--h', col.getAttribute('data-h'));
-      countTo(v, parseInt(v.getAttribute('data-to'), 10), '$', 1400);
-    });
-    var own = document.getElementById('ownCard');
-    if(own){ var f = own.querySelector('.flat'); if(f) f.style.setProperty('--w', '1'); }
-  }
-  function runTimeline(){
-    var tl = document.querySelector('#timeline .tl');
-    if(!tl) return;
-    tl.style.setProperty('--p', '1');
-    tl.querySelectorAll('.tl-i').forEach(function(it, i){
-      setTimeout(function(){ it.classList.add('on'); }, reduce ? 0 : 350 + i * 520);
-    });
-  }
-
-  var jobs = [['#proof', runProof], ['#costChart', runChart], ['#timeline', runTimeline]];
-  if(!('IntersectionObserver' in window) || reduce){
-    jobs.forEach(function(j){ j[1](); });
-    return;
-  }
-  jobs.forEach(function(j){
-    var el = document.querySelector(j[0]);
-    if(!el) return;
-    var io = new IntersectionObserver(function(en){
-      if(en[0].isIntersecting){ j[1](); io.disconnect(); }
-    }, {threshold:0.35});
-    io.observe(el);
-  });
-})();
-
-/* ════════ SCALE THE FRAMED SITE ════════ */
-(function(){
-  /* Both framed sites render at a real desktop viewport and get scaled to the
-     device they sit in, so each shows its desktop layout rather than being
-     served a mobile one by its own media queries. */
-  var BASE=1440;
-  /* unscaled px per second the site travels; the device scales it down to
-     roughly a quarter of this, which reads as a slow pan rather than a scroll */
-  var SPEED=190;
-  var SCROLL_PHASE=.84;          /* 7% to 91% of the cycle, see the keyframes */
-  var INTRO_GRACE=3200;          /* default; each frame sets data-grace to clear its own client's intro */
-  var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
-
-  document.querySelectorAll('.frame-wrap').forEach(function(wrap){
-    var frame=wrap.querySelector('iframe');
-    if(!frame) return;
-    var crop=parseInt(wrap.getAttribute('data-crop'),10)||900;
-    var page=parseInt(wrap.getAttribute('data-page'),10)||crop;
-    var prop=frame.classList.contains('lap-frame') ? '--lap-scale' : '--mon-scale';
-    var travel=Math.max(0,page-crop);
-
-    wrap.style.setProperty('--page',page+'px');
-    wrap.style.setProperty('--shift',(-travel)+'px');
-    var dur=travel/SPEED/SCROLL_PHASE;
-    wrap.style.setProperty('--dur',Math.min(52,Math.max(22,dur)).toFixed(1)+'s');
-
-    function fit(){
-      var w=wrap.clientWidth;
-      if(!w) return;
-      var scale=w/BASE;
-      wrap.style.setProperty(prop,scale.toFixed(4));
-      /* the wrapper is exactly as tall as the cropped slice, so the site ends
-         on its own boundary instead of being cut mid-section */
-      wrap.style.height=Math.round(crop*scale)+'px';
-    }
-    fit();
-    if(window.ResizeObserver) new ResizeObserver(fit).observe(wrap);
-    window.addEventListener('resize',fit,{passive:true});
-    frame.addEventListener('load',fit);
-
-    if(reduce||!travel) return;
-
-    /* Hold the reel paused whenever the device is off screen. Both frames are a
-       full desktop page tall, and compositing that for nobody is the kind of
-       load this page has been bitten by before. */
-    wrap.classList.add('reel-hold');
-    if(window.IntersectionObserver){
-      new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-          wrap.classList.toggle('reel-hold',!e.isIntersecting);
-        });
-      },{rootMargin:'120px'}).observe(wrap);
-    }else{
-      wrap.classList.remove('reel-hold');
-    }
-    frame.addEventListener('load',function(){
-      setTimeout(function(){ wrap.classList.add('reel-run'); },parseInt(wrap.getAttribute('data-grace'),10)||INTRO_GRACE);
-    });
-  });
-})();
-
-/* ════════ SECTION MARKER ════════ */
-(function(){
-  var mark=document.getElementById('mark');
-  if(!mark) return;
-  var label=mark.querySelector('.mk-label');
-  var SECTIONS=[
-    {id:'top',      name:'Start your build'},
-    {id:'work',     name:'My portfolio'},
-    {id:'domain',   name:'Your own address'},
-    {id:'cost',     name:'The math'},
-    {id:'process',  name:'The steps'},
-    {id:'faq',      name:'Questions'},
-    {id:'contact',  name:'Book a call'}
-  ].map(function(x){
-    x.el = x.id==='top' ? document.body : document.getElementById(x.id);
-    return x;
-  }).filter(function(x){ return x.el; });
-
-  var current=-1, hideTimer=null, ticking=false;
-
-  function show(i){
-    if(i===current) return;
-    current=i;
-    label.textContent=SECTIONS[i].name;
-    mark.classList.remove('show');
-    /* restart the ping rather than letting it finish from the last section */
-    void mark.offsetWidth;
-    mark.classList.add('show');
-    clearTimeout(hideTimer);
-    hideTimer=setTimeout(function(){ mark.classList.remove('show'); }, 2200);
-  }
-
-  function paint(){
-    ticking=false;
-    var mark_y=window.innerHeight*0.4, active=0;
-    SECTIONS.forEach(function(s,i){
-      var top = s.el===document.body ? 0 : s.el.getBoundingClientRect().top;
-      if(top<=mark_y) active=i;
-    });
-    show(active);
-  }
-  function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(paint); } }
-  window.addEventListener('scroll',onScroll,{passive:true});
-  window.addEventListener('resize',onScroll,{passive:true});
-  paint();
-})();
-
-/* ════════ LAPTOP: DRAG TO TURN ════════ */
-(function(){
-  var laptop=document.querySelector('.laptop');
-  var link=document.querySelector('.laptop-link');
-  if(!laptop||!link) return;
-  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  var MAX=26;                 /* degrees each way, past this it stops reading as a laptop */
-  var spin=0, startX=0, startSpin=0, dragging=false, moved=0;
-
-  function set(v){ laptop.style.setProperty('--spin', v.toFixed(2)+'deg'); }
-
-  function down(e){
-    dragging=true; moved=0;
-    laptop.classList.add('is-turning'); link.classList.add('is-turning');
-    startX=e.clientX; startSpin=spin;
-    laptop.classList.remove('is-easing');
-    link.setPointerCapture && link.setPointerCapture(e.pointerId);
-  }
-  function move(e){
-    if(!dragging) return;
-    var dx=e.clientX-startX;
-    moved=Math.max(moved,Math.abs(dx));
-    spin=Math.max(-MAX,Math.min(MAX,startSpin+dx*0.14));
-    set(spin);
-  }
-  function up(){
-    if(!dragging) return;
-    dragging=false;
-    link.classList.remove('is-turning');
-    laptop.classList.add('is-easing');
-    spin=0; set(spin);              /* settle back to square */
-  }
-
-  link.addEventListener('dragstart',function(e){ e.preventDefault(); });
-  link.addEventListener('pointerdown',down);
-  link.addEventListener('pointermove',move);
-  link.addEventListener('pointerup',up);
-  link.addEventListener('pointercancel',up);
-  /* a drag must not count as a click through to her site */
-  link.addEventListener('click',function(e){ if(moved>6){ e.preventDefault(); } });
-  link.style.cursor='grab';
-  link.addEventListener('pointerdown',function(){ link.style.cursor='grabbing'; });
-  window.addEventListener('pointerup',function(){ link.style.cursor='grab'; });
-})();
-
 
 /* ════════ MY STORY POPUP ════════ */
 (function(){
@@ -2713,6 +1739,231 @@ document.documentElement.classList.add('js');
 })();
 
 document.getElementById('yr').textContent = new Date().getFullYear();
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ════════ V2: SHOWCASE, scroll-driven ════════ */
+(function(){
+  var sec=document.getElementById('showcase'); if(!sec) return;
+  var mac=sec.querySelector('.mac'), caps=sec.querySelectorAll('.sc-cap'), frs=sec.querySelectorAll('.fr'), dots=sec.querySelectorAll('.sc-steps i');
+  /* map the 1440x900 screen layer onto each view's screen quad */
+  var views=[].slice.call(mac.querySelectorAll('.view'));
+  function solve(A,b){ var n=8; for(var i=0;i<n;i++){ var m=i; for(var r=i+1;r<n;r++) if(Math.abs(A[r][i])>Math.abs(A[m][i])) m=r; var t=A[i];A[i]=A[m];A[m]=t; t=b[i];b[i]=b[m];b[m]=t; for(var r2=i+1;r2<n;r2++){ var f=A[r2][i]/A[i][i]; for(var k=i;k<n;k++) A[r2][k]-=f*A[i][k]; b[r2]-=f*b[i]; } } var x=new Array(n); for(var i2=n-1;i2>=0;i2--){ var sum=b[i2]; for(var k2=i2+1;k2<n;k2++) sum-=A[i2][k2]*x[k2]; x[i2]=sum/A[i2][i2]; } return x; }
+  function projectView(v){
+    var img=v.querySelector('.lap-img'), screen=v.querySelector('.lap-screen');
+    var W=img.clientWidth, H=W*img.getAttribute('height')/img.getAttribute('width'); if(!W) return;
+    function pt(a){ a=v.getAttribute(a).split(','); return [parseFloat(a[0])*W,parseFloat(a[1])*H]; }
+    var dst=[pt('data-tl'),pt('data-tr'),pt('data-br'),pt('data-bl')], src=[[0,0],[720,0],[720,450],[0,450]], A=[],b=[];
+    for(var i=0;i<4;i++){ var x=src[i][0],y=src[i][1],u=dst[i][0],w=dst[i][1];
+      A.push([x,y,1,0,0,0,-u*x,-u*y]); b.push(u); A.push([0,0,0,x,y,1,-w*x,-w*y]); b.push(w); }
+    var h=solve(A,b);
+    screen.style.transform='matrix3d('+[h[0],h[3],0,h[6], h[1],h[4],0,h[7], 0,0,1,0, h[2],h[5],0,1].join(',')+')';
+  }
+  function project(){ views.forEach(projectView); }
+  project(); addEventListener('resize',project,{passive:true}); views.forEach(function(v){ v.querySelector('.lap-img').addEventListener('load',project); });
+  var N=caps.length, cur=-1, ticking=false;
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  /* each step: which way the laptop faces, where it sits, how close it is */
+  var STEPS=[{view:'left',tx:12,zm:1,ry:5},{view:'right',tx:-12,zm:1,ry:-5},{view:'front',tx:0,zm:1.2,ry:0},{view:'left',tx:-12,zm:1,ry:-4}];
+  function setStep(i){ if(i===cur) return; cur=i;
+    caps.forEach(function(c,j){c.classList.toggle('on',j===i)}); dots.forEach(function(c,j){c.classList.toggle('on',j<=i)});
+    frs.forEach(function(c,j){c.classList.toggle('on',(j%N)===i)});
+    var st=STEPS[i]; views.forEach(function(v){ v.classList.toggle('on',v.getAttribute('data-view')===st.view); });
+    var small=innerWidth<980;
+    if(reduce) return;
+    var tx=st.tx*(small?.35:1), zm=small?1+(st.zm-1)*.5:st.zm;
+    mac.style.setProperty('--tx',tx+'%'); mac.style.setProperty('--zm',zm); mac.style.setProperty('--ry',st.ry+'deg');
+  }
+  function paint(){ ticking=false;
+    var r=sec.getBoundingClientRect(), vh=innerHeight, total=r.height-vh;
+    var p=Math.min(1,Math.max(0,-r.top/total));
+    setStep(Math.min(N-1,Math.floor(p*N)));
+  }
+  function onScroll(){ if(!ticking){ticking=true;requestAnimationFrame(paint);} }
+  addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',onScroll,{passive:true}); paint();
+})();
+
+/* ════════ V2: HERO PHOTO TILT ════════ */
+(function(){
+  var hero=document.querySelector('header.hero'), card=document.querySelector('.hero-photo');
+  if(!hero||!card||matchMedia('(prefers-reduced-motion:reduce)').matches||!matchMedia('(hover:hover)').matches) return;
+  hero.addEventListener('pointermove',function(e){ var r=hero.getBoundingClientRect(); var x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+    card.style.setProperty('--ry',(-6+x*14).toFixed(2)+'deg'); card.style.setProperty('--rx',(2-y*10).toFixed(2)+'deg'); });
+  hero.addEventListener('pointerleave',function(){ card.style.removeProperty('--ry'); card.style.removeProperty('--rx'); });
+})();
+
+/* ════════ V2: PROOF + COMPARE + TIMELINE triggers ════════ */
+(function(){
+  var slide=document.querySelector('.mac-slide');
+  if(slide){ if('IntersectionObserver' in window){ var sio=new IntersectionObserver(function(en){ if(en[0].isIntersecting){ slide.classList.add('in'); sio.disconnect(); } },{threshold:.15}); sio.observe(document.getElementById('showcase')); } else slide.classList.add('in'); }
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function ease(t){return 1-Math.pow(1-t,3)}
+  function countTo(el,to,ms){ if(reduce){el.textContent=to;return;} var s=null; function st(ts){ if(s===null)s=ts; var p=Math.min(1,(ts-s)/ms); el.textContent=Math.round(to*ease(p)); if(p<1)requestAnimationFrame(st);} requestAnimationFrame(st); }
+  var jobs=[
+    ['#proof',function(el){ el.classList.add('in'); el.querySelectorAll('.proof-n[data-final]').forEach(function(n){countTo(n,parseInt(n.getAttribute('data-final'),10),1100)}); }],
+    ['.cmp',function(el){ el.classList.add('in'); }],
+    ['#timeline',function(){ var tl=document.querySelector('#timeline .tl'); if(!tl) return; tl.style.setProperty('--p','1'); tl.querySelectorAll('.tl-i').forEach(function(it,i){ setTimeout(function(){it.classList.add('on')}, reduce?0:350+i*520); }); }]
+  ];
+  document.querySelectorAll('.proof-n[data-count]').forEach(function(el){ el.setAttribute('data-final',el.getAttribute('data-count')); if(!reduce) el.textContent='0'; });
+  if(!('IntersectionObserver' in window)){ jobs.forEach(function(j){var el=document.querySelector(j[0]); if(el) j[1](el);}); return; }
+  jobs.forEach(function(j){ var el=document.querySelector(j[0]); if(!el) return; var io=new IntersectionObserver(function(en){ if(en[0].isIntersecting){ j[1](el); io.disconnect(); } },{threshold:.3}); io.observe(el); });
+})();
+
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const R=1, CR=0.21, TUBE_R=0.125;
+const V=[90,150,210,270,330,30].map(a=>new THREE.Vector3(Math.cos(a*Math.PI/180)*R,Math.sin(a*Math.PI/180)*R,0));
+const [top,ul,ll,bot,lr,ur]=V;
+const lerp=(a,b,t)=>a.clone().lerp(b,t);
+const k=CR/R;
+// the open hexagon as an ordered list of segments, so it can be split into pieces
+function segments(){
+  const segs=[]; let cur=lerp(top,ur,.55);
+  for(const [prev,v,nxt] of [[ur,top,ul],[top,ul,ll],[ul,ll,bot],[ll,bot,lr]]){
+    const a=lerp(v,prev,k), b=lerp(v,nxt,k);
+    segs.push(new THREE.LineCurve3(cur,a)); segs.push(new THREE.QuadraticBezierCurve3(a,v.clone(),b)); cur=b;
+  }
+  segs.push(new THREE.LineCurve3(cur,lerp(bot,lr,.55)));
+  return segs;
+}
+function pathOf(segs){ const p=new THREE.CurvePath(); segs.forEach(s=>p.add(s)); return p; }
+function splitLine(l){ const m=l.getPoint(.5); return [new THREE.LineCurve3(l.v1.clone(),m),new THREE.LineCurve3(m,l.v2.clone())]; }
+// four pieces, each owning one rounded corner, split at straight-segment midpoints
+function pieces(){
+  const s=segments(); // L0 Q0 L1 Q1 L2 Q2 L3 Q3 L4
+  const [l1a,l1b]=splitLine(s[2]), [l2a,l2b]=splitLine(s[4]), [l3a,l3b]=splitLine(s[6]);
+  return [pathOf([s[0],s[1],l1a]), pathOf([l1b,s[3],l2a]), pathOf([l2b,s[5],l3a]), pathOf([l3b,s[7],s[8]])];
+}
+const LOOK={color:0xf2f2f6,metalness:1,roughness:.05,clearcoat:1,clearcoatRoughness:.02,envMapIntensity:1.7};
+let FONT=null; const fontReady=new Promise(res=>new FontLoader().load('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/fonts/droid/droid_sans_bold.typeface.json',f=>{FONT=f;res(f)},undefined,()=>res(null)));
+
+function makeScene(canvas,opts){ opts=opts||{};
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.3;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(32,1,.1,100);
+  scene.environment=new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(),.04).texture;
+  const key=new THREE.DirectionalLight(0xffffff,3); key.position.set(2.5,3,4); scene.add(key);
+  const rim=new THREE.DirectionalLight(0xbfc4ff,1.4); rim.position.set(-3,-1.5,-2); scene.add(rim);
+  scene.add(new THREE.AmbientLight(0xffffff,.2));
+  for(const [x,y,z,i] of [[2.2,2.4,3.2,60],[-2.6,1.2,2.6,35],[0.8,-2.4,2.8,22]]){const l=new THREE.PointLight(0xffffff,i,0,2); l.position.set(x,y,z); scene.add(l);}
+  const mat=new THREE.MeshPhysicalMaterial(LOOK);
+  // letters are matte white: flat chrome faces mirror the dark room and read as black blocks
+  const letterMat=new THREE.MeshPhysicalMaterial({color:0xeeeef2,metalness:.45,roughness:.3,clearcoat:.6,clearcoatRoughness:.18,envMapIntensity:1.15});
+  const group=new THREE.Group(); scene.add(group);
+  const parts=[];
+  if(opts.photo){
+    const tl=new THREE.TextureLoader(); const tex=tl.load(opts.photo); tex.colorSpace=THREE.SRGBColorSpace; const alpha=tl.load(opts.mask);
+    const plane=new THREE.Mesh(new THREE.PlaneGeometry(1.86,1.86),new THREE.MeshBasicMaterial({map:tex,alphaMap:alpha,transparent:true,toneMapped:false}));
+    plane.position.z=-0.05; group.add(plane);
+  }
+  for(const p of pieces()){ const m=new THREE.Mesh(new THREE.TubeGeometry(p,90,TUBE_R,24,false),mat); group.add(m); parts.push(m); }
+  const cap=new THREE.SphereGeometry(TUBE_R,24,16);
+  const full=pathOf(segments());
+  for(const pt of [full.getPoint(0),full.getPoint(1)]){ const m=new THREE.Mesh(cap,mat); m.position.copy(pt); group.add(m); parts.push(m); }
+  function letters(){
+    if(!FONT) return;
+    const mk=(ch,x,y)=>{ const g=new TextGeometry(ch,{font:FONT,size:.52,height:.14,curveSegments:16,bevelEnabled:true,bevelThickness:.035,bevelSize:.028,bevelSegments:6}); g.center(); const m=new THREE.Mesh(g,letterMat); m.position.set(x,y,0); group.add(m); parts.push(m); return m; };
+    return [mk('I',-0.30,0.24), mk('G',0.30,-0.28)];
+  }
+  function fit(pad){ const w=canvas.clientWidth||300, h=canvas.clientHeight||300; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+    const box=new THREE.Box3().setFromObject(group); const size=box.getSize(new THREE.Vector3()); const r=Math.max(size.x,size.y)*0.5*(pad||1.28); const d=r/Math.tan(THREE.MathUtils.degToRad(camera.fov*0.5))/Math.min(1,camera.aspect); camera.position.set(0,0,d); camera.lookAt(0,0,0); }
+  return {renderer,scene,camera,group,parts,letters,fit};
+}
+
+/* ── intro: pieces fly in, settle, wordmark types ── */
+(async function intro(){
+  const el=document.getElementById('intro'); if(!el) return;
+  const word=el.querySelector('.word'), nameEl=el.querySelector('.n'), canvas=el.querySelector('canvas');
+  let done=false;
+  function finish(){ if(done) return; done=true; el.classList.add('out'); document.documentElement.classList.remove('intro-on'); setTimeout(()=>{ try{S&&S.renderer.dispose();}catch(e){} el.remove(); },800); }
+  el.querySelector('.skip').addEventListener('click',finish);
+  setTimeout(finish,4600); // hard failsafe inside the module
+  if(reduce){ finish(); return; }
+  let S;
+  try{ S=makeScene(canvas); }catch(e){ finish(); return; }
+  const t0=performance.now(); const DUR=950;
+  // scatter: each piece starts far out along a random direction, rotated off-axis
+  function scatter(meshes,startDelay){ return meshes.map((m,i)=>{ const a=Math.random()*Math.PI*2, d=3.2+Math.random()*2.2; const t={m,pos:m.position.clone(),from:new THREE.Vector3(Math.cos(a)*d,Math.sin(a)*d,(Math.random()-.5)*4),fromRot:new THREE.Euler((Math.random()-.5)*2.4,(Math.random()-.5)*2.4,(Math.random()-.5)*1.6),delay:startDelay+i*80}; m.position.copy(t.from); m.rotation.copy(t.fromRot); return t; }); }
+  const targets=scatter(S.parts.slice(),0);
+  const tubeCount=targets.length;   // typing waits for the tube only; letters may land during it
+  fontReady.then(()=>{ const ls=S.letters(); if(ls){ targets.push(...scatter(ls,Math.max(0,performance.now()-t0)+40)); } });
+  S.group.rotation.set(0.10,-0.28,0);
+  S.fit(1.5);
+  const back=t=>{ const c=1.3; return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2); };
+  let typed=false;
+  function typeName(){ word.classList.add('on'); const full='Isaiah Goodrich'; let i=0; nameEl.textContent='';
+    (function step(){ if(done) return; i++; nameEl.textContent=full.slice(0,i); if(i<full.length) setTimeout(step,46); else { nameEl.classList.add('done'); setTimeout(finish,650); } })(); }
+  (function loop(){ if(done) return; requestAnimationFrame(loop);
+    const now=performance.now(); let allIn=true;
+    targets.forEach((t,idx)=>{ const p=Math.min(1,Math.max(0,(now-t0-t.delay)/DUR)); if(p<1&&idx<tubeCount) allIn=false; const e=p<1?back(p):1;
+      t.m.position.lerpVectors(t.from,t.pos,e); t.m.rotation.set(t.fromRot.x*(1-e),t.fromRot.y*(1-e),t.fromRot.z*(1-e)); });
+    const tt=(now-t0)/1000; S.group.rotation.y=-0.28+Math.sin(tt*.55)*.18; S.group.rotation.x=0.10+Math.sin(tt*.9)*.05;
+    if(allIn && !typed){ typed=true; setTimeout(typeName,140); }
+    S.renderer.render(S.scene,S.camera);
+  })();
+  addEventListener('resize',()=>S.fit(1.5),{passive:true});
+})();
+
+/* ── hero: the ring around the portrait ── */
+(async function heroRing(){
+  const canvas=document.querySelector('.hero-ring canvas'); if(!canvas) return;
+  let S; try{ S=makeScene(canvas,{photo:'images/isaiah-sq.jpg',mask:'images/hex-mask.png'}); }catch(e){ document.documentElement.classList.add('no3d'); return; }
+  S.group.rotation.set(0.06,-0.22,0); S.fit(1.16);
+  let visible=true; if('IntersectionObserver' in window) new IntersectionObserver(en=>{visible=en[0].isIntersecting},{threshold:0}).observe(canvas);
+  const t0=performance.now();
+  (function loop(){ requestAnimationFrame(loop); if(!visible) return; const t=(performance.now()-t0)/1000;
+    if(!reduce){ S.group.rotation.y=-0.22+Math.sin(t*.5)*.26; S.group.rotation.x=0.06+Math.sin(t*.8)*.05; }
+    S.renderer.render(S.scene,S.camera); })();
+  addEventListener('resize',()=>S.fit(1.16),{passive:true});
+})();
+
+/* ── orbit graph: every node tied to the mark, drifting in and out ── */
+(function(){
+  var orbit=document.querySelector('.orbit'); if(!orbit) return;
+  var svg=orbit.querySelector('.edges'), nodes=[].slice.call(orbit.querySelectorAll('.ring li'));
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches, NS='http://www.w3.org/2000/svg';
+  var lines=nodes.map(function(li,i){ var l=document.createElementNS(NS,'line'); var pl=li.querySelector('.pl');
+    if(pl.classList.contains('t1')) l.setAttribute('class','t1'); svg.appendChild(l);
+    pl.addEventListener('mouseenter',function(){l.classList.add('hot')}); pl.addEventListener('mouseleave',function(){l.classList.remove('hot')});
+    pl.addEventListener('focus',function(){l.classList.add('hot')}); pl.addEventListener('blur',function(){l.classList.remove('hot')});
+    return l; });
+  var seeds=nodes.map(function(_,i){ return {ph:i*2.399, sp:.00035+((i*7)%5)*.00006}; });
+  var live=false, raf=0;
+  function frame(t){
+    var R=orbit.getBoundingClientRect(), cx=R.width/2, cy=R.height/2, amp=R.width*(R.width<700?.014:.028);
+    nodes.forEach(function(li,i){
+      if(!reduce) li.style.setProperty('--dr',(Math.sin(t*seeds[i].sp+seeds[i].ph)*amp).toFixed(1)+'px');
+      var b=li.querySelector('.pl-img').getBoundingClientRect();
+      var x=b.left+b.width/2-R.left, y=b.top+b.height/2-R.top;
+      var l=lines[i]; l.setAttribute('x1',cx); l.setAttribute('y1',cy); l.setAttribute('x2',x.toFixed(1)); l.setAttribute('y2',y.toFixed(1));
+    });
+    if(live&&!reduce) raf=requestAnimationFrame(frame);
+  }
+  svg.setAttribute('viewBox','0 0 '+orbit.clientWidth+' '+orbit.clientHeight);
+  addEventListener('resize',function(){ svg.setAttribute('viewBox','0 0 '+orbit.clientWidth+' '+orbit.clientHeight); if(!live) requestAnimationFrame(frame); },{passive:true});
+  new IntersectionObserver(function(es){ es.forEach(function(e){ live=e.isIntersecting; cancelAnimationFrame(raf); if(live) raf=requestAnimationFrame(frame); }); },{rootMargin:'120px'}).observe(orbit);
+  requestAnimationFrame(frame);
+})();
+/* ── orbit core: the same mark, swaying ── */
+(async function core(){
+  const canvas=document.querySelector('.core canvas'); if(!canvas) return;
+  let S; try{ S=makeScene(canvas); }catch(e){ canvas.remove(); return; }
+  await fontReady; S.letters(); S.group.rotation.set(0.10,-0.28,0); S.fit(1.22);
+  let visible=true; if('IntersectionObserver' in window) new IntersectionObserver(en=>{visible=en[0].isIntersecting},{threshold:0}).observe(canvas);
+  const t0=performance.now();
+  (function loop(){ requestAnimationFrame(loop); if(!visible) return; const t=(performance.now()-t0)/1000;
+    if(!reduce){ S.group.rotation.y=-0.28+Math.sin(t*.55)*.42; S.group.rotation.x=0.10+Math.sin(t*.9)*.08; }
+    S.renderer.render(S.scene,S.camera); })();
+  addEventListener('resize',()=>S.fit(1.22),{passive:true});
+})();
 </script>
 </body>
 </html>

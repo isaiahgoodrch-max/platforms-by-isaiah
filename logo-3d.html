@@ -1,0 +1,166 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logo, 3D</title><meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800&family=Fraunces:wght@600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#111114;color:#eaeaef;font-family:'DM Sans',system-ui,sans-serif}
+.top{padding:26px 32px 0}h1{font-family:Fraunces,serif;font-weight:600;font-size:26px;margin:0 0 4px}p{color:#b8b8c2;margin:0;max-width:70ch;line-height:1.6;font-size:14.5px}
+.wrap{display:grid;grid-template-columns:1.4fr .6fr;gap:22px;padding:22px 32px 40px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+#stage{position:relative;height:620px;border-radius:20px;overflow:hidden;background:radial-gradient(60% 55% at 50% 45%,#1d1d23,#0d0d10 75%);border:1px solid rgba(255,255,255,.08)}
+canvas{display:block;width:100%;height:100%}
+.ui{position:absolute;left:16px;bottom:16px;display:flex;gap:8px;flex-wrap:wrap}
+.ui button{font:700 12px 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(17,17,20,.7);color:#eaeaef;cursor:pointer}
+.ui button.on{background:#fff;color:#0a0a0c;border-color:#fff}
+.hint{position:absolute;right:16px;bottom:18px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8e8e98}
+.side{display:flex;flex-direction:column;gap:18px}
+.card{background:#1b1b1f;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 20px}
+.card h2{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9696a0;margin:0 0 14px}
+.row{display:flex;align-items:center;gap:16px;flex-wrap:nowrap}
+.row svg{display:block}
+</style></head><body>
+<div class="top"><h1>The mark, bubbly and in 3D</h1><p>Left: a real 3D object. Fat rounded tube, bevelled letters, lit like chrome. Drag to spin. This is the same object that will assemble itself in the intro. Right: the flat version of the same shape for the nav tab and favicon, where WebGL cannot go.</p></div>
+<div class="wrap">
+  <div id="stage"><div class="ui"><button data-look="chrome" class="on">Chrome</button><button data-look="soft">Soft white</button><button data-look="ink">Black gloss</button><button data-look="spin">Sway: on</button></div><div class="hint">drag to rotate</div></div>
+  <div class="side">
+    <div class="card"><h2>Flat, for nav and favicon</h2><div class="row"><svg width="140" height="140" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".48" stop-color="#cfcfd8"/><stop offset="1" stop-color="#80808c"/></linearGradient>
+    <linearGradient id="bl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c4c4ce"/></linearGradient>
+  </defs>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="#1d1d22" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(1.4 1.9)"/>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="url(#bb)" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.9 -1.1)"/>
+  <text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">I</text>
+  <text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="url(#bl)">I</text>
+  <text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">G</text>
+  <text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="url(#bl)">G</text>
+</svg><svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".48" stop-color="#cfcfd8"/><stop offset="1" stop-color="#80808c"/></linearGradient>
+    <linearGradient id="bl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c4c4ce"/></linearGradient>
+  </defs>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="#1d1d22" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(1.4 1.9)"/>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="url(#bb)" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.9 -1.1)"/>
+  <text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">I</text>
+  <text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="url(#bl)">I</text>
+  <text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">G</text>
+  <text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="url(#bl)">G</text>
+</svg><svg width="42" height="42" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".48" stop-color="#cfcfd8"/><stop offset="1" stop-color="#80808c"/></linearGradient>
+    <linearGradient id="bl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c4c4ce"/></linearGradient>
+  </defs>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="#1d1d22" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(1.4 1.9)"/>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="url(#bb)" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.9 -1.1)"/>
+  <text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">I</text>
+  <text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="url(#bl)">I</text>
+  <text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">G</text>
+  <text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="url(#bl)">G</text>
+</svg><svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".48" stop-color="#cfcfd8"/><stop offset="1" stop-color="#80808c"/></linearGradient>
+    <linearGradient id="bl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c4c4ce"/></linearGradient>
+  </defs>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="#1d1d22" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(1.4 1.9)"/>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="url(#bb)" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 44.38 13.15 L 36.76 8.75 Q 32.00 6.00 27.24 8.75 L 14.25 16.25 Q 9.48 19.00 9.48 24.50 L 9.48 39.50 Q 9.48 45.00 14.25 47.75 L 27.24 55.25 Q 32.00 58.00 36.76 55.25 L 44.38 50.85" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.9 -1.1)"/>
+  <text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">I</text>
+  <text x="21.4" y="31.6" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="url(#bl)">I</text>
+  <text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="#1d1d22" transform="translate(1 1.3)">G</text>
+  <text x="33.4" y="46.2" font-family="'DM Sans',system-ui,sans-serif" font-weight="800" font-size="18.5" fill="url(#bl)">G</text>
+</svg></div></div>
+    <div class="card"><h2>What changed</h2><p>Corners are rounded, the stroke is nearly twice as thick, the letters are heavier, and every edge has a dark underside and a light top so it reads as a solid thing rather than a line. The G sits clear of the bottom edge.</p></div>
+  </div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const stage=document.getElementById('stage');
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(stage.clientWidth,stage.clientHeight);
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.3;
+stage.prepend(renderer.domElement);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(32,stage.clientWidth/stage.clientHeight,.1,100);
+camera.position.set(0,0,4.6);
+const pmrem=new THREE.PMREMGenerator(renderer);
+scene.environment=pmrem.fromScene(new RoomEnvironment(),.04).texture;
+
+// geometry from the same hexagon as the flat mark: pointy top, circumradius 1
+const R=1, CR=0.21;
+const V=[90,150,210,270,330,30].map(a=>new THREE.Vector3(Math.cos(a*Math.PI/180)*R,Math.sin(a*Math.PI/180)*R,0));
+const [top,ul,ll,bot,lr,ur]=V;
+const lerp=(a,b,t)=>a.clone().lerp(b,t);
+const k=CR/R;
+const path=new THREE.CurvePath();
+let cur=lerp(top,ur,.55);
+for(const [prev,v,nxt] of [[ur,top,ul],[top,ul,ll],[ul,ll,bot],[ll,bot,lr]]){
+  const a=lerp(v,prev,k), b=lerp(v,nxt,k);
+  path.add(new THREE.LineCurve3(cur,a));
+  path.add(new THREE.QuadraticBezierCurve3(a,v.clone(),b));
+  cur=b;
+}
+path.add(new THREE.LineCurve3(cur,lerp(bot,lr,.55)));
+const TUBE_R=0.125;
+const tubeGeo=new THREE.TubeGeometry(path,260,TUBE_R,28,false);
+// round the two open ends with spheres so the tube reads as one soft object
+const capGeo=new THREE.SphereGeometry(TUBE_R,24,16);
+
+// shiny: near-mirror roughness, full clearcoat, reflections turned up
+const LOOKS={
+  chrome:{color:0xf2f2f6,metalness:1,roughness:.05,clearcoat:1,clearcoatRoughness:.02,envMapIntensity:1.7},
+  soft:{color:0xf6f6f9,metalness:0,roughness:.18,clearcoat:1,clearcoatRoughness:.05,envMapIntensity:1.3},
+  ink:{color:0x121216,metalness:.4,roughness:.08,clearcoat:1,clearcoatRoughness:.02,envMapIntensity:1.6}
+};
+const mat=new THREE.MeshPhysicalMaterial(LOOKS.chrome);
+const group=new THREE.Group(); scene.add(group);
+group.add(new THREE.Mesh(tubeGeo,mat));
+for(const p of [path.getPoint(0),path.getPoint(1)]){const m=new THREE.Mesh(capGeo,mat); m.position.copy(p); group.add(m);}
+
+// key and rim so the chrome has something to catch besides the room
+const key=new THREE.DirectionalLight(0xffffff,3.0); key.position.set(2.5,3,4); scene.add(key);
+const rim=new THREE.DirectionalLight(0xbfc4ff,1.4); rim.position.set(-3,-1.5,-2); scene.add(rim);
+scene.add(new THREE.AmbientLight(0xffffff,.2));
+// two hot points so the chrome throws real specular hits as it sways
+for(const [x,y,z,i] of [[2.2,2.4,3.2,60],[-2.6,1.2,2.6,35],[0.8,-2.4,2.8,22]]){const l=new THREE.PointLight(0xffffff,i,0,2); l.position.set(x,y,z); scene.add(l);}
+
+// letters: bevelled so the edges are soft; positions match the flat mark
+new FontLoader().load('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/fonts/helvetiker_bold.typeface.json',font=>{
+  const make=(ch,x,y,size)=>{
+    const g=new TextGeometry(ch,{font,size,height:.2,curveSegments:14,bevelEnabled:true,bevelThickness:.05,bevelSize:.035,bevelSegments:6});
+    g.center();
+    const m=new THREE.Mesh(g,mat); m.position.set(x,y,0); group.add(m);
+  };
+  make('I',-0.30,0.24,0.56);
+  make('G',0.30,-0.28,0.56);
+  fit();
+});
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enablePan=false; controls.enableZoom=false; controls.enableDamping=true; controls.dampingFactor=.06;
+let spin=true;
+const BASE_X=0.10, BASE_Y=-0.28;
+group.rotation.set(BASE_X,BASE_Y,0);
+// frame the whole object from its real bounds, whatever the stage size
+function fit(){const box=new THREE.Box3().setFromObject(group); const size=box.getSize(new THREE.Vector3()); const r=Math.max(size.x,size.y)*0.5*1.28; const d=r/Math.tan(THREE.MathUtils.degToRad(camera.fov*0.5)); camera.position.set(0,0,d); camera.lookAt(0,0,0);}
+fit();
+document.querySelectorAll('.ui button').forEach(b=>b.addEventListener('click',()=>{
+  const look=b.dataset.look;
+  if(look==='spin'){spin=!spin;b.textContent='Sway: '+(spin?'on':'off');return;}
+  Object.assign(mat,LOOKS[look]); mat.color=new THREE.Color(LOOKS[look].color); mat.needsUpdate=true;
+  document.querySelectorAll('.ui button[data-look]:not([data-look=spin])').forEach(x=>x.classList.toggle('on',x===b));
+}));
+addEventListener('resize',()=>{renderer.setSize(stage.clientWidth,stage.clientHeight);camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();fit();});
+let t=0;
+(function loop(){requestAnimationFrame(loop); t+=.016; if(spin){group.rotation.y=BASE_Y+Math.sin(t*.55)*.42; group.rotation.x=BASE_X+Math.sin(t*.9)*.08;} controls.update(); renderer.render(scene,camera);})();
+window.__ready=true;
+</script></body></html>
