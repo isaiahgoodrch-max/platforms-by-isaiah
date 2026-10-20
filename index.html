@@ -2160,42 +2160,47 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   var gl=c.getContext('webgl',{alpha:false,antialias:false,depth:false,stencil:false,powerPreference:'low-power',preserveDrawingBuffer:false});
   if(!gl){ c.remove(); return; }
   var VS='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
-  var FS='precision mediump float;uniform vec2 R;uniform float T;uniform float S;uniform vec2 M;\n'+
+  var FS='precision highp float;uniform vec2 R;uniform float T;uniform float S;uniform vec2 M;\n'+
   'float sm(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}\n'+
-  'vec3 bp(int i,float t){\n'+
-  '  float f=float(i);\n'+
-  '  vec3 o=vec3(sin(t*.21+f*2.1)*2.4+cos(t*.13+f)*.7, cos(t*.17+f*1.7)*1.3+sin(t*.11+f*3.)*.5, sin(t*.15+f*.9)*.9);\n'+
-  '  o.y+=S*(2.6-f*.9); o.x+=S*(f-2.)*.5;\n'+
-  '  o.xy+=(M-.5)*vec2(.9,.6)*(.4+.15*f);\n'+
+  /* a dark liquid floor, gently moving */
+  'float floorH(vec2 p,float t){return .16*sin(p.x*1.1+t*.35)*cos(p.y*.9-t*.27)+.08*sin(p.x*2.3-t*.5+p.y*1.7)+.04*sin(p.y*3.7+t*.8);}\n'+
+  /* blobs pulled up out of it, ferrofluid style */
+  'vec3 bp(int i,float t){float f=float(i);\n'+
+  '  vec3 o=vec3(sin(t*.19+f*2.1)*2.6+cos(t*.12+f)*.8, -.9+abs(sin(t*.16+f*1.3))*1.6, -1.2+sin(t*.14+f*.9)*1.6);\n'+
+  '  o.y+=S*(1.2+f*.25); o.x+=S*(f-2.)*.6; o.xz+=(M-.5)*vec2(1.2,.8)*(.3+.12*f);\n'+
   '  return o;}\n'+
-  'float map(vec3 q){float d=1e3;float t=T;\n'+
-  '  d=sm(d,length(q-bp(0,t))-1.35,.9);\n'+
-  '  d=sm(d,length(q-bp(1,t))-1.05,.9);\n'+
-  '  d=sm(d,length(q-bp(2,t))-.85,.9);\n'+
-  '  d=sm(d,length(q-bp(3,t))-1.15,.9);\n'+
-  '  d=sm(d,length(q-bp(4,t))-.7,.9);\n'+
+  'float map(vec3 q){float t=T;\n'+
+  '  float d=q.y-(-1.7+floorH(q.xz,t)); d*=.8;\n'+
+  '  d=sm(d,length(q-bp(0,t))-1.25,1.3);\n'+
+  '  d=sm(d,length(q-bp(1,t))-.95,1.3);\n'+
+  '  d=sm(d,length(q-bp(2,t))-.75,1.3);\n'+
+  '  d=sm(d,length(q-bp(3,t))-1.05,1.3);\n'+
+  '  d=sm(d,length(q-bp(4,t))-.6,1.3);\n'+
   '  return d;}\n'+
-  'vec3 nrm(vec3 q){vec2 e=vec2(.004,0.);return normalize(vec3(map(q+e.xyy)-map(q-e.xyy),map(q+e.yxy)-map(q-e.yxy),map(q+e.yyx)-map(q-e.yyx)));}\n'+
+  'vec3 nrm(vec3 q){vec2 e=vec2(.0035,0.);return normalize(vec3(map(q+e.xyy)-map(q-e.xyy),map(q+e.yxy)-map(q-e.yxy),map(q+e.yyx)-map(q-e.yyx)));}\n'+
   'void main(){\n'+
   '  vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;\n'+
-  '  vec3 bg=mix(vec3(.0667,.0667,.0784),vec3(.039,.039,.047),clamp(S*1.4,0.,1.));\n'+
-  '  bg*=1.-.35*dot(uv,uv);\n'+
-  '  vec3 ro=vec3(0.,0.,7.5), rd=normalize(vec3(uv,-1.9));\n'+
+  '  float dark=clamp(S*1.3,0.,1.);\n'+
+  '  vec3 bgTop=mix(vec3(.055,.055,.066),vec3(.028,.028,.034),dark), bgBot=mix(vec3(.030,.030,.036),vec3(.014,.014,.018),dark);\n'+
+  '  vec3 bg=mix(bgBot,bgTop,smoothstep(-.6,.7,uv.y)); bg*=1.-.3*dot(uv,uv);\n'+
+  '  vec3 ro=vec3(0.,.55-S*.5,7.2), rd=normalize(vec3(uv,-1.75)); rd.y-=.06;\n'+
   '  float t=0.,d; vec3 q; bool hit=false;\n'+
-  '  for(int i=0;i<56;i++){ q=ro+rd*t; d=map(q); if(d<.004){hit=true;break;} t+=d*.9; if(t>16.)break; }\n'+
+  '  for(int i=0;i<64;i++){ q=ro+rd*t; d=map(q); if(d<.004){hit=true;break;} t+=d; if(t>22.)break; }\n'+
   '  vec3 col=bg;\n'+
   '  if(hit){\n'+
-  '    vec3 n=nrm(q), v=-rd;\n'+
-  '    float fr=pow(1.-max(dot(n,v),0.),3.);\n'+
-  '    vec3 l1=normalize(vec3(-.6,.9,.8)), l2=normalize(vec3(.9,.2,.6)), h1=normalize(l1+v), h2=normalize(l2+v);\n'+
-  '    float s1=pow(max(dot(n,h1),0.),70.), s2=pow(max(dot(n,h2),0.),180.);\n'+
-  '    vec3 refl=reflect(rd,n); float env=smoothstep(-.4,1.,refl.y)*.09+.01;\n'+
-  '    vec3 base=vec3(.018,.018,.022);\n'+
-  '    col=base+env*vec3(.35,.35,.4)+fr*vec3(.13,.13,.15)+s1*vec3(.22)+s2*vec3(.16);\n'+
-  '    float fog=smoothstep(5.,13.,t); col=mix(col,bg,fog*.6);\n'+
-  '    float edge=smoothstep(.0,.08,d); col=mix(col,bg,edge*0.);\n'+
+  '    vec3 n=nrm(q), v=-rd; float ndv=max(dot(n,v),0.);\n'+
+  '    float fr=pow(1.-ndv,4.);\n'+
+  '    vec3 l1=normalize(vec3(-.5,.8,.9)), l2=normalize(vec3(.8,.35,.5)), h1=normalize(l1+v), h2=normalize(l2+v);\n'+
+  '    float s1=pow(max(dot(n,h1),0.),260.), s2=pow(max(dot(n,h2),0.),90.);\n'+
+  '    vec3 refl=reflect(rd,n);\n'+
+  /* a long softbox stripe in the reflection, the liquid-metal tell */
+  '    float band=smoothstep(.02,.10,refl.y)*(1.-smoothstep(.22,.42,refl.y));\n'+
+  '    float band2=smoothstep(.55,.75,refl.y)*(1.-smoothstep(.8,.95,refl.y))*.5;\n'+
+  '    vec3 base=vec3(.006,.006,.008);\n'+
+  '    col=base+fr*vec3(.10,.10,.12)+(band+band2)*vec3(.12,.12,.14)*(.3+.7*fr)+s1*vec3(.45)+s2*vec3(.07);\n'+
+  '    float fog=smoothstep(6.,20.,t); col=mix(col,bg,fog*.8);\n'+
   '  }\n'+
-  '  col+=(fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453)-.5)*.012;\n'+
+  '  col+=(fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453)-.5)*.014;\n'+
   '  gl_FragColor=vec4(col,1.);}';
   function sh(t,src){var s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){throw new Error(gl.getShaderInfoLog(s));}return s;}
   var prog;
