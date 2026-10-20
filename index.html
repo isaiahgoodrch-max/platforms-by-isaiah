@@ -2162,11 +2162,11 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   var VS='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   var FS='precision highp float;uniform vec2 R;uniform float T;uniform float S;uniform vec2 M;\n'+
   'float sm(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}\n'+
-  /* a dark liquid floor, gently moving */
-  'float floorH(vec2 p,float t){return .16*sin(p.x*1.1+t*.35)*cos(p.y*.9-t*.27)+.08*sin(p.x*2.3-t*.5+p.y*1.7)+.04*sin(p.y*3.7+t*.8);}\n'+
-  /* blobs pulled up out of it, ferrofluid style */
+  'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}\n'+
+  'float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}\n'+
+  'float floorH(vec2 p,float t){return .16*sin(p.x*1.1+t*.3)*cos(p.y*.9-t*.22)+.08*sin(p.x*2.3-t*.4+p.y*1.7)+.04*sin(p.y*3.7+t*.6);}\n'+
   'vec3 bp(int i,float t){float f=float(i);\n'+
-  '  vec3 o=vec3(sin(t*.19+f*2.1)*2.6+cos(t*.12+f)*.8, -.9+abs(sin(t*.16+f*1.3))*1.6, -1.2+sin(t*.14+f*.9)*1.6);\n'+
+  '  vec3 o=vec3(sin(t*.17+f*2.1)*2.6+cos(t*.11+f)*.8, -.9+abs(sin(t*.14+f*1.3))*1.6, -1.2+sin(t*.12+f*.9)*1.6);\n'+
   '  o.y+=S*(1.2+f*.25); o.x+=S*(f-2.)*.6; o.xz+=(M-.5)*vec2(1.2,.8)*(.3+.12*f);\n'+
   '  return o;}\n'+
   'float map(vec3 q){float t=T;\n'+
@@ -2178,29 +2178,34 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   '  d=sm(d,length(q-bp(4,t))-.6,1.3);\n'+
   '  return d;}\n'+
   'vec3 nrm(vec3 q){vec2 e=vec2(.0035,0.);return normalize(vec3(map(q+e.xyy)-map(q-e.xyy),map(q+e.yxy)-map(q-e.yxy),map(q+e.yyx)-map(q-e.yyx)));}\n'+
+  /* cheap ambient occlusion: how crowded the space above the surface is */
+  'float ao(vec3 q,vec3 n){float o=0.,s=.12;for(int i=1;i<=4;i++){float h=s*float(i);o+=(h-map(q+n*h))/h;}return clamp(1.-o*.28,0.,1.);}\n'+
   'void main(){\n'+
   '  vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;\n'+
   '  float dark=clamp(S*1.3,0.,1.);\n'+
-  '  vec3 bgTop=mix(vec3(.055,.055,.066),vec3(.028,.028,.034),dark), bgBot=mix(vec3(.030,.030,.036),vec3(.014,.014,.018),dark);\n'+
-  '  vec3 bg=mix(bgBot,bgTop,smoothstep(-.6,.7,uv.y)); bg*=1.-.3*dot(uv,uv);\n'+
+  /* the page colour, with a soft dusty haze toward the top */
+  '  vec3 bgTop=mix(vec3(.085,.085,.098),vec3(.045,.045,.054),dark), bgBot=mix(vec3(.045,.045,.054),vec3(.022,.022,.028),dark);\n'+
+  '  vec3 bg=mix(bgBot,bgTop,smoothstep(-.6,.7,uv.y)); bg*=1.-.28*dot(uv,uv);\n'+
   '  vec3 ro=vec3(0.,.55-S*.5,7.2), rd=normalize(vec3(uv,-1.75)); rd.y-=.06;\n'+
   '  float t=0.,d; vec3 q; bool hit=false;\n'+
   '  for(int i=0;i<64;i++){ q=ro+rd*t; d=map(q); if(d<.004){hit=true;break;} t+=d; if(t>22.)break; }\n'+
   '  vec3 col=bg;\n'+
   '  if(hit){\n'+
   '    vec3 n=nrm(q), v=-rd; float ndv=max(dot(n,v),0.);\n'+
-  '    float fr=pow(1.-ndv,4.);\n'+
-  '    vec3 l1=normalize(vec3(-.5,.8,.9)), l2=normalize(vec3(.8,.35,.5)), h1=normalize(l1+v), h2=normalize(l2+v);\n'+
-  '    float s1=pow(max(dot(n,h1),0.),260.), s2=pow(max(dot(n,h2),0.),90.);\n'+
-  '    vec3 refl=reflect(rd,n);\n'+
-  /* a long softbox stripe in the reflection, the liquid-metal tell */
-  '    float band=smoothstep(.02,.10,refl.y)*(1.-smoothstep(.22,.42,refl.y));\n'+
-  '    float band2=smoothstep(.55,.75,refl.y)*(1.-smoothstep(.8,.95,refl.y))*.5;\n'+
-  '    vec3 base=vec3(.006,.006,.008);\n'+
-  '    col=base+fr*vec3(.10,.10,.12)+(band+band2)*vec3(.12,.12,.14)*(.3+.7*fr)+s1*vec3(.45)+s2*vec3(.07);\n'+
-  '    float fog=smoothstep(6.,20.,t); col=mix(col,bg,fog*.8);\n'+
+  '    vec3 key=normalize(vec3(-.55,.85,.7)), fill=normalize(vec3(.8,.2,.4));\n'+
+  /* chalk: soft wrapped diffuse, no gloss, a dusty rim, grain in the surface itself */
+  '    float dif=clamp(dot(n,key)*.6+.4,0.,1.); float dif2=clamp(dot(n,fill)*.5+.5,0.,1.)*.25;\n'+
+  '    float occ=ao(q,n);\n'+
+  '    float grain=noise(q.xy*38.+q.z*17.)*.5+noise(q.xz*90.)*.3+hash(floor(gl_FragCoord.xy*.5))*.2;\n'+
+  '    float rim=pow(1.-ndv,3.)*.22;\n'+
+  '    vec3 albedo=vec3(.16,.16,.18)*(.78+.44*grain);\n'+
+  '    col=albedo*(dif*1.05+dif2+.08)*occ+rim*vec3(.5,.5,.55)*occ;\n'+
+  '    float fog=smoothstep(5.,20.,t); col=mix(col,bg,fog*.85);\n'+
   '  }\n'+
-  '  col+=(fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453)-.5)*.014;\n'+
+  /* chalk dust over everything */
+  '  float dust=noise(gl_FragCoord.xy*.9+T*.3)*.6+hash(gl_FragCoord.xy+floor(T*8.))*.4;\n'+
+  '  col+= (dust-.5)*.045;\n'+
+  '  col+= smoothstep(.75,1.,noise(uv*3.+T*.02))*.012;\n'+
   '  gl_FragColor=vec4(col,1.);}';
   function sh(t,src){var s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){throw new Error(gl.getShaderInfoLog(s));}return s;}
   var prog;
