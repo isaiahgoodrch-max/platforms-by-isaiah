@@ -1114,6 +1114,13 @@ html:not(.intro-on) .hero-visual{animation:photoIn 1.1s cubic-bezier(.22,1,.36,1
 .testi-who a{display:inline-block;margin-top:6px;font-size:12.5px;color:var(--text);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.25)}
 .testi-who a:hover{color:var(--paper);border-bottom-color:var(--paper)}
 @media(max-width:900px){.testi{grid-template-columns:1fr;gap:28px}}
+.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+.tq{margin:0;padding:30px 30px 26px;border-radius:22px;border:1px solid var(--line-2);background:rgba(33,33,37,.55);display:flex;flex-direction:column}
+.tq blockquote{margin:0;flex:1}
+.tq-pull{font-family:var(--serif);font-weight:400;font-size:clamp(20px,1.7vw,25px);line-height:1.25;color:var(--paper);letter-spacing:-.01em}
+.tq-long{margin-top:14px;font-size:14.5px;line-height:1.75;color:var(--text)}
+.tq .testi-who{margin-top:22px;padding-top:18px}
+@media(max-width:900px){.testi-grid{grid-template-columns:1fr;gap:16px}.tq{padding:24px 22px 22px}}
 @media(max-width:680px){#testimonials{padding-top:70px}.testi-video{border-radius:16px}.testi-play span{width:64px;height:64px}}
 /* ══════════════ V2: COMPARE ══════════════ */
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
@@ -1643,6 +1650,28 @@ html:not(.intro-on) .hero-visual{animation:photoIn 1.1s cubic-bezier(.22,1,.36,1
           <div><b>Mayson Brown</b><span>Luxury marketing agency owner and fitness creator</span><a href="https://themaysonbrown.com" target="_blank" rel="noopener noreferrer">themaysonbrown.com</a></div>
         </div>
       </div>
+    </div>
+    <div class="testi-grid reveal">
+      <figure class="tq">
+        <blockquote>
+          <p class="tq-pull">"I knew I would be dumb to pass on what has been an amazing opportunity and experience."</p>
+          <p class="tq-long">"Isaiah originally reached out to me with an offer to build me a website to potentially grow my brand and push my reach. I was originally hesitant but after seeing the work he put in for other creators and the results he's helped them achieve I knew I would be dumb to pass on what has been an amazing opportunity and experience. Since working with Isaiah my pages have grown, I've had more opportunities to work with brands such as Wolfpak and even Controlled Insanity, not because of my website but because Isaiah pushed me to continue to reach out and further myself instead of just giving up. Isaiah is a good person and an amazing person to work with."</p>
+        </blockquote>
+        <figcaption class="testi-who">
+          <img src="images/luis-hero.jpg" alt="" width="56" height="56" loading="lazy" style="object-position:50% 30%">
+          <div><b>Luis Garcia</b><span>Videographer and creator</span><a href="https://luisgarciaugc.com" target="_blank" rel="noopener noreferrer">luisgarciaugc.com</a></div>
+        </figcaption>
+      </figure>
+      <figure class="tq">
+        <blockquote>
+          <p class="tq-pull">"He didn't just build me a website, he helped me create a professional platform."</p>
+          <p class="tq-long">"Working with Isaiah has been an incredible experience. From our very first conversation, I could tell he genuinely understood my vision as a content creator and wanted to help me take my personal brand to the next level. He didn't just build me a website, he helped me create a professional platform to showcase my content, partnerships, and everything I'm working toward. What really stands out about Isaiah is his creativity, attention to detail, and ability to recognize a creator's potential. He understands how important branding, presentation, and quality content are when it comes to growing in this industry. I'd highly recommend Isaiah to any creator or brand looking for someone who understands the creative side of content creation while also knowing how to help turn that creativity into opportunities for growth."</p>
+        </blockquote>
+        <figcaption class="testi-who">
+          <img src="images/eddie-hero.jpg" alt="" width="56" height="56" loading="lazy" style="object-position:50% 14%">
+          <div><b>Edward Banks</b><span>Creator, Kansas City</span><a href="https://edwardbanks.com" target="_blank" rel="noopener noreferrer">edwardbanks.com</a></div>
+        </figcaption>
+      </figure>
     </div>
   </div>
 </section>
